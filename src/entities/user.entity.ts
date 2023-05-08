@@ -24,7 +24,7 @@ export class User {
     unique: true,
     lowercase: true,
     validate: {
-      validator: (v) => validator.isEmail(v),
+      validator: (v: string) => validator.isEmail(v),
       message: 'Please provide a valid email',
     },
   })
