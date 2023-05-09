@@ -4,8 +4,6 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { MotivatorsModule } from './motivators/motivators.module';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AuthService } from './auth/auth.service';
-import { AuthController } from './auth/auth.controller';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
@@ -26,7 +24,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     MotivatorsModule,
     AuthModule,
   ],
-  controllers: [AppController, AuthController],
-  providers: [AppService, AuthService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

@@ -2,21 +2,14 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import slugify from 'slugify';
 import { convertMilliseconds } from '../utils/millisecondsToTime';
-
-export enum Place {
-  main = 'Main',
-  waiting = 'Waiting',
-  purgatory = 'Purgatory',
-}
-
-// export type MotivatorDocument = Motivator & Document;
+import { Place } from 'src/utils/enums';
 
 @Schema({
   timestamps: true,
   toJSON: { virtuals: true },
   toObject: { virtuals: true },
 })
-export class Motivator {
+export class Motivator extends Document {
   @Prop({ required: true, maxLength: 40 })
   title: string;
 

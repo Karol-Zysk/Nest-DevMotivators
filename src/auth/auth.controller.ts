@@ -1,17 +1,13 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignInDto, SignUpDto } from './dto';
-import { PrismaService } from '../prisma/prisma.service';
 import { RefreshTokenGuard } from './guard';
 import { GetUser } from './decorators';
-import { User } from '@prisma/client';
+import { User } from 'src/entities';
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private authService: AuthService,
-    private prisma: PrismaService,
-  ) {}
+  constructor(private authService: AuthService) {}
 
   @Post('signup')
   signUp(@Body() dto: SignUpDto) {

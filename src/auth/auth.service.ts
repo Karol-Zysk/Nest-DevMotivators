@@ -1,40 +1,42 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import {
+  Injectable,
+  BadRequestException,
+  ConflictException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { SignInDto, SignUpDto } from './dto';
 import * as bcrypt from 'bcrypt';
-import {
-  BadRequestException,
-  ForbiddenException,
-  ConflictException,
-} from '@nestjs/common/exceptions';
-import { JwtService } from '@nestjs/jwt/dist';
-import { ConfigService } from '@nestjs/config/dist';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { User, UserDocument } from '../entities';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private prisma: PrismaService,
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
     private jwtService: JwtService,
     private config: ConfigService,
   ) {}
+
   async signUp(dto: SignUpDto): Promise<any> {
+    console.log(dto);
     try {
-      const userExists = await this.prisma.user.findFirst({
-        where: {
-          OR: [{ email: dto.email }, { name: dto.name }],
-        },
-      });
+      const userExists = await this.userModel
+        .findOne({
+          $or: [{ email: dto.email }, { name: dto.login }],
+        })
+        .exec();
       if (userExists) {
         throw new ConflictException('User already exists');
       }
 
       const hash = await this.hashData(dto.password);
-      const newUser = await this.prisma.user.create({
-        data: {
-          email: dto.email,
-          name: dto.name,
-          hash,
-        },
+      const newUser = await this.userModel.create({
+        email: dto.email,
+        login: dto.login,
+        hash,
       });
       const tokens = await this.getTokens(newUser.id, newUser.email);
       await this.updateRefreshToken(newUser.id, tokens.refreshToken);
@@ -45,10 +47,9 @@ export class AuthService {
   }
 
   async signIn(dto: SignInDto) {
-    // Check if user exists
-    const user = await this.prisma.user.findUnique({
-      where: { email: dto.email },
-    });
+    console.log(dto);
+
+    const user = await this.userModel.findOne({ email: dto.email }).exec();
     if (!user) throw new BadRequestException('User does not exist');
     const passwordMatches = await bcrypt.compare(dto.password, user.hash);
     if (!passwordMatches)
@@ -59,10 +60,9 @@ export class AuthService {
   }
 
   async logout(userId: string) {
-    this.prisma.user.update({
-      where: { id: userId },
-      data: { refreshToken: null },
-    });
+    await this.userModel
+      .findByIdAndUpdate(userId, { refreshToken: null })
+      .exec();
     return 'Logged Out';
   }
 
@@ -72,10 +72,9 @@ export class AuthService {
 
   async updateRefreshToken(userId: string, refreshToken: string) {
     const hashedRefreshToken = await this.hashData(refreshToken);
-    await this.prisma.user.update({
-      where: { id: userId },
-      data: { refreshToken: hashedRefreshToken },
-    });
+    await this.userModel
+      .findByIdAndUpdate(userId, { refreshToken: hashedRefreshToken })
+      .exec();
   }
 
   async getTokens(userId: string, username: string) {
@@ -86,7 +85,7 @@ export class AuthService {
           username,
         },
         {
-          secret: this.config.get('JWT_SECRET'),
+          secret: this.config.get<string>('JWT_SECRET'),
           expiresIn: '3h',
         },
       ),
@@ -96,7 +95,7 @@ export class AuthService {
           username,
         },
         {
-          secret: this.config.get('JWT_REFRESH_SECRET'),
+          secret: this.config.get<string>('JWT_REFRESH_SECRET'),
           expiresIn: '30d',
         },
       ),
@@ -108,7 +107,7 @@ export class AuthService {
     };
   }
   async refreshTokens(userId: string, refreshToken: string) {
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    const user = await this.userModel.findById(userId).exec();
     if (!user || !user.refreshToken)
       throw new ForbiddenException('Access Denied');
     const refreshTokenMatches = await bcrypt.compare(
