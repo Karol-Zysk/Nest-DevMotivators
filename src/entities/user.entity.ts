@@ -1,18 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import validator from 'validator';
-import bcrypt from 'bcrypt';
-
-export enum Role {
-  admin = 'Admin',
-  moderator = 'Moderator',
-  user = 'User',
-}
+import { Role } from 'src/utils/enums';
 
 export type UserDocument = User & Document;
 
 @Schema()
-export class User {
+export class User extends Document {
   @Prop({
     required: true,
     maxLength: 40,
@@ -23,24 +16,18 @@ export class User {
     required: true,
     unique: true,
     lowercase: true,
-    validate: {
-      validator: (v) => validator.isEmail(v),
-      message: 'Please provide a valid email',
-    },
   })
   email: string;
 
   @Prop({
-    required: true,
-    minlength: 8,
     select: false,
   })
-  password: string;
+  hash: string;
 
   @Prop({
-    required: true,
+    select: false,
   })
-  passwordConfirm: string;
+  refreshToken: string;
 
   @Prop({
     enum: Role,
@@ -74,24 +61,6 @@ export class User {
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
-
-UserSchema.pre<UserDocument>('save', async function (next) {
-  if (!this.isModified('password')) return next();
-
-  const salt = await bcrypt.genSalt(Number(process.env.SALT_WORK_FACTOR));
-
-  const hash = await bcrypt.hashSync(this.password, salt);
-
-  this.password = hash;
-  this.passwordConfirm = undefined;
-});
-
-UserSchema.methods.correctPassword = async function (
-  candidatePassword: string,
-  userPassword: string,
-) {
-  return await bcrypt.compare(candidatePassword, userPassword);
-};
 
 UserSchema.methods.changedPassword = async function (JWTTimestamp: number) {
   if (this.passwordChangedAt) {

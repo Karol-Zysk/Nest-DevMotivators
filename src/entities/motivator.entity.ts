@@ -2,14 +2,9 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import slugify from 'slugify';
 import { convertMilliseconds } from '../utils/millisecondsToTime';
+import { Place } from 'src/utils/enums';
 
-export enum Place {
-  main = 'Main',
-  waiting = 'Waiting',
-  purgatory = 'Purgatory',
-}
-
-// export type MotivatorDocument = Motivator & Document;
+export type MotivatorDocument = Motivator & Document;
 
 @Schema({
   timestamps: true,
@@ -27,7 +22,7 @@ export class Motivator {
   slug: string;
 
   @Prop({ required: true })
-  photo: string;
+  image: string;
 
   @Prop([{ type: Types.ObjectId, ref: 'User' }])
   thumbUp: Types.ObjectId[];
@@ -62,10 +57,10 @@ export class Motivator {
   }
 }
 
-const MotivatorSchema = SchemaFactory.createForClass(Motivator);
+export const MotivatorSchema = SchemaFactory.createForClass(Motivator);
 
 MotivatorSchema.pre('save', function () {
-  this.slug = slugify(this.title, { lower: true });
+  if (this.isModified('title')) {
+    this.slug = slugify(this.title, { lower: true });
+  }
 });
-
-export { MotivatorSchema };

@@ -2,18 +2,19 @@ import { Module } from '@nestjs/common';
 import { MotivatorsController } from './motivators.controller';
 import { MotivatorsService } from './motivators.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { User, UserSchema } from 'src/entities';
+import { Motivator, MotivatorSchema } from 'src/entities';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       {
-        name: User.name,
-        schema: UserSchema,
+        name: Motivator.name,
+        schema: MotivatorSchema,
       },
     ]),
   ],
   controllers: [MotivatorsController],
   providers: [MotivatorsService],
+  exports: [MongooseModule],
 })
 export class MotivatorsModule {}
