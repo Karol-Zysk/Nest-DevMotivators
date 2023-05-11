@@ -1,21 +1,21 @@
 // motivator.service.ts
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Document } from 'mongoose';
-import { Motivator } from '../entities';
+import { Model } from 'mongoose';
+import { Motivator, MotivatorDocument } from '../entities';
 import { CreateMotivatorDto } from './dto/create-motivator.dto';
 import { UpdateMotivatorDto } from './dto/update-motivator.dto';
 import { ApiFeatures } from '../utils/apiFeatures';
 
 @Injectable()
-export class MotivatorService {
+export class MotivatorsService {
   constructor(
     @InjectModel(Motivator.name)
-    private readonly motivatorModel: Model<Motivator>,
+    private readonly motivatorModel: Model<MotivatorDocument>,
   ) {}
 
   async findAll(query: any): Promise<Motivator[]> {
-    const features = new ApiFeatures<Motivator>(
+    const features = new ApiFeatures<Motivator & Document>(
       this.motivatorModel.find(),
       query,
     )

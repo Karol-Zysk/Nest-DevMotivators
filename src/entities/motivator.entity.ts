@@ -4,12 +4,14 @@ import slugify from 'slugify';
 import { convertMilliseconds } from '../utils/millisecondsToTime';
 import { Place } from 'src/utils/enums';
 
+export type MotivatorDocument = Motivator & Document;
+
 @Schema({
   timestamps: true,
   toJSON: { virtuals: true },
   toObject: { virtuals: true },
 })
-export class Motivator extends Document {
+export class Motivator {
   @Prop({ required: true, maxLength: 40 })
   title: string;
 
@@ -55,10 +57,10 @@ export class Motivator extends Document {
   }
 }
 
-const MotivatorSchema = SchemaFactory.createForClass(Motivator);
+export const MotivatorSchema = SchemaFactory.createForClass(Motivator);
 
 MotivatorSchema.pre('save', function () {
-  this.slug = slugify(this.title, { lower: true });
+  if (this.isModified('title')) {
+    this.slug = slugify(this.title, { lower: true });
+  }
 });
-
-export { MotivatorSchema };

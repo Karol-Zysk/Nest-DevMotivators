@@ -12,12 +12,15 @@ export class CreateMotivatorDto {
   @MinLength(3)
   @MaxLength(100)
   title: string;
+
   @IsString()
   @MaxLength(1000)
   subTitle: string;
+
   @IsArray()
   @IsNotEmpty()
   keyWords: string[];
+
   @IsString()
   @IsNotEmpty()
   photo: string;
