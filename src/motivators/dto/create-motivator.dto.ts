@@ -17,11 +17,10 @@ export class CreateMotivatorDto {
   @MaxLength(1000)
   subTitle: string;
 
-  @IsArray()
   @IsNotEmpty()
   keyWords: string[];
 
   @IsString()
   @IsNotEmpty()
-  photo: string;
+  image: string;
 }

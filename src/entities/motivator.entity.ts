@@ -22,7 +22,7 @@ export class Motivator {
   slug: string;
 
   @Prop({ required: true })
-  photo: string;
+  image: string;
 
   @Prop([{ type: Types.ObjectId, ref: 'User' }])
   thumbUp: Types.ObjectId[];

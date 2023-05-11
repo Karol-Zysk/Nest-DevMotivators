@@ -12,7 +12,7 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
-
+  app.useGlobalFilters();
   await app.listen(port);
 }
 bootstrap();
