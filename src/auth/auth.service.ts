@@ -20,8 +20,9 @@ export class AuthService {
     private config: ConfigService,
   ) {}
 
-  async signUp(dto: SignUpDto): Promise<any> {
-    console.log(dto);
+  async signUp(
+    dto: SignUpDto,
+  ): Promise<{ access_token: string; refreshToken: string }> {
     try {
       const userExists = await this.userModel
         .findOne({
@@ -38,6 +39,7 @@ export class AuthService {
         login: dto.login,
         hash,
       });
+
       const tokens = await this.getTokens(newUser.id, newUser.email);
       await this.updateRefreshToken(newUser.id, tokens.refreshToken);
       return tokens;
@@ -47,10 +49,12 @@ export class AuthService {
   }
 
   async signIn(dto: SignInDto) {
-    console.log(dto);
-
-    const user = await this.userModel.findOne({ email: dto.email }).exec();
+    const user = await this.userModel
+      .findOne({ email: dto.email })
+      .select('+hash')
+      .exec();
     if (!user) throw new BadRequestException('User does not exist');
+
     const passwordMatches = await bcrypt.compare(dto.password, user.hash);
     if (!passwordMatches)
       throw new BadRequestException('Password is incorrect');
@@ -107,7 +111,10 @@ export class AuthService {
     };
   }
   async refreshTokens(userId: string, refreshToken: string) {
-    const user = await this.userModel.findById(userId).exec();
+    const user = await this.userModel
+      .findById(userId)
+      .select('+refreshToken')
+      .exec();
     if (!user || !user.refreshToken)
       throw new ForbiddenException('Access Denied');
     const refreshTokenMatches = await bcrypt.compare(

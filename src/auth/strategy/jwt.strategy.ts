@@ -28,7 +28,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       }
 
       const userObject = user.toObject();
-      delete userObject.hash;
+      // delete userObject.hash;
 
       return userObject;
     } catch (error) {
