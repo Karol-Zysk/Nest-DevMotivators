@@ -8,7 +8,8 @@ import { Model, Types } from 'mongoose';
 import { Motivator, MotivatorDocument } from '../entities';
 import { CreateMotivatorDto } from './dto/create-motivator.dto';
 import { UpdateMotivatorDto } from './dto/update-motivator.dto';
-import { ApiFeatures } from '../utils/apiFeatures';
+import { ApiFeatures, QueryString } from '../utils/apiFeatures';
+import { Place } from 'src/utils/enums';
 
 @Injectable()
 export class MotivatorsService {
@@ -17,15 +18,16 @@ export class MotivatorsService {
     private readonly motivatorModel: Model<MotivatorDocument>,
   ) {}
 
-  async findAll(query: any = {}): Promise<Motivator[]> {
+  async findAll(place: Place, queryString: QueryString): Promise<Motivator[]> {
     const features = new ApiFeatures<Motivator & Document>(
-      this.motivatorModel.find(),
-      query,
+      this.motivatorModel.find({ place }),
+      queryString,
     )
       .filter()
       .sort()
       .limitFields()
       .paginate();
+
     return features.query.exec();
   }
 

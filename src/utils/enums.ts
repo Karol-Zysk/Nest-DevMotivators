@@ -1,11 +1,11 @@
 export enum Place {
-  main = 'Main',
-  waiting = 'Waiting',
-  purgatory = 'Purgatory',
+  main = 'main',
+  waiting = 'waiting',
+  purgatory = 'purgatory',
 }
 
 export enum Role {
-  admin = 'Admin',
-  moderator = 'Moderator',
-  user = 'User',
+  admin = 'admin',
+  moderator = 'moderator',
+  user = 'user',
 }

@@ -1,6 +1,6 @@
 import { Query } from 'mongoose';
 
-interface QueryString {
+export interface QueryString {
   sort?: string;
   fields?: string;
   page?: string;
