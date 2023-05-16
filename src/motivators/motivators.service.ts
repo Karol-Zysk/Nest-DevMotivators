@@ -49,7 +49,7 @@ export class MotivatorsService {
 
   async createMotivator(
     dto: CreateMotivatorDto,
-    userId: string,
+    userId: Types.ObjectId,
   ): Promise<Motivator> {
     const createdMotivator = await this.motivatorModel.create({
       author: userId,
