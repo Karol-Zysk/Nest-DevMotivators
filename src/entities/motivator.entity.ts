@@ -38,7 +38,7 @@ export class Motivator {
 
   @Prop({
     enum: [Place.main, Place.purgatory, Place.waiting],
-    default: Place.waiting,
+    default: Place.purgatory,
   })
   place: Place;
 

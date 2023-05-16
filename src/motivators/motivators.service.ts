@@ -18,7 +18,10 @@ export class MotivatorsService {
     private readonly motivatorModel: Model<MotivatorDocument>,
   ) {}
 
-  async findAll(place: Place, queryString: QueryString): Promise<Motivator[]> {
+  async findAllMotivators(
+    place: Place,
+    queryString: QueryString,
+  ): Promise<Motivator[]> {
     const features = new ApiFeatures<Motivator & Document>(
       this.motivatorModel.find({ place }),
       queryString,
@@ -31,7 +34,7 @@ export class MotivatorsService {
     return features.query.exec();
   }
 
-  async findOne(id: string): Promise<Motivator> {
+  async findMotivatorById(id: string): Promise<Motivator> {
     if (!Types.ObjectId.isValid(id)) {
       throw new BadRequestException('Invalid ID');
     }
@@ -44,7 +47,7 @@ export class MotivatorsService {
     return motivator;
   }
 
-  async create(dto: CreateMotivatorDto, userId): Promise<Motivator> {
+  async createMotivator(dto: CreateMotivatorDto, userId): Promise<Motivator> {
     const createdMotivator = await this.motivatorModel.create({
       author: userId,
       ...dto,
@@ -52,7 +55,7 @@ export class MotivatorsService {
     return createdMotivator;
   }
 
-  async update(
+  async updateMotivator(
     id: string,
     updateMotivatorDto: UpdateMotivatorDto,
   ): Promise<Motivator> {
