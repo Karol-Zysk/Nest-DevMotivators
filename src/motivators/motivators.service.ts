@@ -5,11 +5,11 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { Motivator, MotivatorDocument } from '../entities';
+import { Motivator, MotivatorDocument, User } from '../entities';
 import { CreateMotivatorDto } from './dto/create-motivator.dto';
 import { UpdateMotivatorDto } from './dto/update-motivator.dto';
 import { ApiFeatures, QueryString } from '../utils/apiFeatures';
-import { Place } from 'src/utils/enums';
+import { Place, VoteKind, VoteMethod } from 'src/utils/enums';
 
 @Injectable()
 export class MotivatorsService {
@@ -47,7 +47,10 @@ export class MotivatorsService {
     return motivator;
   }
 
-  async createMotivator(dto: CreateMotivatorDto, userId): Promise<Motivator> {
+  async createMotivator(
+    dto: CreateMotivatorDto,
+    userId: string,
+  ): Promise<Motivator> {
     const createdMotivator = await this.motivatorModel.create({
       author: userId,
       ...dto,
@@ -64,7 +67,45 @@ export class MotivatorsService {
       .exec();
   }
 
-  async delete(id: string): Promise<Motivator> {
-    return this.motivatorModel.findByIdAndDelete(id).exec();
+  async deleteMotivator(id: string): Promise<Motivator> {
+    const deletedMotivator = await this.motivatorModel
+      .findByIdAndDelete(id)
+      .exec();
+
+    if (!deletedMotivator) {
+      throw new NotFoundException(`Motivator with ID ${id} not found`);
+    }
+
+    return;
+  }
+
+  async vote(
+    id: string,
+    userId: User,
+    option: VoteKind,
+    method: VoteMethod,
+  ): Promise<Motivator> {
+    let motivator = await this.motivatorModel
+      .findByIdAndUpdate(
+        id,
+        {
+          [`$${method}`]: { [`${option}`]: userId },
+          movedToMain: Date.now(),
+        },
+        { new: true, runValidators: true },
+      )
+      .exec();
+
+    if (motivator && motivator.like.length === 2) {
+      motivator = await this.motivatorModel
+        .findByIdAndUpdate(
+          id,
+          { place: Place.main },
+          { new: true, runValidators: true },
+        )
+        .exec();
+    }
+
+    return motivator;
   }
 }

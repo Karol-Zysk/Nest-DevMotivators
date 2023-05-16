@@ -25,10 +25,10 @@ export class Motivator {
   image: string;
 
   @Prop([{ type: Types.ObjectId, ref: 'User' }])
-  thumbUp: Types.ObjectId[];
+  like: Types.ObjectId[];
 
   @Prop([{ type: Types.ObjectId, ref: 'User' }])
-  thumbDown: Types.ObjectId[];
+  dislike: Types.ObjectId[];
 
   @Prop()
   accepted: Date;
@@ -37,8 +37,8 @@ export class Motivator {
   movedToMain: Date;
 
   @Prop({
-    enum: [Place.main, Place.purgatory, Place.waiting],
-    default: Place.purgatory,
+    enum: [Place.main, Place.staging, Place.waiting],
+    default: Place.staging,
   })
   place: Place;
 

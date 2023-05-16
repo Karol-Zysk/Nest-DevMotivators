@@ -13,9 +13,9 @@ export class RolesGuard implements CanActivate {
     switch (place) {
       case 'main':
         return true;
+      case 'staging':
+        return true;
       case 'waiting':
-        return ['user', 'moderator', 'admin'].includes(user?.role);
-      case 'purgatory':
         return ['moderator', 'admin'].includes(user?.role);
       default:
         return false;
