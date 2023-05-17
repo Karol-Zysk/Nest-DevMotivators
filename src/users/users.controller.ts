@@ -1,4 +1,13 @@
-import { Controller, UseGuards, Get, Patch, Body } from '@nestjs/common';
+import {
+  Controller,
+  UseGuards,
+  Get,
+  Patch,
+  Body,
+  Delete,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
 import { GetUser } from 'src/auth/decorators';
 import { JwtGuard } from 'src/auth/guard';
 import { User } from 'src/entities';
@@ -18,5 +27,16 @@ export class UsersController {
   @Patch('me')
   updatetMe(@GetUser() user: User, @Body() dto: UpdateUserDto) {
     return this.usersService.updateMe(user._id, dto);
+  }
+
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Delete('me')
+  deletetMe(@GetUser() user: User) {
+    return this.usersService.deleteMe(user._id);
+  }
+
+  @Get('me/motivators')
+  getMyMotivators(@GetUser() user: User) {
+    return this.usersService.getMyMotivators(user._id);
   }
 }

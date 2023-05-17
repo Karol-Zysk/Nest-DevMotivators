@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Model, Types } from 'mongoose';
-import { User, UserDocument } from 'src/entities';
+import { Motivator, MotivatorDocument, User, UserDocument } from 'src/entities';
 import { UpdateUserDto } from './dto';
 import { InjectModel } from '@nestjs/mongoose';
 
@@ -9,6 +9,8 @@ export class UsersService {
   constructor(
     @InjectModel(User.name)
     private readonly userModel: Model<UserDocument>,
+    @InjectModel(Motivator.name)
+    private readonly motivatorModel: Model<MotivatorDocument>,
   ) {}
   getMe(user: User): User {
     return user;
@@ -41,5 +43,9 @@ export class UsersService {
     await this.userModel.findByIdAndDelete({ _id: userId });
 
     return;
+  }
+
+  async getMyMotivators(userId: Types.ObjectId): Promise<Motivator[]> {
+    return await this.motivatorModel.find({ author: userId });
   }
 }

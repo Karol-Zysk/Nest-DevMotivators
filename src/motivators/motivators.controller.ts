@@ -19,18 +19,18 @@ import { User } from 'src/entities';
 import { JwtGuard } from 'src/auth/guard';
 import { Place, VoteKind, VoteMethod } from 'src/utils/enums';
 import { QueryString } from 'src/utils/apiFeatures';
-import { RolesGuard } from 'src/motivators/guards/roles.guard';
-import { AuthorizeGuard } from './guards/authorize.guard';
 import { UpdateMotivatorDto } from './dto/update-motivator.dto';
-import { VotingGuard } from './guards/voting.guard';
+import { AuthorizeGuard, RolesGuard, VotingGuard } from './guards';
+import { Public } from 'src/decorators/isPublic.decorator';
 
 @UseGuards(JwtGuard)
 @Controller('motivators')
 export class MotivatorsController {
   constructor(private motivatorsService: MotivatorsService) {}
 
-  @UseGuards(RolesGuard)
   @Get('/place/:place')
+  @Public()
+  @UseGuards(RolesGuard)
   async findAllMotivators(
     @Param('place') place: Place,
     @Query() queryString: QueryString,
@@ -79,34 +79,32 @@ export class MotivatorsController {
     );
   }
 
-  @UseGuards(VotingGuard)
-  @Patch('/:id/undolike')
+  @Put('/:id/undolike')
   async undoLike(@Param('id') id: string, @GetUser() user: User) {
     return this.motivatorsService.vote(
       id,
-      user.id,
+      user._id,
       VoteKind.like,
       VoteMethod.take,
     );
   }
 
   @UseGuards(VotingGuard)
-  @Patch('/:id/dounlike')
+  @Put('/:id/dounlike')
   async doUnlike(@Param('id') id: string, @GetUser() user: User) {
     return this.motivatorsService.vote(
       id,
-      user.id,
+      user._id,
       VoteKind.dislike,
       VoteMethod.give,
     );
   }
 
-  @UseGuards(VotingGuard)
-  @Patch('/:id/undounlike')
+  @Put('/:id/undounlike')
   async undoUnlike(@Param('id') id: string, @GetUser() user: User) {
     return this.motivatorsService.vote(
       id,
-      user.id,
+      user._id,
       VoteKind.dislike,
       VoteMethod.take,
     );

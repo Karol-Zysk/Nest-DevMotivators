@@ -1,8 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import slugify from 'slugify';
-import { convertMilliseconds } from '../utils/millisecondsToTime';
-import { Place } from 'src/utils/enums';
+import { Place, convertMilliseconds } from 'src/utils';
 
 export type MotivatorDocument = Motivator & Document;
 

@@ -19,8 +19,8 @@ export class VotingGuard implements CanActivate {
 
     const motivator = await this.motivatorService.findMotivatorById(id);
 
-    const like = motivator?.like.includes(user.id);
-    const disLike = motivator?.dislike.includes(user.id);
+    const like = motivator?.like.includes(user._id);
+    const disLike = motivator?.dislike.includes(user._id);
 
     const voted = like || disLike;
 
