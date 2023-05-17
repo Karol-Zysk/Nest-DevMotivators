@@ -1,5 +1,6 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Observable } from 'rxjs';
+import { Place, Role } from 'src/utils';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -11,14 +12,14 @@ export class RolesGuard implements CanActivate {
     const place = request.params.place;
 
     switch (place) {
-      case 'main':
+      case Place.main:
         return true;
-      case 'staging':
+      case Place.staging:
         return true;
-      case 'waiting':
-        return ['moderator', 'admin'].includes(user?.role);
+      case Place.waiting:
+        return [Role.moderator, Role.admin].includes(user?.role);
       default:
-        return false;
+        return user?.role === Role.admin;
     }
   }
 }

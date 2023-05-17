@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { MongoExceptionFilter } from './filters/mongo-exception.filter';
 
 const port = process.env.PORT || 4000;
 console.log(`app is running on port${port}`);
@@ -12,7 +13,7 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
-  app.useGlobalFilters();
+  app.useGlobalFilters(new MongoExceptionFilter());
   await app.listen(port);
 }
 bootstrap();
