@@ -7,7 +7,9 @@ import {
   Delete,
   HttpCode,
   HttpStatus,
+  Param,
 } from '@nestjs/common';
+
 import { GetUser } from 'src/auth/decorators';
 import { JwtGuard } from 'src/auth/guard';
 import { User } from 'src/entities';
@@ -38,5 +40,10 @@ export class UsersController {
   @Get('me/motivators')
   getMyMotivators(@GetUser() user: User) {
     return this.usersService.getMyMotivators(user._id);
+  }
+
+  @Get('/:id/motivators')
+  getUserMotivators(@Param('id') id: string) {
+    return this.usersService.getUserMotivators(id);
   }
 }

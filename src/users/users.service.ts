@@ -17,20 +17,14 @@ export class UsersService {
   }
 
   async updateMe(userId: Types.ObjectId, dto: UpdateUserDto): Promise<User> {
-    let updatedUser: User;
-
-    try {
-      updatedUser = await this.userModel.findByIdAndUpdate(
-        { _id: userId },
-        dto,
-        {
-          new: true,
-          runValidators: true,
-        },
-      );
-    } catch (error) {
-      throw error;
-    }
+    const updatedUser = await this.userModel.findByIdAndUpdate(
+      { _id: userId },
+      dto,
+      {
+        new: true,
+        runValidators: true,
+      },
+    );
 
     if (!updatedUser) {
       throw new NotFoundException(`User with id ${userId} not found`);
@@ -45,7 +39,14 @@ export class UsersService {
     return;
   }
 
-  async getMyMotivators(userId: Types.ObjectId): Promise<Motivator[]> {
+  async getMyMotivators(userId: string): Promise<Motivator[]> {
     return await this.motivatorModel.find({ author: userId });
+  }
+
+  async getUserMotivators(userId: string): Promise<Motivator[]> {
+    const objectId = new Types.ObjectId(userId);
+    const motivators = await this.motivatorModel.find({ author: objectId });
+
+    return motivators;
   }
 }

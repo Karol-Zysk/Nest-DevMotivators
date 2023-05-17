@@ -31,23 +31,20 @@ export class MotivatorsController {
   @Get('/place/:place')
   @Public()
   @UseGuards(RolesGuard)
-  async findAllMotivators(
+  findAllMotivators(
     @Param('place') place: Place,
     @Query() queryString: QueryString,
   ) {
     return this.motivatorsService.findAllMotivators(place, queryString);
   }
 
-  @Get(':id')
-  async findMotivatorById(@Param('id') id: string) {
-    return await this.motivatorsService.findMotivatorById(id);
+  @Get('/:id')
+  findMotivatorById(@Param('id') id: string) {
+    return this.motivatorsService.findMotivatorById(id);
   }
 
   @Post()
-  async createMotivator(
-    @Body() dto: CreateMotivatorDto,
-    @GetUser() user: User,
-  ) {
+  createMotivator(@Body() dto: CreateMotivatorDto, @GetUser() user: User) {
     return this.motivatorsService.createMotivator(dto, user._id);
   }
 
@@ -69,8 +66,7 @@ export class MotivatorsController {
 
   @UseGuards(VotingGuard)
   @Put('/:id/dolike')
-  async doLike(@Param('id') id: string, @GetUser() user: User) {
-    console.log(user);
+  doLike(@Param('id') id: string, @GetUser() user: User) {
     return this.motivatorsService.vote(
       id,
       user._id,
@@ -80,7 +76,7 @@ export class MotivatorsController {
   }
 
   @Put('/:id/undolike')
-  async undoLike(@Param('id') id: string, @GetUser() user: User) {
+  undoLike(@Param('id') id: string, @GetUser() user: User) {
     return this.motivatorsService.vote(
       id,
       user._id,
@@ -91,7 +87,7 @@ export class MotivatorsController {
 
   @UseGuards(VotingGuard)
   @Put('/:id/dounlike')
-  async doUnlike(@Param('id') id: string, @GetUser() user: User) {
+  doUnlike(@Param('id') id: string, @GetUser() user: User) {
     return this.motivatorsService.vote(
       id,
       user._id,
@@ -101,7 +97,7 @@ export class MotivatorsController {
   }
 
   @Put('/:id/undounlike')
-  async undoUnlike(@Param('id') id: string, @GetUser() user: User) {
+  undoUnlike(@Param('id') id: string, @GetUser() user: User) {
     return this.motivatorsService.vote(
       id,
       user._id,
