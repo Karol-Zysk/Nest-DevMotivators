@@ -108,4 +108,13 @@ export class MotivatorsService {
 
     return motivator;
   }
+
+  async acceptToStaging(motivatorId: string): Promise<Motivator> {
+    const updatedMotivator = await this.motivatorModel.findByIdAndUpdate(
+      motivatorId,
+      { place: `${Place.staging}`, accepted: Date.now() },
+      { new: true, runValidators: true },
+    );
+    return updatedMotivator;
+  }
 }
