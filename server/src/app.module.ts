@@ -13,12 +13,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       isGlobal: true,
       envFilePath: '.env',
     }),
-    MongooseModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
-        uri: configService.get<string>('DB_URI'),
-      }),
+    MongooseModule.forRoot('mongodb://mongo:27017/devmotivators', {
+      useNewUrlParser: true,
     }),
     UsersModule,
     MotivatorsModule,
