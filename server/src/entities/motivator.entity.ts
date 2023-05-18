@@ -37,7 +37,7 @@ export class Motivator {
 
   @Prop({
     enum: [Place.main, Place.staging, Place.waiting],
-    default: Place.waiting,
+    default: Place.main,
   })
   place: Place;
 
