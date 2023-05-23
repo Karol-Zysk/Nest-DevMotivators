@@ -18,6 +18,7 @@ import { AccountContext } from "../context/AccountContext";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import LogoutButton from "./LogoutButton";
+import NaviBtn from "./NavigationButton";
 
 type LinkType = {
   children: {
@@ -46,11 +47,12 @@ const NavLink: React.FC<LinkType> = ({ children }) => (
 );
 
 export default function Navbar() {
-  const { isLoggedIn } = useContext(AccountContext);
+  const { isLoggedIn, user } = useContext(AccountContext);
+  console.log(isLoggedIn);
 
   const { colorMode, toggleColorMode } = useColorMode();
   const shadow = useColorModeValue("1px 1px 1px black", "1px 1px 1px white");
-  const color = useColorModeValue("facebook.500", "white");
+  const color = useColorModeValue("facebook.500", "gray.500");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -111,10 +113,17 @@ export default function Navbar() {
             ))}
           </HStack>
           <Flex alignItems={"center"}>
-            <Button size={["md", "md", "lg"]} mr="3" onClick={toggleColorMode}>
+            {isLoggedIn ? (
+              <LogoutButton />
+            ) : (
+              <>
+                <NaviBtn href="login" btnTxt="Login" />
+                <NaviBtn href="register" btnTxt="Register" />
+              </>
+            )}
+            <Button size={["sm", "sm", "sm"]} ml="3" onClick={toggleColorMode}>
               {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
             </Button>
-            {isLoggedIn && <LogoutButton />}
           </Flex>
         </Flex>
         <Box

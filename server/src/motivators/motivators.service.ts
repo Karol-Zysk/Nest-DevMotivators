@@ -49,11 +49,12 @@ export class MotivatorsService {
 
   async createMotivator(
     dto: CreateMotivatorDto,
-    userId: Types.ObjectId,
+    user: User,
   ): Promise<Motivator> {
     const createdMotivator = await this.motivatorModel.create({
-      author: userId,
+      author: user._id,
       ...dto,
+      authorName: user.login,
     });
     return createdMotivator;
   }

@@ -4,13 +4,13 @@ import { FaRegThumbsUp, FaRegThumbsDown } from "react-icons/fa";
 import axios from "axios";
 import { Motivator } from "../../interfaces/Motivator.interface";
 
-const Main = () => {
+const Staging = () => {
   const [motivators, setMotivators] = useState([]);
 
   useEffect(() => {
     const getMotivators = async () => {
       const res = await axios.get(
-        "http://127.0.0.1:4000/api/v1/motivators/place/main"
+        "http://127.0.0.1:4000/api/v1/motivators/place/staging"
       );
 
       setMotivators(res.data);
@@ -37,7 +37,7 @@ const Main = () => {
         >
           <Flex justify="between" w="full" mb="4">
             <Text fontSize="1.25rem" fontWeight="600" color="white">
-              Commited by: {motivator.authorName}
+              {motivator.authorName}
             </Text>
             <Flex>
               <Flex
@@ -75,7 +75,7 @@ const Main = () => {
             <Image
               src={motivator.image}
               alt="image"
-              boxSize="-moz-max-content"
+              boxSize="full"
               objectFit="contain"
             />
           </Flex>
@@ -110,4 +110,4 @@ const Main = () => {
   );
 };
 
-export default Main;
+export default Staging;

@@ -55,7 +55,7 @@ export class MotivatorsController {
 
   @Post()
   createMotivator(@Body() dto: CreateMotivatorDto, @GetUser() user: User) {
-    return this.motivatorsService.createMotivator(dto, user._id);
+    return this.motivatorsService.createMotivator(dto, user);
   }
 
   @UseGuards(AuthorizeGuard)

@@ -27,13 +27,14 @@ export class ApiClient {
     try {
       const headers = config.headers || {};
       if (this.accessToken) {
-        headers["Authorization"] = `Bearer ${this.accessToken}`;
+        headers["Authorization"] = `Bearer ${this.accessToken}` ;
       }
       const response = await axios.request<ApiResponse<T>>({
         ...config,
         headers,
         baseURL: this.baseUrl,
       });
+      console.log(response);
 
       if (!response.data) {
         throw new Error("No data returned from server");

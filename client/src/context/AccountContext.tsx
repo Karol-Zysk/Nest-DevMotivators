@@ -1,6 +1,6 @@
 import { useToast } from "@chakra-ui/react";
 import { createContext, ReactNode, useEffect, useState } from "react";
-import { ApiClient, ApiResponse } from "../utils/ApiClient";
+import { ApiClient } from "../utils/ApiClient";
 
 export interface UserData {
   id: string;
@@ -79,6 +79,7 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const apiClient = new ApiClient();
     const accessToken = localStorage.getItem("access_token");
+    console.log("elo");
 
     if (!accessToken) {
       cleanAfterLogout();
@@ -86,7 +87,7 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
     }
 
     apiClient
-      .get<UserData | any>("/user/me")
+      .get<UserData>("/user/me")
       .then((response: UserData | any) => {
         console.log(response);
         if (response?.error) {

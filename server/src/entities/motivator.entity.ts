@@ -37,7 +37,7 @@ export class Motivator {
 
   @Prop({
     enum: [Place.main, Place.staging, Place.waiting],
-    default: Place.main,
+    default: Place.staging,
   })
   place: Place;
 
@@ -46,6 +46,9 @@ export class Motivator {
 
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   author: Types.ObjectId;
+
+  @Prop({ type: Types.ObjectId, ref: 'User', required: true })
+  authorName: Types.ObjectId;
 
   safeIn(): string {
     if (this.accepted && this.movedToMain) {

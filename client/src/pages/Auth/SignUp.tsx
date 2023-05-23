@@ -73,7 +73,7 @@ const SignUp: React.FC = () => {
       minH="70vh"
       spacing="1rem"
     >
-      <Heading>Sign Up</Heading>
+      <Heading>Register</Heading>
       <form onSubmit={handleSubmit}>
         <FormControl isInvalid={Boolean(error)}>
           <FormLabel htmlFor="login">Login:</FormLabel>
