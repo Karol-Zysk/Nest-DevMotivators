@@ -1,7 +1,18 @@
-import React from "react";
+import { ReactNode } from "react";
 import { Container } from "./Layout";
+import Navbar from "../components/Navbar";
+import { Flex } from "@chakra-ui/react";
 
-const Layout = ({ children }) => {
-  return <Container>{children}</Container>;
+interface LayoutProps {
+  children: ReactNode;
+}
+
+const Layout: React.FC<LayoutProps> = ({ children }) => {
+  return (
+    <Flex direction={"column"} border={"8px"} w="full">
+      <Navbar />
+      {children}
+    </Flex>
+  );
 };
 export default Layout;

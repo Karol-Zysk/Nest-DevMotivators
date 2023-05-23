@@ -1,4 +1,5 @@
 version: "3.8"
+
 services:
   mongo:
     container_name: mongo
@@ -18,20 +19,3 @@ services:
       - mongo
     ports:
       - 8081:8081
-
-  client:
-    build: ./client
-    volumes:
-      - ./client:/usr/src/app
-      - /usr/src/app/node_modules
-    ports:
-      - 8000:8000
-
-  server:
-    build: ./server
-    volumes:
-      - ./server:/usr/src/app
-    ports:
-      - 4000:4000
-    depends_on:
-      - mongo
