@@ -26,11 +26,11 @@ export class AuthService {
     try {
       const userExists = await this.userModel
         .findOne({
-          $or: [{ email: dto.email }, { name: dto.login }],
+          $and: [{ email: dto.email }, { name: dto.login }],
         })
         .exec();
       if (userExists) {
-        throw new ConflictException('User already exists');
+        throw new ConflictException('User alr exists');
       }
 
       const hash = await this.hashData(dto.password);

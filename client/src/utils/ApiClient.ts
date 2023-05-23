@@ -35,11 +35,11 @@ export class ApiClient {
         baseURL: this.baseUrl,
       });
 
-      if (!response.data.data) {
+      if (!response.data) {
         throw new Error("No data returned from server");
       }
-
-      return response.data.data;
+      //@ts-ignore
+      return response.data;
     } catch (error: any) {
       const message = Array.isArray(error.response.data.message)
         ? error.response.data.message[0]

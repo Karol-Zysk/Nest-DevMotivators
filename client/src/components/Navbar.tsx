@@ -45,7 +45,7 @@ const NavLink: React.FC<LinkType> = ({ children }) => (
   <Link to={children.href}>{children.link}</Link>
 );
 
-export default function Nav() {
+export default function Navbar() {
   const { isLoggedIn } = useContext(AccountContext);
 
   const { colorMode, toggleColorMode } = useColorMode();

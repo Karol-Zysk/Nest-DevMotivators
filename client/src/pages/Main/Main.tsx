@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import {
   Author,
   Card,
@@ -10,16 +10,19 @@ import {
   Title,
 } from "./Main.styles";
 import axios from "axios";
+import { AccountContext, UserData } from "../../context/AccountContext";
 
-const MotivatorCards = () => {
+const Main = () => {
   const [motivators, setMotivators] = useState([]);
+  const { user } = useContext(AccountContext);
+
+  const activeUser: UserData = user;
 
   useEffect(() => {
     const getMotivators = async () => {
       const res = await axios.get(
         "http://127.0.0.1:4000/api/v1/motivators/place/main"
       );
-      console.log(res);
 
       setMotivators(res.data);
     };
@@ -36,7 +39,10 @@ const MotivatorCards = () => {
       {motivators.map((motivator: any) => (
         <Card key={motivator.id}>
           <div className="flex justify-between w-full mb-4 ">
-            <Author>author: {motivator.author.login}</Author>
+            <Author>
+              author: {activeUser.login}
+              {motivator.author.login}
+            </Author>
             <div className="flex">
               <Thumb>
                 <ThumbIconUp />
@@ -58,6 +64,7 @@ const MotivatorCards = () => {
             />
           </div>
           <Title>{motivator.title}</Title>
+          <Title>{activeUser.login}</Title>
           <SubTitle>{motivator.subTitle}</SubTitle>
         </Card>
       ))}
@@ -65,4 +72,4 @@ const MotivatorCards = () => {
   );
 };
 
-export default MotivatorCards;
+export default Main;

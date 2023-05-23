@@ -5,7 +5,7 @@ import { ApiClient, ApiResponse } from "../utils/ApiClient";
 export interface UserData {
   id: string;
   email: string;
-  name: string;
+  login: string;
 }
 
 interface AccountContextValue {
@@ -86,24 +86,25 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
     }
 
     apiClient
-      .get<UserData | any>("/users/me")
-      .then((response: ApiResponse<UserData | any>) => {
-        const { data } = response;
-
-        if (data.error) {
+      .get<UserData | any>("/user/me")
+      .then((response: UserData | any) => {
+        console.log(response);
+        if (response?.error) {
           cleanAfterLogout();
           return;
         }
 
-        setUser(data);
+        setUser(response);
         setIsLoggedIn(true);
       })
       .catch((error: any) => {
         cleanAfterLogout();
         setError(error);
+        console.log(error.message);
+
         toast({
           title: "Error",
-          description: `${error}`,
+          description: `${error.message}`,
           status: "error",
           duration: 5000,
           isClosable: true,
