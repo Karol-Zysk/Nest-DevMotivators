@@ -17,10 +17,7 @@ const MotivatorCards = () => {
   useEffect(() => {
     const getMotivators = async () => {
       const res = await axios.get(
-        "http://127.0.0.1:4000/api/v1/motivators/place/main",
-        {
-          headers: { "x-foo": "bar" },
-        }
+        "http://127.0.0.1:4000/api/v1/motivators/place/main"
       );
       console.log(res);
 
