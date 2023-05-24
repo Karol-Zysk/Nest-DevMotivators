@@ -3,6 +3,7 @@ import { Box, Flex, Heading, Text, Image, Icon } from "@chakra-ui/react";
 import { FaRegThumbsUp, FaRegThumbsDown } from "react-icons/fa";
 import axios from "axios";
 import { Motivator } from "../../interfaces/Motivator.interface";
+import Voting from "../../components/Voting";
 
 const Main = () => {
   const [motivators, setMotivators] = useState([]);
@@ -39,37 +40,7 @@ const Main = () => {
             <Text fontSize="1.25rem" fontWeight="600" color="white">
               Commited by: {motivator.authorName}
             </Text>
-            <Flex>
-              <Flex
-                align="center"
-                fontSize="1.125rem"
-                fontWeight="700"
-                color="white"
-                mr="2"
-              >
-                <Icon
-                  as={FaRegThumbsUp}
-                  fontSize="2rem"
-                  color="#3182ce"
-                  mr="0.5rem"
-                />
-                {motivator.like.length}
-              </Flex>
-              <Flex
-                align="center"
-                fontSize="1.125rem"
-                fontWeight="700"
-                color="white"
-              >
-                <Icon
-                  as={FaRegThumbsDown}
-                  fontSize="2rem"
-                  color="#e53e3e"
-                  mr="0.5rem"
-                />
-                {motivator.dislike.length}
-              </Flex>
-            </Flex>
+            <Voting motivator={motivator} />
           </Flex>
           <Flex justify="center" w="full" mb="2">
             <Image

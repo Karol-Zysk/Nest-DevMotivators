@@ -47,7 +47,7 @@ export class User extends Document {
   description: string;
 
   @Prop({
-    default: 'default.jpg',
+    default: 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
   })
   userPhoto: string;
 

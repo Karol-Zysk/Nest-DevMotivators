@@ -27,14 +27,13 @@ export class ApiClient {
     try {
       const headers = config.headers || {};
       if (this.accessToken) {
-        headers["Authorization"] = `Bearer ${this.accessToken}` ;
+        headers["Authorization"] = `Bearer ${this.accessToken}`;
       }
       const response = await axios.request<ApiResponse<T>>({
         ...config,
         headers,
         baseURL: this.baseUrl,
       });
-      console.log(response);
 
       if (!response.data) {
         throw new Error("No data returned from server");
@@ -70,6 +69,15 @@ export class ApiClient {
   async patch<T>(url: string, data?: any): Promise<T> {
     return this.request<T>({
       method: "patch",
+      url,
+      data,
+      baseURL: this.baseUrl,
+    });
+  }
+
+  async put<T>(url: string, data?: any): Promise<T> {
+    return this.request<T>({
+      method: "put",
       url,
       data,
       baseURL: this.baseUrl,

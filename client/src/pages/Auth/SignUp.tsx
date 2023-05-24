@@ -13,7 +13,7 @@ import {
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router";
 import { AccountContext } from "../../context/AccountContext";
-import { ApiClient, ApiResponse, AuthResponse } from "../../utils/ApiClient";
+import { ApiClient, AuthResponse } from "../../utils/ApiClient";
 
 interface FormData {
   login: string;
@@ -43,21 +43,23 @@ const SignUp: React.FC = () => {
     event.preventDefault();
 
     try {
-      const result: ApiResponse<AuthResponse> = await apiClient.post(
+      const result: AuthResponse = await apiClient.post(
         "/auth/signup",
         formData
       );
+
       localStorage.setItem("access_token", result.access_token);
+
       localStorage.setItem("refresh_token", result.refreshToken);
       setIsLoggedIn(true);
 
       setTimeout(() => {
         navigate("/main");
       }, 500);
-    } catch (error) {
+    } catch (error: any) {
       toast({
-        title: "Error",
-        description: `${error}`,
+        title: `Error: ${error?.status}`,
+        description: `${error.message}`,
         status: "error",
         duration: 5000,
         isClosable: true,

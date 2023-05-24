@@ -11,7 +11,7 @@ import {
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router";
 import { AccountContext } from "../../context/AccountContext";
-import { ApiClient, ApiResponse, AuthResponse } from "../../utils/ApiClient";
+import { ApiClient, AuthResponse } from "../../utils/ApiClient";
 
 interface FormData {
   email: string;
@@ -36,7 +36,7 @@ const Login: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const result: ApiResponse<AuthResponse> = await apiClient.post(
+      const result: AuthResponse = await apiClient.post(
         "/auth/signin",
         formData
       );
@@ -51,8 +51,8 @@ const Login: React.FC = () => {
       }, 500);
     } catch (error: any) {
       toast({
-        title: "Error",
-        description: `${error}`,
+        title: `Error: ${error?.status}`,
+        description: `${error.message}`,
         status: "error",
         duration: 5000,
         isClosable: true,

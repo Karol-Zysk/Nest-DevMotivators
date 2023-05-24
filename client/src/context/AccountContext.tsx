@@ -1,8 +1,9 @@
 import { useToast } from "@chakra-ui/react";
 import { createContext, ReactNode, useEffect, useState } from "react";
-import { ApiClient } from "../utils/ApiClient";
+import { ApiClient, AuthResponse } from "../utils/ApiClient";
 
 export interface UserData {
+  userPhoto: string;
   id: string;
   email: string;
   login: string;
@@ -23,10 +24,8 @@ const initialState: AccountContextValue = {
   isLoggedIn: false,
   setIsLoggedIn: () => false,
   setUser: () => undefined,
-
   error: null,
   setError: () => null,
-
   cleanAfterLogout: () => undefined,
 };
 
@@ -53,9 +52,12 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
         throw new Error("You're not logged in!");
       }
 
-      const response = await apiClient.get<any>("/auth/refresh", {
-        headers: { authorization: `Bearer ${refreshToken}` },
-      });
+      const response = await apiClient.get<{ data: AuthResponse }>(
+        "/auth/refresh",
+        {
+          headers: { authorization: `Bearer ${refreshToken}` },
+        }
+      );
       const { data } = response;
 
       if (data.access_token) {
@@ -77,31 +79,22 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
-    const apiClient = new ApiClient();
-    const accessToken = localStorage.getItem("access_token");
-    console.log("elo");
+    const fetchUserData = async () => {
+      const apiClient = new ApiClient();
+      const accessToken = localStorage.getItem("access_token");
 
-    if (!accessToken) {
-      cleanAfterLogout();
-      return;
-    }
-
-    apiClient
-      .get<UserData>("/user/me")
-      .then((response: UserData | any) => {
-        console.log(response);
-        if (response?.error) {
-          cleanAfterLogout();
-          return;
-        }
-
-        setUser(response);
-        setIsLoggedIn(true);
-      })
-      .catch((error: any) => {
+      if (!accessToken) {
         cleanAfterLogout();
-        setError(error);
-        console.log(error.message);
+        return;
+      }
+
+      try {
+        const response = await apiClient.get<UserData>("/user/me");
+        setUser(response);
+        console.log(response);
+        setIsLoggedIn(true);
+      } catch (error: any) {
+        console.log(error);
 
         toast({
           title: "Error",
@@ -110,8 +103,12 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
           duration: 5000,
           isClosable: true,
         });
-      });
-  }, [isLoggedIn]);
+        return;
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
