@@ -1,11 +1,12 @@
 import { useToast } from "@chakra-ui/react";
 import { createContext, ReactNode, useEffect, useState } from "react";
-import { ApiClient, ApiResponse } from "../utils/ApiClient";
+import { ApiClient, AuthResponse } from "../utils/ApiClient";
 
 export interface UserData {
+  userPhoto: string;
   id: string;
   email: string;
-  name: string;
+  login: string;
 }
 
 interface AccountContextValue {
@@ -23,10 +24,8 @@ const initialState: AccountContextValue = {
   isLoggedIn: false,
   setIsLoggedIn: () => false,
   setUser: () => undefined,
-
   error: null,
   setError: () => null,
-
   cleanAfterLogout: () => undefined,
 };
 
@@ -53,9 +52,12 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
         throw new Error("You're not logged in!");
       }
 
-      const response = await apiClient.get<any>("/auth/refresh", {
-        headers: { authorization: `Bearer ${refreshToken}` },
-      });
+      const response = await apiClient.get<{ data: AuthResponse }>(
+        "/auth/refresh",
+        {
+          headers: { authorization: `Bearer ${refreshToken}` },
+        }
+      );
       const { data } = response;
 
       if (data.access_token) {
@@ -77,39 +79,36 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
-    const apiClient = new ApiClient();
-    const accessToken = localStorage.getItem("access_token");
+    const fetchUserData = async () => {
+      const apiClient = new ApiClient();
+      const accessToken = localStorage.getItem("access_token");
 
-    if (!accessToken) {
-      cleanAfterLogout();
-      return;
-    }
-
-    apiClient
-      .get<UserData | any>("/users/me")
-      .then((response: ApiResponse<UserData | any>) => {
-        const { data } = response;
-
-        if (data.error) {
-          cleanAfterLogout();
-          return;
-        }
-
-        setUser(data);
-        setIsLoggedIn(true);
-      })
-      .catch((error: any) => {
+      if (!accessToken) {
         cleanAfterLogout();
-        setError(error);
+        return;
+      }
+
+      try {
+        const response = await apiClient.get<UserData>("/user/me");
+        setUser(response);
+        console.log(response);
+        setIsLoggedIn(true);
+      } catch (error: any) {
+        console.log(error);
+
         toast({
           title: "Error",
-          description: `${error}`,
+          description: `${error.message}`,
           status: "error",
           duration: 5000,
           isClosable: true,
         });
-      });
-  }, [isLoggedIn]);
+        return;
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   useEffect(() => {
     const intervalId = setInterval(() => {

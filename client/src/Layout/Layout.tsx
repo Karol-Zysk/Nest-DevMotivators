@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import { Container } from "./Layout";
 import Navbar from "../components/Navbar";
 import { Flex } from "@chakra-ui/react";
 
@@ -9,9 +8,14 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <Flex direction={"column"} border={"8px"} w="full">
+    <Flex minH="100vh" direction="column">
       <Navbar />
-      {children}
+
+      <Flex direction="column" height="100%" flex="1">
+        {children}
+      </Flex>
+
+      {/* <Footer /> */}
     </Flex>
   );
 };

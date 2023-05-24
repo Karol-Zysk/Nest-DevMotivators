@@ -1,11 +1,14 @@
-import Layout from "../src/Layout/Layout.tsx";
-import MotivatorCards from "./pages/Main/Main";
+import Layout from "./Layout/Layout";
+import { AccountContextProvider } from "./context/AccountContext";
+import Views from "./views/Views";
 
 function App() {
   return (
-    <Layout>
-      <MotivatorCards />
-    </Layout>
+    <AccountContextProvider>
+      <Layout>
+        <Views />
+      </Layout>
+    </AccountContextProvider>
   );
 }
 

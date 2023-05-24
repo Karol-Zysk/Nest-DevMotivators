@@ -9,15 +9,21 @@ import {
   HStack,
   VStack,
   Text,
+  IconButton,
+  Avatar,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
-import { IconButton } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import { useContext, useState } from "react";
 import { AccountContext } from "../context/AccountContext";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import LogoutButton from "./LogoutButton";
+import NaviBtn from "./NavigationButton";
 
 type LinkType = {
   children: {
@@ -45,12 +51,12 @@ const NavLink: React.FC<LinkType> = ({ children }) => (
   <Link to={children.href}>{children.link}</Link>
 );
 
-export default function Nav() {
-  const { isLoggedIn } = useContext(AccountContext);
+export default function Navbar() {
+  const { isLoggedIn, user } = useContext(AccountContext);
 
   const { colorMode, toggleColorMode } = useColorMode();
   const shadow = useColorModeValue("1px 1px 1px black", "1px 1px 1px white");
-  const color = useColorModeValue("facebook.500", "white");
+  const color = useColorModeValue("facebook.500", "gray.500");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -111,10 +117,35 @@ export default function Nav() {
             ))}
           </HStack>
           <Flex alignItems={"center"}>
-            <Button size={["md", "md", "lg"]} mr="3" onClick={toggleColorMode}>
+            {isLoggedIn ? (
+              <>
+                {isLoggedIn && (
+                  <Menu>
+                    <MenuButton
+                      as={Button}
+                      rounded={"full"}
+                      variant={"link"}
+                      cursor={"pointer"}
+                    >
+                      <Avatar size={"sm"} src={user?.userPhoto} />
+                    </MenuButton>
+                    <MenuList>
+                      <MenuItem>Profile</MenuItem>
+                      <MenuItem>Settings</MenuItem>
+                    </MenuList>
+                  </Menu>
+                )}
+                <LogoutButton />
+              </>
+            ) : (
+              <>
+                <NaviBtn href="login" btnTxt="Login" />
+                <NaviBtn href="register" btnTxt="Register" />
+              </>
+            )}
+            <Button size={["sm", "sm", "sm"]} ml="3" onClick={toggleColorMode}>
               {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
             </Button>
-            {isLoggedIn && <LogoutButton />}
           </Flex>
         </Flex>
         <Box

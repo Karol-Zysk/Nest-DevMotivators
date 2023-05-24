@@ -26,7 +26,7 @@ export class AuthService {
     try {
       const userExists = await this.userModel
         .findOne({
-          $or: [{ email: dto.email }, { name: dto.login }],
+          $or: [{ email: dto.email }, { login: dto.login }],
         })
         .exec();
       if (userExists) {
