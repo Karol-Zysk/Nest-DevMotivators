@@ -1,14 +1,16 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Flex, Icon, useToast } from "@chakra-ui/react";
 import { FaRegThumbsDown, FaRegThumbsUp } from "react-icons/fa";
 import { Motivator } from "../interfaces/Motivator.interface";
 import { ApiClient } from "../utils/ApiClient";
+import { AxiosError, AxiosResponse } from "axios";
+import { AccountContext } from "../context/AccountContext";
 
 const StyledFlex = styled(Flex)<{ active: boolean }>`
   transition: all 0.3s;
-  opacity: ${({ active }) => (active ? 1 : 0.9)};
-  transform: scale(${({ active }) => (active ? 1 : 0.95)});
+  opacity: ${({ active }) => (active ? 1 : 0.8)};
+  transform: scale(${({ active }) => (active ? 1 : 0.8)});
   &:hover {
     opacity: 1;
     transform: scale(1);
@@ -16,22 +18,26 @@ const StyledFlex = styled(Flex)<{ active: boolean }>`
 `;
 
 const Voting: React.FC<{ motivator: Motivator }> = ({ motivator }) => {
+  const { user } = useContext(AccountContext);
   const toast = useToast();
-  const [hasLiked, setHasLiked] = useState(false);
-  const [hasDisliked, setHasDisliked] = useState(false);
+  const [lastError403, setLastError403] = useState(false);
+  const [resp, setResp] = useState<Motivator | undefined>(undefined);
 
-  const vote = async (
-    id: string,
-    action: string,
-    setActionState: (state: boolean) => boolean,
-    oppositeActionState: boolean
-  ) => {
-    if (oppositeActionState) return;
+  const vote = async (id: string, action: string) => {
+    const apiClient = new ApiClient();
+
     try {
-      const apiClient = new ApiClient();
-      await apiClient.put(`/motivators/${id}/${action}`);
-      setActionState((prevState: boolean) => !prevState);
+      console.log(action);
+
+      const res = await apiClient.patch(`/motivators/${id}/${action}`);
+      // console.log(res);
+      setResp(res);
+      console.log(resp);
+
+      setLastError403(!lastError403); // reset lastError403 status after executing the action
     } catch (error: any) {
+      console.log(error);
+
       toast({
         title: "Error",
         description: `${error.message}`,
@@ -39,6 +45,10 @@ const Voting: React.FC<{ motivator: Motivator }> = ({ motivator }) => {
         duration: 5000,
         isClosable: true,
       });
+
+      if (error.response && error.response.status === 403) {
+        setLastError403(true);
+      }
     }
   };
 
@@ -50,32 +60,22 @@ const Voting: React.FC<{ motivator: Motivator }> = ({ motivator }) => {
         fontWeight="700"
         color="white"
         mr="2"
-        active={hasLiked}
+        active={true}
         onClick={() =>
-          vote(
-            motivator._id,
-            hasLiked ? "undolike" : "dolike",
-            setHasLiked,
-            hasDisliked
-          )
+          user && vote(motivator._id, lastError403 ? "dolike" : "undolike")
         }
       >
         <Icon as={FaRegThumbsUp} fontSize="2rem" color="#3182ce" mr="0.5rem" />
-        {motivator.like.length}
+        {resp?.like.length || motivator.like.length}
       </StyledFlex>
       <StyledFlex
         align="center"
         fontSize="1.125rem"
         fontWeight="700"
         color="white"
-        active={hasDisliked}
+        active={true}
         onClick={() =>
-          vote(
-            motivator._id,
-            hasDisliked ? "undounlike" : "dounlike",
-            setHasDisliked,
-            hasLiked
-          )
+          user && vote(motivator._id, lastError403 ? "undounlike" : "dounlike")
         }
       >
         <Icon
@@ -84,7 +84,7 @@ const Voting: React.FC<{ motivator: Motivator }> = ({ motivator }) => {
           color="#e53e3e"
           mr="0.5rem"
         />
-        {motivator.dislike.length}
+        {resp?.dislike.length || motivator.dislike.length}
       </StyledFlex>
     </Flex>
   );

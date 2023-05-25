@@ -3,6 +3,7 @@ import {
   CanActivate,
   ExecutionContext,
   ForbiddenException,
+  BadRequestException,
 } from '@nestjs/common';
 import { MotivatorsService } from '../motivators.service';
 
@@ -18,6 +19,7 @@ export class VotingGuard implements CanActivate {
     } = request;
 
     const motivator = await this.motivatorService.findMotivatorById(id);
+    if (!motivator) throw new BadRequestException('Invalid Motivator Id');
 
     const like = motivator?.like.includes(user._id);
     const disLike = motivator?.dislike.includes(user._id);
@@ -25,7 +27,11 @@ export class VotingGuard implements CanActivate {
     const voted = like || disLike;
 
     if (voted) {
-      throw new ForbiddenException("You've already voted");
+      throw new ForbiddenException(
+        `You've already ${like ? 'liked' : 'disliked'} this motivator. Click ${
+          like ? 'like' : 'dislike'
+        }  to undo your vote.`,
+      );
     }
 
     return true;
