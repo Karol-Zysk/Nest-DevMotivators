@@ -4,7 +4,6 @@ import { Flex, Icon, useToast } from "@chakra-ui/react";
 import { FaRegThumbsDown, FaRegThumbsUp } from "react-icons/fa";
 import { Motivator } from "../interfaces/Motivator.interface";
 import { ApiClient } from "../utils/ApiClient";
-import { AxiosError, AxiosResponse } from "axios";
 import { AccountContext } from "../context/AccountContext";
 
 const StyledFlex = styled(Flex)<{ active: boolean }>`
@@ -20,8 +19,9 @@ const StyledFlex = styled(Flex)<{ active: boolean }>`
 const Voting: React.FC<{ motivator: Motivator }> = ({ motivator }) => {
   const { user } = useContext(AccountContext);
   const toast = useToast();
+
   const [lastError403, setLastError403] = useState(false);
-  const [resp, setResp] = useState<Motivator | undefined>(undefined);
+  const [resp, setResp] = useState<Motivator>();
 
   const vote = async (id: string, action: string) => {
     const apiClient = new ApiClient();
@@ -29,12 +29,12 @@ const Voting: React.FC<{ motivator: Motivator }> = ({ motivator }) => {
     try {
       console.log(action);
 
-      const res = await apiClient.patch(`/motivators/${id}/${action}`);
-      // console.log(res);
+      setLastError403(!lastError403);
+      const res = await apiClient.patch<Motivator>(
+        `/motivators/${id}/${action}`
+      );
       setResp(res);
       console.log(resp);
-
-      setLastError403(!lastError403); // reset lastError403 status after executing the action
     } catch (error: any) {
       console.log(error);
 
@@ -47,7 +47,7 @@ const Voting: React.FC<{ motivator: Motivator }> = ({ motivator }) => {
       });
 
       if (error.response && error.response.status === 403) {
-        setLastError403(true);
+        setLastError403(false);
       }
     }
   };
@@ -62,10 +62,24 @@ const Voting: React.FC<{ motivator: Motivator }> = ({ motivator }) => {
         mr="2"
         active={true}
         onClick={() =>
-          user && vote(motivator._id, lastError403 ? "dolike" : "undolike")
+          user
+            ? vote(motivator._id, !lastError403 ? "dolike" : "undolike")
+            : toast({
+                title: "Error",
+                description: `Unauthorized, Log in first`,
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+              })
         }
       >
-        <Icon as={FaRegThumbsUp} fontSize="2rem" color="#3182ce" mr="0.5rem" />
+        <Icon
+          as={FaRegThumbsUp}
+          fontSize="2rem"
+          cursor="pointer"
+          color="#3182ce"
+          mr="0.5rem"
+        />
         {resp?.like.length || motivator.like.length}
       </StyledFlex>
       <StyledFlex
@@ -75,13 +89,22 @@ const Voting: React.FC<{ motivator: Motivator }> = ({ motivator }) => {
         color="white"
         active={true}
         onClick={() =>
-          user && vote(motivator._id, lastError403 ? "undounlike" : "dounlike")
+          user
+            ? vote(motivator._id, !lastError403 ? "dounlike" : "undounlike")
+            : toast({
+                title: "Error",
+                description: `Unauthorized, Log in first`,
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+              })
         }
       >
         <Icon
           as={FaRegThumbsDown}
           fontSize="2rem"
           color="#e53e3e"
+          cursor="pointer"
           mr="0.5rem"
         />
         {resp?.dislike.length || motivator.dislike.length}
