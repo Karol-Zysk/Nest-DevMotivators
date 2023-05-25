@@ -41,10 +41,15 @@ export class ApiClient {
       //@ts-ignore
       return response.data;
     } catch (error: any) {
-      const message = Array.isArray(error.response.data.message)
-        ? error.response.data.message[0]
-        : error.response.data.message || "Unknown error occurred";
-      throw new Error(message);
+      // Handle HTTP 403 (Forbidden) errors
+      if (error.response && error.response.status === 403) {
+        throw new Error(error.response.data.message);
+      }
+      if (error.response && error.response.status === 401) {
+        throw new Error(error.response.data.message);
+      }
+
+      return error;
     }
   }
 
@@ -69,15 +74,6 @@ export class ApiClient {
   async patch<T>(url: string, data?: any): Promise<T> {
     return this.request<T>({
       method: "patch",
-      url,
-      data,
-      baseURL: this.baseUrl,
-    });
-  }
-
-  async put<T>(url: string, data?: any): Promise<T> {
-    return this.request<T>({
-      method: "put",
       url,
       data,
       baseURL: this.baseUrl,

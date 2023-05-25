@@ -10,7 +10,6 @@ import {
   Delete,
   HttpCode,
   HttpStatus,
-  Put,
 } from '@nestjs/common';
 import { MotivatorsService } from './motivators.service';
 import { CreateMotivatorDto } from './dto/create-motivator.dto';
@@ -75,7 +74,7 @@ export class MotivatorsController {
   }
 
   @UseGuards(VotingGuard)
-  @Put('/:id/dolike')
+  @Patch('/:id/dolike')
   doLike(@Param('id') id: string, @GetUser() user: User) {
     return this.motivatorsService.vote(
       id,
@@ -85,7 +84,7 @@ export class MotivatorsController {
     );
   }
 
-  @Put('/:id/undolike')
+  @Patch('/:id/undolike')
   undoLike(@Param('id') id: string, @GetUser() user: User) {
     return this.motivatorsService.vote(
       id,
@@ -96,7 +95,7 @@ export class MotivatorsController {
   }
 
   @UseGuards(VotingGuard)
-  @Put('/:id/dounlike')
+  @Patch('/:id/dounlike')
   doUnlike(@Param('id') id: string, @GetUser() user: User) {
     return this.motivatorsService.vote(
       id,
@@ -106,7 +105,7 @@ export class MotivatorsController {
     );
   }
 
-  @Put('/:id/undounlike')
+  @Patch('/:id/undounlike')
   undoUnlike(@Param('id') id: string, @GetUser() user: User) {
     return this.motivatorsService.vote(
       id,
