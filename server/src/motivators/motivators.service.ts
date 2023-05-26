@@ -2,6 +2,7 @@ import {
   Injectable,
   BadRequestException,
   NotFoundException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
@@ -80,25 +81,58 @@ export class MotivatorsService {
     return;
   }
 
-  async vote(
+  async checkVoteConditions(
     id: string,
-    userId: User,
+    user: User,
     option: VoteKind,
     method: VoteMethod,
   ): Promise<Motivator> {
-    let motivator = await this.motivatorModel
+    const motivator = await this.motivatorModel.findById(id).exec();
+
+    if (!motivator) {
+      throw new NotFoundException(`Motivator with id ${id} not found`);
+    }
+
+    if (method === VoteMethod.take) {
+      if (option === VoteKind.like && !motivator.like.includes(user._id)) {
+        throw new ForbiddenException(
+          `You've already disliked this motivator. Click dislike to undo your vote.`,
+        );
+      }
+      if (
+        option === VoteKind.dislike &&
+        !motivator.dislike.includes(user._id)
+      ) {
+        throw new ForbiddenException(
+          `You've already liked this motivator. Click like to undo your vote.`,
+        );
+      }
+    }
+
+    return motivator;
+  }
+
+  async vote(
+    id: string,
+    user: User,
+    option: VoteKind,
+    method: VoteMethod,
+  ): Promise<Motivator> {
+    const motivator = await this.checkVoteConditions(id, user, option, method);
+
+    let updatedMotivator = await this.motivatorModel
       .findByIdAndUpdate(
         id,
         {
-          [`$${method}`]: { [`${option}`]: userId },
+          [`$${method}`]: { [`${option}`]: user },
           movedToMain: Date.now(),
         },
         { new: true, runValidators: true },
       )
       .exec();
 
-    if (motivator && motivator.like.length === 2) {
-      motivator = await this.motivatorModel
+    if (updatedMotivator && updatedMotivator.like.length === 2) {
+      updatedMotivator = await this.motivatorModel
         .findByIdAndUpdate(
           id,
           { place: Place.main },
@@ -107,7 +141,7 @@ export class MotivatorsService {
         .exec();
     }
 
-    return motivator;
+    return updatedMotivator;
   }
 
   async acceptToStaging(motivatorId: string): Promise<Motivator> {

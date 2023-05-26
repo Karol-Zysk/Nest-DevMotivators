@@ -42,8 +42,8 @@ const Links = [
     href: "/staging",
   },
   {
-    link: "Add New",
-    href: "/add",
+    link: "Pull Request",
+    href: "/pullrequest",
   },
 ];
 

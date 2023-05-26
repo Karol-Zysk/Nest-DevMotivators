@@ -27,17 +27,19 @@ const Voting: React.FC<{ motivator: Motivator }> = ({ motivator }) => {
     const apiClient = new ApiClient();
 
     try {
-      console.log(action);
-
       setLastError403(!lastError403);
       const res = await apiClient.patch<Motivator>(
         `/motivators/${id}/${action}`
       );
-      setResp(res);
-      console.log(resp);
-    } catch (error: any) {
-      console.log(error);
+      console.log(res);
 
+      setResp(res);
+    } catch (error: any) {
+      console.log(error.statu);
+
+      if (error.response && error.response.status === 403) {
+        setLastError403(false);
+      }
       toast({
         title: "Error",
         description: `${error.message}`,
@@ -45,10 +47,6 @@ const Voting: React.FC<{ motivator: Motivator }> = ({ motivator }) => {
         duration: 5000,
         isClosable: true,
       });
-
-      if (error.response && error.response.status === 403) {
-        setLastError403(false);
-      }
     }
   };
 
@@ -66,7 +64,7 @@ const Voting: React.FC<{ motivator: Motivator }> = ({ motivator }) => {
             ? vote(motivator._id, !lastError403 ? "dolike" : "undolike")
             : toast({
                 title: "Error",
-                description: `Unauthorized, Log in first`,
+                description: `Log in to vote`,
                 status: "error",
                 duration: 5000,
                 isClosable: true,
