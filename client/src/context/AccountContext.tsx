@@ -91,7 +91,6 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
       try {
         const response = await apiClient.get<UserData>("/user/me");
         setUser(response);
-        console.log(response);
         setIsLoggedIn(true);
       } catch (error: any) {
         console.log(error);
@@ -108,7 +107,7 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
     };
 
     fetchUserData();
-  }, []);
+  }, [isLoggedIn]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {

@@ -6,6 +6,7 @@ import { MotivatorsModule } from './motivators/motivators.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     UsersModule,
     MotivatorsModule,
     AuthModule,
+    CloudinaryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

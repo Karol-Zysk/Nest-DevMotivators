@@ -87,4 +87,37 @@ export class ApiClient {
       baseURL: this.baseUrl,
     });
   }
+
+  async getCloudinarySignature(): Promise<{
+    signature: string;
+    timestamp: number;
+  }> {
+    return this.request<{ signature: string; timestamp: number }>({
+      method: "get",
+      url: "/cloudinary/signature",
+    });
+  }
+
+  async postCloudinaryUpload(formData: FormData): Promise<any> {
+    try {
+      const response = await axios.post(
+        `https://api.cloudinary.com/v1_1/${
+          import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+        }/upload`,
+        formData
+      );
+
+      return response.data;
+    } catch (error: any) {
+      console.log(error);
+      // Handle HTTP 403 (Forbidden) and 401 (Unauthorized) errors
+      if (
+        error.response &&
+        (error.response.status === 403 || error.response.status === 401)
+      ) {
+        throw new Error(error.response.data.message);
+      }
+      throw error;
+    }
+  }
 }
