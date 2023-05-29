@@ -47,7 +47,7 @@ const Login: React.FC = () => {
 
       setIsLoggedIn(true);
       setTimeout(() => {
-        navigate("/main");
+        navigate("/");
       }, 500);
     } catch (error: any) {
       toast({

@@ -1,24 +1,29 @@
 import { useEffect, useState } from "react";
-import { Box, Flex, Heading, Text, Image, Icon } from "@chakra-ui/react";
-import { FaRegThumbsUp, FaRegThumbsDown } from "react-icons/fa";
-import axios from "axios";
+import { Box, Flex, Heading, Text, Image, Button } from "@chakra-ui/react";
 import { Motivator } from "../../interfaces/Motivator.interface";
 import Voting from "../../components/Voting";
+import { ApiClient } from "../../utils/ApiClient";
 
 const Main = () => {
   const [motivators, setMotivators] = useState([]);
+  const [page, setPage] = useState(0);
+  const resultsPerPage = 3;
+
+  const apiClient = new ApiClient();
+
+  const getMotivators = async () => {
+    const res = await apiClient.get(
+      `/motivators/place/main?limit=${resultsPerPage}&page=${
+        page * resultsPerPage
+      }`
+    );
+
+    setMotivators((oldMotivators) => [...oldMotivators, ...res]);
+  };
 
   useEffect(() => {
-    const getMotivators = async () => {
-      const res = await axios.get(
-        "http://127.0.0.1:4000/api/v1/motivators/place/main"
-      );
-
-      setMotivators(res.data);
-    };
-
     getMotivators();
-  }, []);
+  }, [page]);
 
   if (!motivators.length) {
     return <h1 className="text-3xl font-bold text-center">Loading...</h1>;
@@ -60,13 +65,6 @@ const Main = () => {
             {motivator.title}
           </Heading>
           <Heading
-            as="h3"
-            mt="1rem"
-            fontSize="3xl"
-            fontWeight="700"
-            color="white"
-          ></Heading>
-          <Heading
             as="h4"
             mt="0.5rem"
             fontSize="xl"
@@ -77,6 +75,9 @@ const Main = () => {
           </Heading>
         </Box>
       ))}
+      <Button onClick={() => setPage((prevPage) => prevPage + 1)}>
+        Load more
+      </Button>
     </Box>
   );
 };

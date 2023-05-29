@@ -8,6 +8,7 @@ export class CreateMotivatorDto {
   title: string;
 
   @IsString()
+  @IsNotEmpty()
   @MaxLength(1000)
   subTitle: string;
 

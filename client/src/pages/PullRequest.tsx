@@ -3,20 +3,22 @@ import {
   Box,
   Input,
   Button,
-  Text,
   VStack,
   FormControl,
   FormLabel,
 } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
 import { ApiClient } from "../utils/ApiClient";
+import { uploadToCloudinary } from "../utils/CloudinaryUpload";
+import { useNavigate } from "react-router";
 
 const PullRequest: React.FC = () => {
   const [title, setTitle] = useState<string>("");
   const [subTitle, setSubTitle] = useState<string>("");
   const [keyWords, setKeyWords] = useState<string[]>([]);
   const [photo, setPhoto] = useState<File | null>(null);
-  const [image, setImage] = useState("");
+
+  const navigate = useNavigate();
   const toast = useToast();
   const apiClient = new ApiClient();
 
@@ -24,43 +26,28 @@ const PullRequest: React.FC = () => {
     event.preventDefault();
 
     try {
-      const { signature, timestamp } = await apiClient.getCloudinarySignature();
-
-      const formData = new FormData();
-      if (image) {
-        formData.append("file", image);
-      }
-      formData.append("signature", signature);
-      formData.append("timestamp", timestamp);
-      formData.append("api_key", `${import.meta.env.VITE_CLOUDINARY_API_KEY}`);
-      console.log(import.meta.env.VITE_CLOUDINARY_API_KEY);
-
-      console.log(formData);
-      const data = await apiClient.postCloudinaryUpload(formData);
-
-      setImage(data.secure_url);
+      const imageUrl = photo ? await uploadToCloudinary(photo) : "";
 
       const motivatorData = {
         keyWords,
-        image: data.secure_url,
+        image: imageUrl,
         title,
         subTitle,
       };
-      console.log(motivatorData);
 
       const res = await apiClient.post("motivators", motivatorData);
-      console.log(res);
 
-      toast({
-        title: "Motivator created",
-        description: "Your motivator has been successfully created.",
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-      });
+      if (res) {
+        navigate("/");
+        toast({
+          title: "Success",
+          description: "Motivaror Successfully Created",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
+      }
     } catch (error: any) {
-      console.log(error);
-
       toast({
         title: "Error",
         description: error.message,
@@ -84,6 +71,7 @@ const PullRequest: React.FC = () => {
           <FormLabel color="gray.300">Title:</FormLabel>
           <Input
             type="text"
+            required={true}
             value={title}
             onChange={(event) => setTitle(event.currentTarget.value)}
           />
@@ -93,6 +81,7 @@ const PullRequest: React.FC = () => {
           <Input
             type="text"
             value={subTitle}
+            required={true}
             onChange={(event) => setSubTitle(event.currentTarget.value)}
           />
         </FormControl>
@@ -102,6 +91,7 @@ const PullRequest: React.FC = () => {
           </FormLabel>
           <Input
             type="text"
+            required={true}
             value={keyWords.join(",")}
             onChange={(event) => setKeyWords(event.target.value.split(","))}
           />

@@ -10,7 +10,7 @@ import PullRequest from "../pages/PullRequest";
 const Views = () => {
   return (
     <Routes>
-      <Route path="/main" element={<Main />} />
+      <Route path="/" element={<Main />} />
       <Route path="/staging" element={<Staging />} />
       <Route element={<PrivateRoutes />}>
         <Route path="/pullrequest" element={<PullRequest />} />
