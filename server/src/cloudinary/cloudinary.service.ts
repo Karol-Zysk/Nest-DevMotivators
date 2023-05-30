@@ -11,7 +11,6 @@ export class CloudinaryService {
       },
       `${process.env.CLOUDINARY_SECRET}`,
     );
-    console.log(process.env.CLOUDINARY_SECRET);
 
     return { signature, timestamp };
   }

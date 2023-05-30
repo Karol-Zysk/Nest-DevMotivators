@@ -119,22 +119,25 @@ export default function Navbar() {
           <Flex alignItems={"center"}>
             {isLoggedIn ? (
               <>
-                {isLoggedIn && (
-                  <Menu>
-                    <MenuButton
-                      as={Button}
-                      rounded={"full"}
-                      variant={"link"}
-                      cursor={"pointer"}
-                    >
-                      <Avatar size={"sm"} src={user?.userPhoto} />
-                    </MenuButton>
-                    <MenuList>
-                      <MenuItem>Profile</MenuItem>
-                      <MenuItem>Settings</MenuItem>
-                    </MenuList>
-                  </Menu>
-                )}
+                <Menu>
+                  <MenuButton
+                    as={Button}
+                    rounded={"full"}
+                    variant={"link"}
+                    cursor={"pointer"}
+                  >
+                    <Avatar size={"sm"} src={user?.userPhoto} />
+                  </MenuButton>
+                  <MenuList>
+                    <MenuItem>
+                      <Link to="/profile">Profil</Link>
+                    </MenuItem>
+                    <MenuItem>
+                      <Link to="/settings">Profil</Link>
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
+
                 <LogoutButton />
               </>
             ) : (

@@ -36,6 +36,7 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<UserData | undefined | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
   const cleanAfterLogout = () => {
     setUser(undefined);
     setIsLoggedIn(false);
@@ -52,25 +53,19 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
         throw new Error("You're not logged in!");
       }
 
-      const response = await apiClient.get<{ data: AuthResponse }>(
-        "/auth/refresh",
-        {
-          headers: { authorization: `Bearer ${refreshToken}` },
-        }
-      );
-      const { data } = response;
+      const response = await apiClient.get<AuthResponse>("/auth/refresh", {
+        headers: { authorization: `Bearer ${refreshToken}` },
+      });
 
-      if (data.access_token) {
-        localStorage.setItem("access_token", data.access_token);
-        localStorage.setItem("refresh_token", data.refreshToken);
+      if (response.access_token) {
+        localStorage.setItem("access_token", response.access_token);
+        localStorage.setItem("refresh_token", response.refreshToken);
         setIsLoggedIn(true);
       }
     } catch (error: any) {
-      console.error(error);
-      setError(error);
       toast({
         title: "Error",
-        description: `${error}`,
+        description: `${error.message}`,
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -91,9 +86,14 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
       try {
         const response = await apiClient.get<UserData>("/user/me");
         setUser(response);
+        console.log(response);
+
         setIsLoggedIn(true);
       } catch (error: any) {
-        console.log(error);
+        if (error.statusCode === 401) {
+          refreshAccessToken();
+          return;
+        }
 
         toast({
           title: "Error",
@@ -107,14 +107,14 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
     };
 
     fetchUserData();
-  }, [isLoggedIn]);
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      refreshAccessToken();
-    }, 10 * 60 * 1000);
-    return () => clearInterval(intervalId);
   }, []);
+
+  // useEffect(() => {
+  //   const intervalId = setInterval(() => {
+  //     refreshAccessToken();
+  //   }, 10 * 60 * 1000);
+  //   return () => clearInterval(intervalId);
+  // }, []);
 
   return (
     <AccountContext.Provider

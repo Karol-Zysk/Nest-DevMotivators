@@ -1,27 +1,33 @@
 import { useEffect, useState } from "react";
-import { Box, Flex, Heading, Text, Image, Button } from "@chakra-ui/react";
+import { Box, Flex, Heading, Text, Image } from "@chakra-ui/react";
+import ReactPaginate from "react-paginate";
 import { Motivator } from "../../interfaces/Motivator.interface";
 import Voting from "../../components/Voting";
 import { ApiClient } from "../../utils/ApiClient";
+import Pagination from "../../components/Pagination";
+
+interface ApiResponse {
+  motivators: Motivator[];
+  count: number;
+}
 
 const Main = () => {
-  const [motivators, setMotivators] = useState([]);
+  const [motivators, setMotivators] = useState<Motivator[]>([]);
   const [page, setPage] = useState(0);
-  const resultsPerPage = 3;
-
+  const [pageCount, setPageCount] = useState(0);
+  const limit = 3;
   const apiClient = new ApiClient();
 
-  const getMotivators = async () => {
-    const res = await apiClient.get(
-      `/motivators/place/main?limit=${resultsPerPage}&page=${
-        page * resultsPerPage
-      }`
-    );
-
-    setMotivators((oldMotivators) => [...oldMotivators, ...res]);
-  };
-
   useEffect(() => {
+    const getMotivators = async () => {
+      const res: ApiResponse = await apiClient.get(
+        `/motivators/place/staging?page=${page + 1}&limit=${limit}`
+      );
+
+      setMotivators(res.motivators);
+      setPageCount(Math.ceil(res.count / limit));
+    };
+
     getMotivators();
   }, [page]);
 
@@ -65,6 +71,13 @@ const Main = () => {
             {motivator.title}
           </Heading>
           <Heading
+            as="h3"
+            mt="1rem"
+            fontSize="3xl"
+            fontWeight="700"
+            color="white"
+          ></Heading>
+          <Heading
             as="h4"
             mt="0.5rem"
             fontSize="xl"
@@ -75,9 +88,8 @@ const Main = () => {
           </Heading>
         </Box>
       ))}
-      <Button onClick={() => setPage((prevPage) => prevPage + 1)}>
-        Load more
-      </Button>
+
+      <Pagination pageCount={pageCount} setPage={setPage} />
     </Box>
   );
 };

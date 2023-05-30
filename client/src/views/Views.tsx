@@ -6,6 +6,7 @@ import PrivateRoutes from "../routes/PrivateRoutes";
 import AuthRoutes from "../routes/AuthRoutes";
 import Staging from "../pages/Main/Staging";
 import PullRequest from "../pages/PullRequest";
+import DevProfile from "../pages/DevProfile";
 
 const Views = () => {
   return (
@@ -14,6 +15,8 @@ const Views = () => {
       <Route path="/staging" element={<Staging />} />
       <Route element={<PrivateRoutes />}>
         <Route path="/pullrequest" element={<PullRequest />} />
+        <Route path="/profile" element={<DevProfile />} />
+        <Route path="/settings" element={<PullRequest />} />
       </Route>
 
       <Route element={<AuthRoutes />} path="/">

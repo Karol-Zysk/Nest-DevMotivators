@@ -1,4 +1,4 @@
-import Layout from "./Layout/Layout";
+import Layout from "./layout/Layout";
 import { AccountContextProvider } from "./context/AccountContext";
 import Views from "./views/Views";
 
