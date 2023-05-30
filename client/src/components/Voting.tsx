@@ -6,10 +6,10 @@ import { Motivator } from "../interfaces/Motivator.interface";
 import { ApiClient } from "../utils/ApiClient";
 import { AccountContext } from "../context/AccountContext";
 
-const StyledFlex = styled(Flex)<{ active: boolean }>`
+const StyledFlex = styled(Flex)<{ $active: boolean }>`
   transition: all 0.3s;
-  opacity: ${({ active }) => (active ? 1 : 0.8)};
-  transform: scale(${({ active }) => (active ? 1 : 0.8)});
+  opacity: ${({ $active }) => ($active ? 1 : 0.8)};
+  transform: scale(${({ $active }) => ($active ? 1 : 0.8)});
   &:hover {
     opacity: 1;
     transform: scale(1);
@@ -31,7 +31,6 @@ const Voting: React.FC<{ motivator: Motivator }> = ({ motivator }) => {
       const res = await apiClient.patch<Motivator>(
         `/motivators/${id}/${action}`
       );
-      console.log(res);
 
       setResp(res);
     } catch (error: any) {
@@ -58,7 +57,7 @@ const Voting: React.FC<{ motivator: Motivator }> = ({ motivator }) => {
         fontWeight="700"
         color="white"
         mr="2"
-        active={true}
+        $active={true}
         onClick={() =>
           user
             ? vote(motivator._id, !lastError403 ? "dolike" : "undolike")
@@ -85,7 +84,7 @@ const Voting: React.FC<{ motivator: Motivator }> = ({ motivator }) => {
         fontSize="1.125rem"
         fontWeight="700"
         color="white"
-        active={true}
+        $active={true}
         onClick={() =>
           user
             ? vote(motivator._id, !lastError403 ? "dounlike" : "undounlike")

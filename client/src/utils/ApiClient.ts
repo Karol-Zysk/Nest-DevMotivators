@@ -43,10 +43,10 @@ export class ApiClient {
     } catch (error: any) {
       // Handle HTTP 403 (Forbidden) errors
       if (error.response && error.response.status === 403) {
-        throw new Error(error.response.data.message);
+        throw error.response.data;
       }
       if (error.response && error.response.status === 401) {
-        throw new Error(error.response.data.message);
+        throw error.response.data;
       }
 
       return error;

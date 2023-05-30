@@ -1,24 +1,34 @@
 import { useEffect, useState } from "react";
-import { Box, Flex, Heading, Text, Image, Icon } from "@chakra-ui/react";
-import { FaRegThumbsUp, FaRegThumbsDown } from "react-icons/fa";
-import axios from "axios";
+import { Box, Flex, Heading, Text, Image } from "@chakra-ui/react";
 import { Motivator } from "../../interfaces/Motivator.interface";
 import Voting from "../../components/Voting";
+import { ApiClient } from "../../utils/ApiClient";
+import Pagination from "../../components/Pagination";
 
-const Staging = () => {
-  const [motivators, setMotivators] = useState([]);
+interface ApiResponse {
+  motivators: Motivator[];
+  count: number;
+}
+
+const Main = () => {
+  const [motivators, setMotivators] = useState<Motivator[]>([]);
+  const [page, setPage] = useState(0);
+  const [pageCount, setPageCount] = useState(0);
+  const limit = 3;
+  const apiClient = new ApiClient();
 
   useEffect(() => {
     const getMotivators = async () => {
-      const res = await axios.get(
-        "http://127.0.0.1:4000/api/v1/motivators/place/staging"
+      const res: ApiResponse = await apiClient.get(
+        `/motivators/place/staging?page=${page + 1}&limit=${limit}`
       );
 
-      setMotivators(res.data);
+      setMotivators(res.motivators);
+      setPageCount(Math.ceil(res.count / limit));
     };
 
     getMotivators();
-  }, []);
+  }, [page]);
 
   if (!motivators.length) {
     return <h1 className="text-3xl font-bold text-center">Loading...</h1>;
@@ -38,7 +48,7 @@ const Staging = () => {
         >
           <Flex justify="between" w="full" mb="4">
             <Text fontSize="1.25rem" fontWeight="600" color="white">
-              {motivator.authorName}
+              Commited by: {motivator.authorName}
             </Text>
             <Voting motivator={motivator} />
           </Flex>
@@ -46,7 +56,7 @@ const Staging = () => {
             <Image
               src={motivator.image}
               alt="image"
-              boxSize="full"
+              boxSize="-moz-max-content"
               objectFit="contain"
             />
           </Flex>
@@ -77,8 +87,9 @@ const Staging = () => {
           </Heading>
         </Box>
       ))}
+      <Pagination pageCount={pageCount} setPage={setPage} />
     </Box>
   );
 };
 
-export default Staging;
+export default Main;

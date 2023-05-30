@@ -18,6 +18,7 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
+  app.useGlobalFilters();
   app.useGlobalFilters(new MongoExceptionFilter());
   await app.listen(port);
 }

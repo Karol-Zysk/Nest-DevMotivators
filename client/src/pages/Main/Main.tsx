@@ -1,24 +1,35 @@
 import { useEffect, useState } from "react";
-import { Box, Flex, Heading, Text, Image, Icon } from "@chakra-ui/react";
-import { FaRegThumbsUp, FaRegThumbsDown } from "react-icons/fa";
-import axios from "axios";
+import { Box, Flex, Heading, Text, Image } from "@chakra-ui/react";
+import ReactPaginate from "react-paginate";
 import { Motivator } from "../../interfaces/Motivator.interface";
 import Voting from "../../components/Voting";
+import { ApiClient } from "../../utils/ApiClient";
+import Pagination from "../../components/Pagination";
+
+interface ApiResponse {
+  motivators: Motivator[];
+  count: number;
+}
 
 const Main = () => {
-  const [motivators, setMotivators] = useState([]);
+  const [motivators, setMotivators] = useState<Motivator[]>([]);
+  const [page, setPage] = useState(0);
+  const [pageCount, setPageCount] = useState(0);
+  const limit = 3;
+  const apiClient = new ApiClient();
 
   useEffect(() => {
     const getMotivators = async () => {
-      const res = await axios.get(
-        "http://127.0.0.1:4000/api/v1/motivators/place/main"
+      const res: ApiResponse = await apiClient.get(
+        `/motivators/place/staging?page=${page + 1}&limit=${limit}`
       );
 
-      setMotivators(res.data);
+      setMotivators(res.motivators);
+      setPageCount(Math.ceil(res.count / limit));
     };
 
     getMotivators();
-  }, []);
+  }, [page]);
 
   if (!motivators.length) {
     return <h1 className="text-3xl font-bold text-center">Loading...</h1>;
@@ -77,6 +88,8 @@ const Main = () => {
           </Heading>
         </Box>
       ))}
+
+      <Pagination pageCount={pageCount} setPage={setPage} />
     </Box>
   );
 };

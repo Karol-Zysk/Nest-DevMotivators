@@ -19,10 +19,14 @@ export class MotivatorsService {
     private readonly motivatorModel: Model<MotivatorDocument>,
   ) {}
 
+  async countAllMotivators(place: Place): Promise<number> {
+    return this.motivatorModel.countDocuments({ place });
+  }
+
   async findAllMotivators(
     place: Place,
     queryString: QueryString,
-  ): Promise<Motivator[]> {
+  ): Promise<{ motivators: Motivator[]; count: number }> {
     const features = new ApiFeatures<Motivator & Document>(
       this.motivatorModel.find({ place }),
       queryString,
@@ -32,7 +36,10 @@ export class MotivatorsService {
       .limitFields()
       .paginate();
 
-    return features.query.exec();
+    const motivators = await features.query.exec();
+    const count = await this.countAllMotivators(place);
+
+    return { motivators, count };
   }
 
   async findMotivatorById(id: string): Promise<Motivator> {

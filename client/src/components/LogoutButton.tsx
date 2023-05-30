@@ -26,7 +26,7 @@ const LogoutButton = () => {
       cleanAfterLogout();
 
       setTimeout(() => {
-        navigate("/main");
+        navigate("/");
       }, 500);
 
       toast({
