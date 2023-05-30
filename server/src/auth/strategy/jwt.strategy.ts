@@ -13,7 +13,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     @InjectModel(User.name) private userModel: Model<UserDocument>,
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        (request) => {
+          return request?.cookies.access_token;
+        },
+      ]),
       secretOrKey: config.get<string>('JWT_SECRET'),
     });
   }

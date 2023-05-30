@@ -90,9 +90,10 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
 
         setIsLoggedIn(true);
       } catch (error: any) {
+        console.log(error.statusCode);
+
         if (error.statusCode === 401) {
           refreshAccessToken();
-          return;
         }
 
         toast({

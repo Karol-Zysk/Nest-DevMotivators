@@ -35,7 +35,7 @@ type LinkType = {
 const Links = [
   {
     link: "Main",
-    href: "/main",
+    href: "/",
   },
   {
     link: "Staging",

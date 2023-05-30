@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  Request,
+  Res,
+} from '@nestjs/common';
+import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { SignInDto, SignUpDto } from './dto';
 import { RefreshTokenGuard } from './guard';
@@ -10,26 +19,40 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('signup')
-  signUp(@Body() dto: SignUpDto) {
-    return this.authService.signUp(dto);
+  async signUp(
+    @Body() dto: SignUpDto,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<void> {
+    return this.authService.signUp(dto, res);
   }
 
   @Post('signin')
-  signIn(@Body() dto: SignInDto) {
-    return this.authService.signIn(dto);
+  async signIn(
+    @Body() dto: SignInDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    return this.authService.signIn(dto, res);
   }
 
   @UseGuards(RefreshTokenGuard)
   @Get('refresh')
-  refreshTokens(@GetUser() user: User) {
+  async refreshTokens(
+    @GetUser() user: User,
+    @Request() req,
+    @Res({ passthrough: true }) res: Response,
+  ) {
     const userId = user['sub'];
-    const refreshToken = user.refreshToken;
-    return this.authService.refreshTokens(userId, refreshToken);
+    const refreshToken = req.cookies['jwt-refresh'];
+    return this.authService.refreshTokens(userId, refreshToken, res);
   }
+
   @UseGuards(RefreshTokenGuard)
   @Get('logout')
-  logout(@GetUser() user: User) {
+  async logout(
+    @GetUser() user: User,
+    @Res({ passthrough: true }) res: Response,
+  ) {
     const userId = user['sub'];
-    return this.authService.logout(userId);
+    return this.authService.logout(userId, res);
   }
 }
