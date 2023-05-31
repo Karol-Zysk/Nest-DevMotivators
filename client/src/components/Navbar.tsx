@@ -41,10 +41,6 @@ const Links = [
     link: "Staging",
     href: "/staging",
   },
-  {
-    link: "Pull Request",
-    href: "/pullrequest",
-  },
 ];
 
 const NavLink: React.FC<LinkType> = ({ children }) => (
@@ -133,7 +129,7 @@ export default function Navbar() {
                       <Link to="/profile">Profil</Link>
                     </MenuItem>
                     <MenuItem>
-                      <Link to="/settings">Profil</Link>
+                      <Link to="/pullrequest">Add Motivator</Link>
                     </MenuItem>
                   </MenuList>
                 </Menu>

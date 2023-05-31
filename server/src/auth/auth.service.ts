@@ -95,8 +95,8 @@ export class AuthService {
       .findByIdAndUpdate(userId, { refreshToken: null })
       .exec();
 
-    res.clearCookie('access_token');
-    res.clearCookie('refresh_token');
+    res.clearCookie('access_token', { sameSite: 'none', secure: true });
+    res.clearCookie('refresh_token', { sameSite: 'none', secure: true });
     res.sendStatus(200);
   }
 
@@ -155,8 +155,18 @@ export class AuthService {
     const tokens = await this.getTokens(user.id, user.email);
     await this.updateRefreshToken(user.id, tokens.refreshToken);
 
-    res.cookie('access_token', tokens.access_token, { httpOnly: true });
-    res.cookie('refresh_token', tokens.refreshToken, { httpOnly: true });
+    res.cookie('access_token', tokens.access_token, {
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+      path: '/',
+    });
+    res.cookie('refresh_token', tokens.refreshToken, {
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+      path: '/',
+    });
 
     res.sendStatus(200);
   }

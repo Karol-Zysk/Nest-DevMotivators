@@ -45,49 +45,54 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
     setIsLoggedIn(false);
   };
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const apiClient = new ApiClient();
+  const fetchUserData = async () => {
+    const apiClient = new ApiClient();
 
-      try {
-        const response = await apiClient.get<UserData>("/user/me");
+    try {
+      const response = await apiClient.get<UserData>("/user/me");
+      console.log(response);
+      console.log(isLoggedIn);
+      if (response) {
         setUser(response);
         setIsLoggedIn(true);
-      } catch (error: any) {
-        if (error.statusCode === 401) {
-          try {
-            await apiClient.get("/refresh"); // odświeżamy tokeny
-            const response = await apiClient.get<UserData>("/user/me");
+      }
+    } catch (error: any) {
+      if (error.statusCode === 401) {
+        try {
+          await apiClient.get("/auth/refresh"); // odświeżamy tokeny
+          const response = await apiClient.get<UserData>("/user/me");
+
+          if (response) {
             setUser(response);
             setIsLoggedIn(true);
-          } catch (refreshError: any) {
-            console.log(refreshError.statusCode);
-
-            cleanAfterLogout();
-            navigate("/login");
-
-            toast({
-              title: "Error",
-              description: `${refreshError.message}`,
-              status: "error",
-              duration: 5000,
-              isClosable: true,
-            });
           }
-        } else {
+        } catch (refreshError: any) {
+          cleanAfterLogout();
+          navigate("/login");
+
           toast({
             title: "Error",
-            description: `${error.message}`,
+            description: `${refreshError.message}`,
             status: "error",
             duration: 5000,
             isClosable: true,
           });
         }
+      } else {
+        toast({
+          title: "Error",
+          description: `${error.message}`,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
       }
-    };
+    }
+  };
 
-    fetchUserData();
-  }, []);
+  useEffect(() => {
+    if (isLoggedIn) fetchUserData();
+  }, [isLoggedIn]);
 
   return (
     <AccountContext.Provider

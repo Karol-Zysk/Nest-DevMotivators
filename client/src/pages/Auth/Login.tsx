@@ -36,12 +36,7 @@ const Login: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const result: AuthResponse = await apiClient.post(
-        "/auth/signin",
-        formData
-      );
-
-      console.log(result);
+      await apiClient.post("/auth/signin", formData);
 
       setIsLoggedIn(true);
       setTimeout(() => {
