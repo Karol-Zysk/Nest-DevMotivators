@@ -1,6 +1,7 @@
 import { useToast } from "@chakra-ui/react";
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { ApiClient, AuthResponse } from "../utils/ApiClient";
+import { useNavigate } from "react-router-dom";
 
 export interface UserData {
   userPhoto: string;
@@ -37,85 +38,56 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
+  const navigate = useNavigate();
+
   const cleanAfterLogout = () => {
     setUser(undefined);
     setIsLoggedIn(false);
   };
 
-  const refreshAccessToken = async () => {
-    const apiClient = new ApiClient();
-    const refreshToken = localStorage.getItem("refresh_token");
-    if (!refreshToken) return;
-
-    try {
-      const refreshToken = localStorage.getItem("refresh_token");
-      if (!refreshToken) {
-        throw new Error("You're not logged in!");
-      }
-
-      const response = await apiClient.get<AuthResponse>("/auth/refresh", {
-        headers: { authorization: `Bearer ${refreshToken}` },
-      });
-
-      if (response.access_token) {
-        localStorage.setItem("access_token", response.access_token);
-        localStorage.setItem("refresh_token", response.refreshToken);
-        setIsLoggedIn(true);
-      }
-    } catch (error: any) {
-      toast({
-        title: "Error",
-        description: `${error.message}`,
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-    }
-  };
-
   useEffect(() => {
     const fetchUserData = async () => {
       const apiClient = new ApiClient();
-      const accessToken = localStorage.getItem("access_token");
-
-      if (!accessToken) {
-        cleanAfterLogout();
-        return;
-      }
 
       try {
         const response = await apiClient.get<UserData>("/user/me");
         setUser(response);
-        console.log(response);
-
         setIsLoggedIn(true);
       } catch (error: any) {
-        console.log(error.statusCode);
-
         if (error.statusCode === 401) {
-          refreshAccessToken();
-        }
+          try {
+            await apiClient.get("/refresh"); // odświeżamy tokeny
+            const response = await apiClient.get<UserData>("/user/me");
+            setUser(response);
+            setIsLoggedIn(true);
+          } catch (refreshError: any) {
+            console.log(refreshError.statusCode);
 
-        toast({
-          title: "Error",
-          description: `${error.message}`,
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-        });
-        return;
+            cleanAfterLogout();
+            navigate("/login");
+
+            toast({
+              title: "Error",
+              description: `${refreshError.message}`,
+              status: "error",
+              duration: 5000,
+              isClosable: true,
+            });
+          }
+        } else {
+          toast({
+            title: "Error",
+            description: `${error.message}`,
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+          });
+        }
       }
     };
 
     fetchUserData();
   }, []);
-
-  // useEffect(() => {
-  //   const intervalId = setInterval(() => {
-  //     refreshAccessToken();
-  //   }, 10 * 60 * 1000);
-  //   return () => clearInterval(intervalId);
-  // }, []);
 
   return (
     <AccountContext.Provider

@@ -12,7 +12,7 @@ export interface AuthResponse {
   refreshToken: string;
 }
 
-export const baseUrl = "http://127.0.0.1:4000/api/v1";
+export const baseUrl = "https://127.0.0.1:4000/api/v1";
 
 export class ApiClient {
   private baseUrl: string;
@@ -26,13 +26,12 @@ export class ApiClient {
   private async request<T>(config: AxiosRequestConfig): Promise<T> {
     try {
       const headers = config.headers || {};
-      if (this.accessToken) {
-        headers["Authorization"] = `Bearer ${this.accessToken}`;
-      }
+
       const response = await axios.request<ApiResponse<T>>({
         ...config,
         headers,
         baseURL: this.baseUrl,
+        withCredentials: true,
       });
 
       if (!response.data) {
@@ -41,7 +40,6 @@ export class ApiClient {
       //@ts-ignore
       return response.data;
     } catch (error: any) {
-      // Handle HTTP 403 (Forbidden) errors
       if (error.response && error.response.status === 403) {
         throw error.response.data;
       }

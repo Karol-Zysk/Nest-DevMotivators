@@ -42,8 +42,19 @@ export class AuthService {
       const tokens = await this.getTokens(newUser.id, newUser.email);
       await this.updateRefreshToken(newUser.id, tokens.refreshToken);
 
-      res.cookie('access_token', tokens.access_token, { httpOnly: true });
-      res.cookie('refresh_token', tokens.refreshToken, { httpOnly: true });
+      res.cookie('access_token', tokens.access_token, {
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+        path: '/',
+      });
+
+      res.cookie('refresh_token', tokens.refreshToken, {
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+        path: '/',
+      });
       res.sendStatus(201);
     } catch (error) {
       throw new BadRequestException(error.message);
@@ -63,8 +74,19 @@ export class AuthService {
     const tokens = await this.getTokens(user.id, user.email);
     await this.updateRefreshToken(user.id, tokens.refreshToken);
 
-    res.cookie('access_token', tokens.access_token, { httpOnly: true });
-    res.cookie('refresh_token', tokens.refreshToken, { httpOnly: true });
+    res.cookie('access_token', tokens.access_token, {
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+      path: '/',
+    });
+
+    res.cookie('refresh_token', tokens.refreshToken, {
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+      path: '/',
+    });
     res.sendStatus(200);
   }
 
