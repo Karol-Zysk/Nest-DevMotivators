@@ -34,7 +34,6 @@ const Voting: React.FC<{ motivator: Motivator }> = ({ motivator }) => {
 
       setResp(res);
     } catch (error: any) {
-      console.log(error.statu);
 
       if (error.response && error.response.status === 403) {
         setLastError403(false);

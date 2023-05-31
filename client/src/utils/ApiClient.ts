@@ -16,11 +16,9 @@ export const baseUrl = "https://127.0.0.1:4000/api/v1";
 
 export class ApiClient {
   private baseUrl: string;
-  private accessToken: string | null;
 
   constructor() {
     this.baseUrl = baseUrl;
-    this.accessToken = localStorage.getItem("access_token");
   }
 
   private async request<T>(config: AxiosRequestConfig): Promise<T> {
