@@ -11,6 +11,7 @@ import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from '../entities';
+import { Request, Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -20,9 +21,7 @@ export class AuthService {
     private config: ConfigService,
   ) {}
 
-  async signUp(
-    dto: SignUpDto,
-  ): Promise<{ access_token: string; refreshToken: string }> {
+  async signUp(dto: SignUpDto, res: Response): Promise<void> {
     try {
       const userExists = await this.userModel
         .findOne({
@@ -42,13 +41,27 @@ export class AuthService {
 
       const tokens = await this.getTokens(newUser.id, newUser.email);
       await this.updateRefreshToken(newUser.id, tokens.refreshToken);
-      return tokens;
+
+      res.cookie('access_token', tokens.access_token, {
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+        path: '/',
+      });
+
+      res.cookie('refresh_token', tokens.refreshToken, {
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+        path: '/',
+      });
+      res.sendStatus(201);
     } catch (error) {
       throw new BadRequestException(error.message);
     }
   }
 
-  async signIn(dto: SignInDto) {
+  async signIn(dto: SignInDto, res: Response) {
     const user = await this.userModel
       .findOne({ email: dto.email })
       .select('+hash')
@@ -60,14 +73,31 @@ export class AuthService {
       throw new BadRequestException('Password is incorrect');
     const tokens = await this.getTokens(user.id, user.email);
     await this.updateRefreshToken(user.id, tokens.refreshToken);
-    return tokens;
+
+    res.cookie('access_token', tokens.access_token, {
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+      path: '/',
+    });
+
+    res.cookie('refresh_token', tokens.refreshToken, {
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+      path: '/',
+    });
+    res.sendStatus(200);
   }
 
-  async logout(userId: string) {
+  async logout(userId: string, res: Response) {
     await this.userModel
       .findByIdAndUpdate(userId, { refreshToken: null })
       .exec();
-    return 'Logged Out';
+
+    res.clearCookie('access_token');
+    res.clearCookie('refresh_token');
+    res.sendStatus(200);
   }
 
   hashData(data: string) {
@@ -110,7 +140,7 @@ export class AuthService {
       refreshToken,
     };
   }
-  async refreshTokens(userId: string, refreshToken: string) {
+  async refreshTokens(userId: string, req: Request, res: Response) {
     const user = await this.userModel
       .findById(userId)
       .select('+refreshToken')
@@ -118,12 +148,16 @@ export class AuthService {
     if (!user || !user.refreshToken)
       throw new ForbiddenException('Access Denied');
     const refreshTokenMatches = await bcrypt.compare(
-      refreshToken,
+      req.cookies.refresh_token,
       user.refreshToken,
     );
     if (!refreshTokenMatches) throw new ForbiddenException('Access Denied');
     const tokens = await this.getTokens(user.id, user.email);
     await this.updateRefreshToken(user.id, tokens.refreshToken);
-    return tokens;
+
+    res.cookie('access_token', tokens.access_token, { httpOnly: true });
+    res.cookie('refresh_token', tokens.refreshToken, { httpOnly: true });
+
+    res.sendStatus(200);
   }
 }

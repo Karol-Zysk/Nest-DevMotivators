@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Box, Flex, Heading, Text, Image } from "@chakra-ui/react";
-import ReactPaginate from "react-paginate";
 import { Motivator } from "../../interfaces/Motivator.interface";
 import Voting from "../../components/Voting";
 import { ApiClient } from "../../utils/ApiClient";
@@ -21,7 +20,7 @@ const Main = () => {
   useEffect(() => {
     const getMotivators = async () => {
       const res: ApiResponse = await apiClient.get(
-        `/motivators/place/staging?page=${page + 1}&limit=${limit}`
+        `/motivators/place/main?page=${page + 1}&limit=${limit}`
       );
 
       setMotivators(res.motivators);
