@@ -1,7 +1,8 @@
 import { useToast } from "@chakra-ui/react";
 import { createContext, ReactNode, useEffect, useState } from "react";
-import { ApiClient, AuthResponse } from "../utils/ApiClient";
+import { ApiClient } from "../utils/ApiClient";
 import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 export interface UserData {
   userPhoto: string;
@@ -38,6 +39,10 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
+  const [cookies] = useCookies(["is_logged_in"]);
+
+  const LoggedIn = cookies["is_logged_in"] === "true";
+
   const navigate = useNavigate();
 
   const cleanAfterLogout = () => {
@@ -51,7 +56,6 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
     try {
       const response = await apiClient.get<UserData>("/user/me");
       console.log(response);
-      console.log(isLoggedIn);
       if (response) {
         setUser(response);
         setIsLoggedIn(true);
@@ -91,8 +95,9 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
-    if (isLoggedIn) fetchUserData();
-  }, [isLoggedIn]);
+    if (LoggedIn) fetchUserData();
+    return;
+  }, []);
 
   return (
     <AccountContext.Provider
