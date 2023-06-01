@@ -4,8 +4,7 @@ import { useToast } from "@chakra-ui/toast";
 
 import { AccountContext } from "../context/AccountContext";
 import { useNavigate } from "react-router";
-import { ApiClient, baseUrl } from "../utils/ApiClient";
-import axios from "axios";
+import { ApiClient } from "../utils/ApiClient";
 
 const LogoutButton = () => {
   const { cleanAfterLogout } = useContext(AccountContext);
