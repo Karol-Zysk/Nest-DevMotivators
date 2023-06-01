@@ -11,7 +11,8 @@ import {
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router";
 import { AccountContext } from "../../context/AccountContext";
-import { ApiClient, AuthResponse } from "../../utils/ApiClient";
+import { ApiClient } from "../../utils/ApiClient";
+import { useCookies } from "react-cookie";
 
 interface FormData {
   email: string;
@@ -26,6 +27,7 @@ const Login: React.FC = () => {
     password: "",
   });
   const toast = useToast();
+  const [cookies, setCookie] = useCookies(["is_logged_in"]);
   const navigate = useNavigate();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,6 +39,7 @@ const Login: React.FC = () => {
     event.preventDefault();
     try {
       await apiClient.post("/auth/signin", formData);
+      setCookie("is_logged_in", true, { path: "/" });
 
       setIsLoggedIn(true);
       setTimeout(() => {

@@ -13,7 +13,8 @@ import {
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router";
 import { AccountContext } from "../../context/AccountContext";
-import { ApiClient, AuthResponse } from "../../utils/ApiClient";
+import { ApiClient } from "../../utils/ApiClient";
+import { useCookies } from "react-cookie";
 
 interface FormData {
   login: string;
@@ -32,6 +33,7 @@ const SignUp: React.FC = () => {
 
   const toast = useToast();
   const navigate = useNavigate();
+  const [cookies, setCookie] = useCookies(["is_logged_in"]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -43,14 +45,8 @@ const SignUp: React.FC = () => {
     event.preventDefault();
 
     try {
-      const result: AuthResponse = await apiClient.post(
-        "/auth/signup",
-        formData
-      );
-
-      localStorage.setItem("access_token", result.access_token);
-
-      localStorage.setItem("refresh_token", result.refreshToken);
+      await apiClient.post("/auth/signup", formData);
+      setCookie("is_logged_in", true, { path: "/" });
       setIsLoggedIn(true);
 
       setTimeout(() => {

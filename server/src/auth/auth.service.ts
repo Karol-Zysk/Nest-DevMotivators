@@ -55,6 +55,14 @@ export class AuthService {
         secure: true,
         path: '/',
       });
+
+      res.cookie('is_logged_in', 'true', {
+        httpOnly: false,
+        sameSite: 'none',
+        secure: true,
+        path: '/',
+      });
+
       res.sendStatus(201);
     } catch (error) {
       throw new BadRequestException(error.message);
@@ -87,6 +95,14 @@ export class AuthService {
       secure: true,
       path: '/',
     });
+
+    res.cookie('is_logged_in', 'true', {
+      httpOnly: false,
+      sameSite: 'none',
+      secure: true,
+      path: '/',
+    });
+
     res.sendStatus(200);
   }
 
@@ -97,6 +113,7 @@ export class AuthService {
 
     res.clearCookie('access_token', { sameSite: 'none', secure: true });
     res.clearCookie('refresh_token', { sameSite: 'none', secure: true });
+    res.clearCookie('is_logged_in', { sameSite: 'none', secure: true });
     res.sendStatus(200);
   }
 
