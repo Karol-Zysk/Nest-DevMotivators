@@ -1,6 +1,5 @@
 import {
   Box,
-  Center,
   Heading,
   Text,
   Stack,
@@ -8,6 +7,7 @@ import {
   Button,
   useColorModeValue,
   Flex,
+  useToast,
 } from "@chakra-ui/react";
 import { UserData } from "../context/AccountContext";
 
@@ -16,6 +16,7 @@ interface UserCardProps {
 }
 
 const UserCard: React.FC<UserCardProps> = ({ user }) => {
+  const toast = useToast();
   return (
     <Flex py={2} w={"full"}>
       <Box
@@ -58,6 +59,15 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
         </Text>
         <Stack mt={8} direction={"row"} spacing={4}>
           <Button
+            onClick={() => {
+              toast({
+                title: "Info",
+                description: "Not yet implemented",
+                status: "info",
+                duration: 5000,
+                isClosable: true,
+              });
+            }}
             flex={1}
             fontSize={"sm"}
             rounded={"full"}
@@ -68,6 +78,15 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
             Message
           </Button>
           <Button
+            onClick={() => {
+              toast({
+                title: "Info",
+                description: "Not yet implemented",
+                status: "info",
+                duration: 5000,
+                isClosable: true,
+              });
+            }}
             flex={1}
             fontSize={"sm"}
             rounded={"full"}

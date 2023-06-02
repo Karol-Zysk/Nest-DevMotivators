@@ -1,6 +1,5 @@
 import {
   Box,
-  Center,
   Heading,
   Text,
   Stack,
@@ -14,9 +13,10 @@ import { formatDateString } from "../utils/TimeOperations";
 
 interface UserCardProps {
   user: UserData | null | undefined;
+  motivatorsNumber: number | undefined;
 }
 
-const Stats: React.FC<UserCardProps> = ({ user }) => {
+const Stats: React.FC<UserCardProps> = ({ user, motivatorsNumber }) => {
   return (
     <Flex w={"full"}>
       <Box
@@ -25,21 +25,20 @@ const Stats: React.FC<UserCardProps> = ({ user }) => {
         boxShadow={"2xl"}
         rounded={"lg"}
         p={6}
-        textAlign={"center"}
+        textAlign={"left"}
       >
         <Heading fontSize={"2xl"} fontFamily={"body"}>
-          on motivators:
-          {formatDateString(user?.createdAt)}
+          Active since: {formatDateString(user?.createdAt)}
         </Heading>
         <Text fontWeight={600} color={"gray.500"} mb={4}>
-          {user?.email}
+          Motivators commited: {motivatorsNumber}
         </Text>
         <Text
           textAlign={"center"}
           color={useColorModeValue("gray.700", "gray.400")}
           px={3}
         >
-          Fajny Ziomo
+          {/* id: {user._id} */}
         </Text>
         <Stack mt={8} direction={"row"} spacing={4}>
           <Button

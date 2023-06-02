@@ -26,7 +26,7 @@ const LogoutButton = () => {
       toast({
         title: "Success",
         description: "You have successfully logged out.",
-        status: "success",
+        status: "info",
         duration: 5000,
         isClosable: true,
       });
