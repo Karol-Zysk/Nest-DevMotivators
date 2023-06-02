@@ -15,6 +15,7 @@ import { useNavigate } from "react-router";
 import { AccountContext } from "../../context/AccountContext";
 import { ApiClient } from "../../utils/ApiClient";
 import { useCookies } from "react-cookie";
+import { expiresTime } from "../../utils/TimeOperations";
 
 interface FormData {
   login: string;
@@ -46,7 +47,7 @@ const SignUp: React.FC = () => {
 
     try {
       await apiClient.post("/auth/signup", formData);
-      setCookie("is_logged_in", true, { path: "/" });
+      setCookie("is_logged_in", true, { path: "/", expires: expiresTime });
       setIsLoggedIn(true);
 
       setTimeout(() => {

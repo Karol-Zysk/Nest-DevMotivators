@@ -3,12 +3,14 @@ import { createContext, ReactNode, useEffect, useState } from "react";
 import { ApiClient } from "../utils/ApiClient";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import { expiresTime } from "../utils/TimeOperations";
 
 export interface UserData {
   userPhoto: string;
   id: string;
   email: string;
   login: string;
+  createdAt: string;
 }
 
 interface AccountContextValue {
@@ -34,18 +36,19 @@ const initialState: AccountContextValue = {
 const AccountContext = createContext<AccountContextValue>(initialState);
 
 const AccountContextProvider = ({ children }: { children: ReactNode }) => {
+  const [cookies, setCookie, removeCookie] = useCookies(["is_logged_in"]);
+  const LoggedIn = cookies["is_logged_in"];
+
   const toast = useToast();
+
   const [user, setUser] = useState<UserData | undefined | null>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!LoggedIn);
   const [error, setError] = useState<string | null>(null);
-
-  const [cookies] = useCookies(["is_logged_in"]);
-
-  const LoggedIn = cookies["is_logged_in"] === "true";
 
   const navigate = useNavigate();
 
   const cleanAfterLogout = () => {
+    removeCookie("is_logged_in", { path: "/" });
     setUser(undefined);
     setIsLoggedIn(false);
   };
@@ -63,12 +66,16 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
     } catch (error: any) {
       if (error.statusCode === 401) {
         try {
-          await apiClient.get("/auth/refresh"); // odświeżamy tokeny
+          await apiClient.get("/auth/refresh");
           const response = await apiClient.get<UserData>("/user/me");
 
           if (response) {
             setUser(response);
             setIsLoggedIn(true);
+            setCookie("is_logged_in", true, {
+              path: "/",
+              expires: expiresTime,
+            });
           }
         } catch (refreshError: any) {
           cleanAfterLogout();
@@ -95,9 +102,11 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
+    console.log(isLoggedIn);
+
     if (LoggedIn) fetchUserData();
     return;
-  }, []);
+  }, [isLoggedIn]);
 
   return (
     <AccountContext.Provider

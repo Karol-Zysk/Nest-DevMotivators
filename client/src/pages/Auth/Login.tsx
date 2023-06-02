@@ -13,6 +13,7 @@ import { useNavigate } from "react-router";
 import { AccountContext } from "../../context/AccountContext";
 import { ApiClient } from "../../utils/ApiClient";
 import { useCookies } from "react-cookie";
+import { expiresTime } from "../../utils/TimeOperations";
 
 interface FormData {
   email: string;
@@ -39,7 +40,7 @@ const Login: React.FC = () => {
     event.preventDefault();
     try {
       await apiClient.post("/auth/signin", formData);
-      setCookie("is_logged_in", true, { path: "/" });
+      setCookie("is_logged_in", true, { path: "/", expires: expiresTime });
 
       setIsLoggedIn(true);
       setTimeout(() => {

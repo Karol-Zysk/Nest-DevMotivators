@@ -16,7 +16,7 @@ import {
   MenuList,
   MenuItem,
 } from "@chakra-ui/react";
-import { MoonIcon, SunIcon } from "@chakra-ui/icons";
+import { MoonIcon, SunIcon,  } from "@chakra-ui/icons";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import { useContext, useState } from "react";
 import { AccountContext } from "../context/AccountContext";
@@ -24,6 +24,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import LogoutButton from "./LogoutButton";
 import NaviBtn from "./NavigationButton";
+import BlinkingText from "./BlinkingText";
 
 type LinkType = {
   children: {
@@ -52,7 +53,7 @@ export default function Navbar() {
 
   const { colorMode, toggleColorMode } = useColorMode();
   const shadow = useColorModeValue("1px 1px 1px black", "1px 1px 1px white");
-  const color = useColorModeValue("facebook.500", "gray.500");
+  const color = useColorModeValue("black", "white");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -69,8 +70,9 @@ export default function Navbar() {
   return (
     <>
       <Box
-        bg={useColorModeValue("gray.200", "gray.900")}
+        bg={useColorModeValue("gray.200", "black")}
         px={4}
+        py={2}
         borderBottom="4px"
       >
         <Flex h="min" p="4" align={"center"} justifyContent={"space-between"}>
@@ -86,14 +88,7 @@ export default function Navbar() {
               }}
             />
           }
-          <Box
-            textShadow={shadow}
-            fontSize={["2xl", "3xl", "4xl"]}
-            fontWeight="bold"
-            color={color}
-          >
-            Dev-Motivators
-          </Box>
+          <BlinkingText color={color} />
           <HStack
             spacing={8}
             alignItems={"center"}
@@ -102,14 +97,7 @@ export default function Navbar() {
             display={{ base: "none", md: "flex" }}
           >
             {Links.map((links) => (
-              <motion.div
-                key={links.link}
-                initial={{ y: -20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.3 }}
-              >
-                <NavLink key={links.link}>{links}</NavLink>
-              </motion.div>
+              <NavLink key={links.link}>{links}</NavLink>
             ))}
           </HStack>
           <Flex alignItems={"center"}>
