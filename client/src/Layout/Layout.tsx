@@ -8,10 +8,10 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <Flex minH="100vh" direction="column">
+    <Flex minH="100vh" borderTop="8px" borderX="4px" direction="column">
       <Navbar />
 
-      <Flex direction="column" height="100%" flex="1">
+      <Flex direction="column" h="100%" flex="1">
         {children}
       </Flex>
 

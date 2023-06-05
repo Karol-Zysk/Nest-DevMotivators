@@ -16,7 +16,7 @@ import {
   MenuList,
   MenuItem,
 } from "@chakra-ui/react";
-import { MoonIcon, SunIcon,  } from "@chakra-ui/icons";
+import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import { useContext, useState } from "react";
 import { AccountContext } from "../context/AccountContext";
@@ -52,7 +52,6 @@ export default function Navbar() {
   const { isLoggedIn, user } = useContext(AccountContext);
 
   const { colorMode, toggleColorMode } = useColorMode();
-  const shadow = useColorModeValue("1px 1px 1px black", "1px 1px 1px white");
   const color = useColorModeValue("black", "white");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -125,10 +124,10 @@ export default function Navbar() {
                 <LogoutButton />
               </>
             ) : (
-              <>
+              <Flex>
                 <NaviBtn href="login" btnTxt="Login" />
                 <NaviBtn href="register" btnTxt="Register" />
-              </>
+              </Flex>
             )}
             <Button size={["sm", "sm", "sm"]} ml="3" onClick={toggleColorMode}>
               {colorMode === "light" ? <MoonIcon /> : <SunIcon />}

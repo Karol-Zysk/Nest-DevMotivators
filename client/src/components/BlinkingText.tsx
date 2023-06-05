@@ -25,7 +25,7 @@ const BlinkingText: React.FC<BlinkingTextProps> = ({ color }) => {
       fontWeight="medium"
       color={color}
     >
-      {"C:\\Dev_Motivators"}
+      {"C:\\Dev_Motivators>"}
       {isVisible && "_"}
     </Box>
   );
