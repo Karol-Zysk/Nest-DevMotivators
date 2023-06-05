@@ -4,6 +4,7 @@ import { Motivator } from "../../interfaces/Motivator.interface";
 import Voting from "../../components/Voting";
 import { ApiClient } from "../../utils/ApiClient";
 import Pagination from "../../components/Pagination";
+import Loading from "../../components/Loading";
 
 interface ApiResponse {
   motivators: Motivator[];
@@ -11,9 +12,12 @@ interface ApiResponse {
 }
 
 const Main = () => {
-  const [motivators, setMotivators] = useState<Motivator[]>([]);
+  const [motivators, setMotivators] = useState<Motivator[] | undefined>(
+    undefined
+  );
   const [page, setPage] = useState(0);
   const [pageCount, setPageCount] = useState(0);
+
   const limit = 3;
   const apiClient = new ApiClient();
 
@@ -30,8 +34,8 @@ const Main = () => {
     getMotivators();
   }, [page]);
 
-  if (!motivators.length) {
-    return <h1 className="text-3xl font-bold text-center">Loading...</h1>;
+  if (!motivators) {
+    return <Loading />;
   }
 
   return (

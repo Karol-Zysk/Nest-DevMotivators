@@ -4,20 +4,21 @@ import { useNavigate } from "react-router";
 const NaviBtn = ({ href, btnTxt }: { href: string; btnTxt: string }) => {
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
+  const handleNavigate = async () => {
     navigate(href);
   };
 
   return (
     <Button
       size={["xs", "sm", "md"]}
-      bg="facebook.400"
+      bg="transparent"
       color="white"
-      rounded="xl"
+      ml="2"
       border="2px"
-      _hover={{ bg: "facebook.200", color: "black", borderColor: "black" }}
+      borderStyle="dashed"
+      _hover={{ bg: "white", color: "black", borderColor: "black" }}
       borderColor="white"
-      onClick={handleLogout}
+      onClick={handleNavigate}
     >
       {btnTxt}
     </Button>
