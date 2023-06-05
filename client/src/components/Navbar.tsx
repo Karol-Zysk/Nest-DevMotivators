@@ -18,6 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
+import { AiOutlineUser } from "react-icons/ai";
 import { useContext, useState } from "react";
 import { AccountContext } from "../context/AccountContext";
 import { motion } from "framer-motion";
@@ -49,10 +50,11 @@ const NavLink: React.FC<LinkType> = ({ children }) => (
 );
 
 export default function Navbar() {
-  const { isLoggedIn, user } = useContext(AccountContext);
+  const { isLoggedIn } = useContext(AccountContext);
 
   const { colorMode, toggleColorMode } = useColorMode();
   const color = useColorModeValue("black", "white");
+  const opositeColor = useColorModeValue("white", "black");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -109,13 +111,14 @@ export default function Navbar() {
                     variant={"link"}
                     cursor={"pointer"}
                   >
-                    <Avatar size={"sm"} src={user?.userPhoto} />
+                    <AiOutlineUser size="32" color={color} />
+                    {/* <Avatar size={"sm"} src={user?.userPhoto} /> */}
                   </MenuButton>
-                  <MenuList>
-                    <MenuItem>
+                  <MenuList background={opositeColor}>
+                    <MenuItem background={opositeColor}>
                       <Link to="/profile">Profil</Link>
                     </MenuItem>
-                    <MenuItem>
+                    <MenuItem background={opositeColor}>
                       <Link to="/pullrequest">Add Motivator</Link>
                     </MenuItem>
                   </MenuList>

@@ -43,12 +43,13 @@ const LogoutButton = () => {
 
   return (
     <Button
-      size={["sm", "md", "md"]}
-      bg="facebook.400"
+      size={["xs", "sm", "md"]}
+      bg="transparent"
       color="white"
-      rounded="xl"
+      ml="2"
       border="2px"
-      _hover={{ bg: "facebook.200", color: "black", borderColor: "black" }}
+      borderStyle="dashed"
+      _hover={{ bg: "white", color: "black", borderColor: "black" }}
       borderColor="white"
       onClick={handleLogout}
     >

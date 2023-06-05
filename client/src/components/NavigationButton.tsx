@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 const NaviBtn = ({ href, btnTxt }: { href: string; btnTxt: string }) => {
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
+  const handleNavigate = async () => {
     navigate(href);
   };
 
@@ -18,7 +18,7 @@ const NaviBtn = ({ href, btnTxt }: { href: string; btnTxt: string }) => {
       borderStyle="dashed"
       _hover={{ bg: "white", color: "black", borderColor: "black" }}
       borderColor="white"
-      onClick={handleLogout}
+      onClick={handleNavigate}
     >
       {btnTxt}
     </Button>
