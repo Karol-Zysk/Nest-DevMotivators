@@ -11,7 +11,7 @@ import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from '../entities';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 
 @Injectable()
 export class AuthService {

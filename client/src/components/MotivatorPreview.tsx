@@ -30,7 +30,7 @@ const MotivatorPreview: React.FC<MotivatorPreviewProps> = ({
         boxShadow="md"
       >
         <Flex justify="space-between" minH="full" w="full" mb="4">
-          <Text fontSize="1.25rem" fontWeight="600" color="white">
+          <Text fontSize="1.25rem" fontWeight="600">
             Commited by: {user?.login}
           </Text>
           <Flex>
@@ -38,7 +38,6 @@ const MotivatorPreview: React.FC<MotivatorPreviewProps> = ({
               align="center"
               fontSize="1.125rem"
               fontWeight="700"
-              color="white"
               mr="2"
             >
               <Icon
@@ -50,12 +49,7 @@ const MotivatorPreview: React.FC<MotivatorPreviewProps> = ({
               />
               8
             </StyledFlex>
-            <StyledFlex
-              align="center"
-              fontSize="1.125rem"
-              fontWeight="700"
-              color="white"
-            >
+            <StyledFlex align="center" fontSize="1.125rem" fontWeight="700">
               <Icon
                 as={FaRegThumbsDown}
                 fontSize="2rem"
@@ -96,7 +90,6 @@ const MotivatorPreview: React.FC<MotivatorPreviewProps> = ({
           fontWeight="700"
           w="100%"
           textAlign="center"
-          color="white"
         >
           {title}
         </Heading>
@@ -107,7 +100,6 @@ const MotivatorPreview: React.FC<MotivatorPreviewProps> = ({
           mt="1rem"
           fontSize="3xl"
           fontWeight="700"
-          color="white"
         ></Heading>
         <Heading
           as="h4"
@@ -116,7 +108,6 @@ const MotivatorPreview: React.FC<MotivatorPreviewProps> = ({
           fontWeight="500"
           w="100%"
           textAlign="center"
-          color="white"
         >
           {subTitle}
         </Heading>

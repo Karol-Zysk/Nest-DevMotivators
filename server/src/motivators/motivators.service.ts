@@ -3,6 +3,7 @@ import {
   BadRequestException,
   NotFoundException,
   ForbiddenException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
@@ -11,6 +12,7 @@ import { CreateMotivatorDto } from './dto/create-motivator.dto';
 import { UpdateMotivatorDto } from './dto/update-motivator.dto';
 import { ApiFeatures, QueryString } from '../utils/apiFeatures';
 import { Place, VoteKind, VoteMethod } from 'src/utils/enums';
+import { v2 as cloudinary } from 'cloudinary';
 
 @Injectable()
 export class MotivatorsService {
@@ -77,14 +79,37 @@ export class MotivatorsService {
   }
 
   async deleteMotivator(id: string): Promise<Motivator> {
-    const deletedMotivator = await this.motivatorModel
-      .findByIdAndDelete(id)
-      .exec();
+    cloudinary.config({
+      cloud_name: `${process.env.CLOUDINARY_CLOUD_NAME}`,
+      api_key: `${process.env.CLOUDINARY_API_KEY}`,
+      api_secret: `${process.env.CLOUDINARY_SECRET}`,
+    });
 
-    if (!deletedMotivator) {
+    const motivatorToDelete = await this.motivatorModel.findById(id);
+    if (!motivatorToDelete) {
       throw new NotFoundException(`Motivator with ID ${id} not found`);
     }
 
+    const imageUrlParts = motivatorToDelete.image.split('/');
+    const imageNameWithExtension = imageUrlParts[imageUrlParts.length - 1];
+    const imageName = imageNameWithExtension.split('.')[0];
+
+    const info = await cloudinary.uploader.destroy(
+      imageName,
+      function (error, result) {
+        if (error) {
+          console.log(error);
+          throw new InternalServerErrorException(
+            'Problem with image deletion from Cloudinary',
+          );
+        }
+      },
+    );
+    console.log(info);
+
+    // const deletedMotivator = await motivatorToDelete.deleteOne();
+
+    // return deletedMotivator;
     return;
   }
 
@@ -125,7 +150,7 @@ export class MotivatorsService {
     option: VoteKind,
     method: VoteMethod,
   ): Promise<Motivator> {
-    const motivator = await this.checkVoteConditions(id, user, option, method);
+    await this.checkVoteConditions(id, user, option, method);
 
     let updatedMotivator = await this.motivatorModel
       .findByIdAndUpdate(

@@ -66,7 +66,7 @@ export class MotivatorsController {
     return this.motivatorsService.updateMotivator(id, updateMotivatorDto);
   }
 
-  @UseGuards(AuthorizeGuard)
+  // @UseGuards(AuthorizeGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete('/:id')
   async deleteMotivator(@Param('id') id: string) {

@@ -10,7 +10,6 @@ import {
   VStack,
   Text,
   IconButton,
-  Avatar,
   Menu,
   MenuButton,
   MenuList,
