@@ -1,10 +1,10 @@
 import { Flex } from "@chakra-ui/react";
 import { useContext, useState, useEffect } from "react";
-import { AccountContext } from "../context/AccountContext";
-import UserCard from "../components/UserCard";
-import Stats from "../components/Stats";
-import { Motivator } from "../interfaces/Motivator.interface";
-import { ApiClient } from "../utils/ApiClient";
+import { AccountContext } from "../../context/AccountContext";
+import UserCard from "../../components/UserCard";
+import Stats from "../../components/Stats";
+import { Motivator } from "../../interfaces/Motivator.interface";
+import { ApiClient } from "../../utils/ApiClient";
 
 function DevProfile() {
   const { user } = useContext(AccountContext);
@@ -16,7 +16,6 @@ function DevProfile() {
     try {
       const res = await apiClient.get<Motivator[]>(`user/me/motivators`);
       setUserMotivators(res);
-      console.log(res);
     } catch (error) {
       console.error(error);
     }

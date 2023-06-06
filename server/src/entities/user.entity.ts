@@ -31,7 +31,7 @@ export class User extends Document {
 
   @Prop({
     enum: Role,
-    default: Role.user,
+    default: Role.admin,
   })
   role: Role;
 

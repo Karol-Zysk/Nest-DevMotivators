@@ -37,7 +37,7 @@ export class Motivator {
 
   @Prop({
     enum: [Place.main, Place.staging, Place.waiting],
-    default: Place.staging,
+    default: Place.waiting,
   })
   place: Place;
 
@@ -49,14 +49,6 @@ export class Motivator {
 
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   authorName: Types.ObjectId;
-
-  safeIn(): string {
-    if (this.accepted && this.movedToMain) {
-      const safeIn = Number(this.movedToMain) - Number(this.accepted);
-      return convertMilliseconds(safeIn);
-    }
-    return '';
-  }
 }
 
 export const MotivatorSchema = SchemaFactory.createForClass(Motivator);
@@ -65,4 +57,15 @@ MotivatorSchema.pre('save', function () {
   if (this.isModified('title')) {
     this.slug = slugify(this.title, { lower: true });
   }
+});
+
+MotivatorSchema.virtual('safeIn').get(function (this: {
+  accepted: Date;
+  movedToMain: Date;
+}) {
+  if (this.accepted && this.movedToMain) {
+    const safeIn = Number(this.movedToMain) - Number(this.accepted);
+    return convertMilliseconds(safeIn);
+  }
+  return '';
 });

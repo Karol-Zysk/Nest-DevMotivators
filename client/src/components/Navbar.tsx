@@ -69,130 +69,132 @@ export default function Navbar() {
   };
 
   return (
-    <>
-      <Box
-        bg={useColorModeValue("gray.200", "black")}
-        px={4}
-        py={2}
-        borderBottom="4px"
-      >
-        <Flex h="min" p="4" align={"center"} justifyContent={"space-between"}>
-          {
-            <IconButton
-              size={"md"}
-              icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
-              aria-label={"Open Menu"}
-              display={{ md: "none" }}
-              onClick={() => {
-                handleMenuClick();
-                isOpen ? onClose() : onOpen();
-              }}
-            />
-          }
-          <BlinkingText color={color} />
-          <HStack
-            spacing={8}
-            alignItems={"center"}
-            fontWeight="semibold"
-            fontSize="xl"
-            display={{ base: "none", md: "flex" }}
-          >
-            {Links.map((links) => (
-              <NavLink key={links.link}>{links}</NavLink>
-            ))}
-          </HStack>
-          <Flex alignItems={"center"}>
-            {isLoggedIn ? (
-              <>
-                <Menu>
-                  <MenuButton
-                    as={Button}
-                    rounded={"full"}
-                    variant={"link"}
-                    cursor={"pointer"}
-                  >
-                    <AiOutlineUser size="32" color={color} />
-                    {/* <Avatar size={"sm"} src={user?.userPhoto} /> */}
-                  </MenuButton>
-                  <MenuList background={opositeColor}>
-                    <MenuItem background={opositeColor}>
-                      <Link to="/profile">Profil</Link>
-                    </MenuItem>
-                    <MenuItem background={opositeColor}>
-                      <Link to="/pullrequest">Add Motivator</Link>
-                    </MenuItem>
-                  </MenuList>
-                </Menu>
-
-                <LogoutButton />
-              </>
-            ) : (
-              <Flex>
-                <NaviBtn href="login" btnTxt="Login" />
-                <NaviBtn href="register" btnTxt="Register" />
-              </Flex>
-            )}
-            <Button size={["sm", "sm", "sm"]} ml="3" onClick={toggleColorMode}>
-              {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
-            </Button>
-          </Flex>
-        </Flex>
-        <Box
-          pb={4}
-          display={{ md: "none" }}
-          onClick={() => {
-            handleMenuClick();
-            isOpen ? onClose() : onOpen();
-          }}
+    <Box
+      bg={useColorModeValue("gray.200", "black")}
+      px={4}
+      py={2}
+      borderBottom="4px"
+    >
+      <Flex h="min" p="4" align={"center"} justifyContent={"space-between"}>
+        {
+          <IconButton
+            size={"md"}
+            icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
+            aria-label={"Open Menu"}
+            display={{ md: "none" }}
+            onClick={() => {
+              handleMenuClick();
+              isOpen ? onClose() : onOpen();
+            }}
+          />
+        }
+        <BlinkingText color={color} />
+        <HStack
+          spacing={8}
+          alignItems={"center"}
+          fontWeight="semibold"
+          fontSize="2xl"
+          w="100%"
+          justify="center"
+          display={{ base: "none", md: "flex" }}
         >
-          <Stack
-            as={"nav"}
-            spacing={4}
-            bg={useColorModeValue("gray.200", "gray.900")}
-            w={"100%"}
-            position={"absolute"}
-            top={"100%"}
-            left={0}
-            zIndex={999}
-            overflow={"hidden"}
-            transition={"height 0.3s ease-in-out"}
-            height={menuHeight}
-          >
-            {Links.map((links) => (
+          {Links.map((links) => (
+            <Box _hover={{ opacity: "0.9" }}>
               <NavLink key={links.link}>{links}</NavLink>
-            ))}
-          </Stack>
-        </Box>
-        {isOpen ? (
-          <Box
-            bg={color}
-            w={"100%"}
-            h={"100vh"}
-            pos={"absolute"}
-            top={0}
-            left={0}
-            zIndex={100}
-            onClick={onClose}
-          >
-            <Flex alignItems={"center"} justifyContent={"center"} h={"100%"}>
-              <VStack as={"nav"} spacing={"10"} align="center">
-                {Links.map((links) => (
-                  <motion.div
-                    key={links.link}
-                    initial={{ y: -20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <Text fontWeight="semibold" fontSize="xl">
-                      <NavLink key={links.link}>{links}</NavLink>
-                    </Text>
-                  </motion.div>
-                ))}
-              </VStack>
+            </Box>
+          ))}
+        </HStack>
+        <Flex alignItems={"center"}>
+          {isLoggedIn ? (
+            <>
+              <Menu>
+                <MenuButton
+                  as={Button}
+                  rounded={"full"}
+                  variant={"link"}
+                  cursor={"pointer"}
+                >
+                  <AiOutlineUser size="32" color={color} />
+                  {/* <Avatar size={"sm"} src={user?.userPhoto} /> */}
+                </MenuButton>
+                <MenuList background={opositeColor}>
+                  <MenuItem background={opositeColor}>
+                    <Link to="/profile">Profil</Link>
+                  </MenuItem>
+                  <MenuItem background={opositeColor}>
+                    <Link to="/pullrequest">Add Motivator</Link>
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+
+              <LogoutButton />
+            </>
+          ) : (
+            <Flex>
+              <NaviBtn href="login" btnTxt="Login" />
+              <NaviBtn href="register" btnTxt="Register" />
             </Flex>
-          </Box>
-        ) : null}
+          )}
+          <Button size={["sm", "sm", "sm"]} ml="3" onClick={toggleColorMode}>
+            {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+          </Button>
+        </Flex>
+      </Flex>
+      <Box
+        pb={4}
+        display={{ md: "none" }}
+        onClick={() => {
+          handleMenuClick();
+          isOpen ? onClose() : onOpen();
+        }}
+      >
+        <Stack
+          as={"nav"}
+          spacing={4}
+          bg={color}
+          w={"100%"}
+          position={"absolute"}
+          top={"100%"}
+          left={0}
+          zIndex={999}
+          overflow={"hidden"}
+          transition={"height 0.3s ease-in-out"}
+          height={menuHeight}
+        >
+          {Links.map((links) => (
+            <NavLink key={links.link}>{links}</NavLink>
+          ))}
+        </Stack>
       </Box>
-    </>
+      {isOpen ? (
+        <Box
+          bg={opositeColor}
+          w={"100%"}
+          h={"100vh"}
+          pos={"absolute"}
+          top={0}
+          left={0}
+          zIndex={100}
+          onClick={onClose}
+        >
+          <Flex alignItems={"center"} justifyContent={"center"} h={"100%"}>
+            <VStack as={"nav"} spacing={"10"} align="center">
+              {Links.map((links) => (
+                <motion.div
+                  key={links.link}
+                  initial={{ y: -20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Text fontWeight="semibold" fontSize="xl">
+                    <NavLink key={links.link}>{links}</NavLink>
+                  </Text>
+                </motion.div>
+              ))}
+            </VStack>
+          </Flex>
+        </Box>
+      ) : null}
+    </Box>
   );
 }

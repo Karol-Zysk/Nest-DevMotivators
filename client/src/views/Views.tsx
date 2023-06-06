@@ -5,8 +5,8 @@ import SignUp from "../pages/Auth/SignUp";
 import PrivateRoutes from "../routes/PrivateRoutes";
 import AuthRoutes from "../routes/AuthRoutes";
 import Staging from "../pages/Main/Staging";
-import PullRequest from "../pages/PullRequest";
-import DevProfile from "../pages/DevProfile";
+import PullRequest from "../pages/PullRequest/PullRequest";
+import DevProfile from "../pages/DevProfile/DevProfile";
 
 const Views = () => {
   return (

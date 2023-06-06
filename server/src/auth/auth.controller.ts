@@ -42,7 +42,9 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     const userId = user['sub'];
-    const refreshToken = req.cookies['jwt-refresh'];
+
+    const refreshToken = req.cookies['refresh_token'];
+
     return this.authService.refreshTokens(userId, refreshToken, res);
   }
 

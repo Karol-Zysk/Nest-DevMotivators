@@ -157,15 +157,16 @@ export class AuthService {
       refreshToken,
     };
   }
-  async refreshTokens(userId: string, req: Request, res: Response) {
+  async refreshTokens(userId: string, refreshToken: string, res: Response) {
     const user = await this.userModel
       .findById(userId)
       .select('+refreshToken')
       .exec();
+
     if (!user || !user.refreshToken)
       throw new ForbiddenException('Access Denied');
     const refreshTokenMatches = await bcrypt.compare(
-      req.cookies.refresh_token,
+      refreshToken,
       user.refreshToken,
     );
     if (!refreshTokenMatches) throw new ForbiddenException('Access Denied');

@@ -1,20 +1,10 @@
-import styled from "styled-components";
 import { useContext, useState } from "react";
 import { Flex, Icon, useToast } from "@chakra-ui/react";
 import { FaRegThumbsDown, FaRegThumbsUp } from "react-icons/fa";
 import { Motivator } from "../interfaces/Motivator.interface";
 import { ApiClient } from "../utils/ApiClient";
 import { AccountContext } from "../context/AccountContext";
-
-const StyledFlex = styled(Flex)<{ $active: boolean }>`
-  transition: all 0.3s;
-  opacity: ${({ $active }) => ($active ? 1 : 0.8)};
-  transform: scale(${({ $active }) => ($active ? 1 : 0.8)});
-  &:hover {
-    opacity: 1;
-    transform: scale(1);
-  }
-`;
+import { StyledFlex } from "./StyledFlex";
 
 const Voting: React.FC<{ motivator: Motivator }> = ({ motivator }) => {
   const { user } = useContext(AccountContext);
@@ -34,7 +24,6 @@ const Voting: React.FC<{ motivator: Motivator }> = ({ motivator }) => {
 
       setResp(res);
     } catch (error: any) {
-
       if (error.response && error.response.status === 403) {
         setLastError403(false);
       }
