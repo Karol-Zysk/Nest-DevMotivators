@@ -58,7 +58,7 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
 
     try {
       const response = await apiClient.get<UserData>("/user/me");
-      console.log(response);
+
       if (response) {
         setUser(response);
         setIsLoggedIn(true);
@@ -79,7 +79,6 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
           }
         } catch (refreshError: any) {
           cleanAfterLogout();
-          navigate("/login");
 
           toast({
             title: "Error",
@@ -102,8 +101,6 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
-    console.log(isLoggedIn);
-
     if (LoggedIn) fetchUserData();
     return;
   }, [isLoggedIn]);

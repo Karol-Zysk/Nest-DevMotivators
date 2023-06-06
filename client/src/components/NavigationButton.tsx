@@ -11,13 +11,11 @@ const NaviBtn = ({ href, btnTxt }: { href: string; btnTxt: string }) => {
   return (
     <Button
       size={["xs", "sm", "md"]}
-      bg="transparent"
-      color="white"
+      // bg="transparent"
       ml="2"
       border="2px"
       borderStyle="dashed"
-      _hover={{ bg: "white", color: "black", borderColor: "black" }}
-      borderColor="white"
+      _hover={{ bg: "white", color: "black" }}
       onClick={handleNavigate}
     >
       {btnTxt}
