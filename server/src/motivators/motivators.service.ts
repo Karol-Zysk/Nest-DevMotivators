@@ -94,22 +94,13 @@ export class MotivatorsService {
     const imageNameWithExtension = imageUrlParts[imageUrlParts.length - 1];
     const imageName = imageNameWithExtension.split('.')[0];
 
-    const info = await cloudinary.uploader.destroy(
-      imageName,
-      function (error, result) {
-        if (error) {
-          console.log(error);
-          throw new InternalServerErrorException(
-            'Problem with image deletion from Cloudinary',
-          );
-        }
-      },
-    );
-    console.log(info);
+    await cloudinary.uploader.destroy(imageName, {
+      resource_type: 'image',
+    });
 
-    // const deletedMotivator = await motivatorToDelete.deleteOne();
+    const deletedMotivator = await motivatorToDelete.deleteOne();
 
-    // return deletedMotivator;
+    return deletedMotivator;
     return;
   }
 

@@ -1,10 +1,18 @@
 import { useEffect, useState } from "react";
-import { Box, Flex, Heading, Text, Image } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Heading,
+  Text,
+  Image,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import { Motivator } from "../../interfaces/Motivator.interface";
 import Voting from "../../components/Voting";
 import { ApiClient } from "../../utils/ApiClient";
 import Pagination from "../../components/Pagination";
 import Loading from "../../components/Loading";
+import MotivatorImage from "../../components/MotivatorImage";
 
 interface ApiResponse {
   motivators: Motivator[];
@@ -17,6 +25,7 @@ const Main = () => {
   );
   const [page, setPage] = useState(0);
   const [pageCount, setPageCount] = useState(0);
+  const color = useColorModeValue("black", "white");
   const limit = 3;
   const apiClient = new ApiClient();
 
@@ -33,6 +42,10 @@ const Main = () => {
     getMotivators();
   }, [page]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [motivators]);
+
   if (!motivators) {
     return <Loading />;
   }
@@ -40,55 +53,45 @@ const Main = () => {
   return (
     <Box maxW="40%" p="1rem" m="2rem auto">
       {motivators.map((motivator: Motivator) => (
-        <Box
-          key={motivator.id}
+        <Flex
+          key={motivator._id}
+          direction="column"
+          minH="100%"
+          w="100%"
           p="1rem"
           mb="2rem"
-          bgColor="#1a202c"
-          border="2px solid white"
           borderRadius="md"
-          boxShadow="lg"
+          boxShadow={`0px 3px 4px ${color}`}
         >
-          <Flex justify="between" w="full" mb="4">
-            <Text fontSize="1.25rem" fontWeight="600" color="white">
+          <Flex justify="space-between" minH="full" w="full" mb="4">
+            <Text fontSize="1.25rem" fontWeight="600">
               Commited by: {motivator.authorName}
             </Text>
             <Voting motivator={motivator} />
           </Flex>
-          <Flex justify="center" w="full" mb="2">
-            <Image
-              src={motivator.image}
-              alt="image"
-              boxSize="-moz-max-content"
-              objectFit="contain"
-            />
-          </Flex>
+          <MotivatorImage src={motivator.image} alt={motivator.image} />
           <Heading
             as="h3"
             mt="1rem"
             fontSize="3xl"
             fontWeight="700"
-            color="white"
+            w="100%"
+            textAlign="center"
           >
             {motivator.title}
           </Heading>
-          <Heading
-            as="h3"
-            mt="1rem"
-            fontSize="3xl"
-            fontWeight="700"
-            color="white"
-          ></Heading>
+
           <Heading
             as="h4"
             mt="0.5rem"
             fontSize="xl"
             fontWeight="500"
-            color="white"
+            w="100%"
+            textAlign="center"
           >
             {motivator.subTitle}
           </Heading>
-        </Box>
+        </Flex>
       ))}
 
       <Pagination pageCount={pageCount} setPage={setPage} />

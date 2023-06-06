@@ -5,6 +5,7 @@ import Voting from "../../components/Voting";
 import { ApiClient } from "../../utils/ApiClient";
 import Pagination from "../../components/Pagination";
 import Loading from "../../components/Loading";
+import MotivatorImage from "../../components/MotivatorImage";
 
 interface ApiResponse {
   motivators: Motivator[];
@@ -34,6 +35,10 @@ const Main = () => {
     getMotivators();
   }, [page]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [motivators]);
+
   if (!motivators) {
     return <Loading />;
   }
@@ -56,14 +61,7 @@ const Main = () => {
             </Text>
             <Voting motivator={motivator} />
           </Flex>
-          <Flex justify="center" w="full" mb="2">
-            <Image
-              src={motivator.image}
-              alt="image"
-              boxSize="-moz-max-content"
-              objectFit="contain"
-            />
-          </Flex>
+          <MotivatorImage src={motivator.image} alt={motivator.image} />
           <Heading
             as="h3"
             mt="1rem"

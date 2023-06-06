@@ -93,14 +93,7 @@ const MotivatorPreview: React.FC<MotivatorPreviewProps> = ({
         >
           {title}
         </Heading>
-        <Heading
-          w="100%"
-          textAlign="center"
-          as="h3"
-          mt="1rem"
-          fontSize="3xl"
-          fontWeight="700"
-        ></Heading>
+
         <Heading
           as="h4"
           mt="0.5rem"

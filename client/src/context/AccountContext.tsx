@@ -36,6 +36,7 @@ const AccountContext = createContext<AccountContextValue>(initialState);
 
 const AccountContextProvider = ({ children }: { children: ReactNode }) => {
   const [cookies, setCookie, removeCookie] = useCookies(["is_logged_in"]);
+
   const LoggedIn = cookies["is_logged_in"];
 
   const toast = useToast();
@@ -63,7 +64,9 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
     } catch (error: any) {
       if (error.statusCode === 401) {
         try {
+          console.log("elo");
           await apiClient.get("/auth/refresh");
+
           const response = await apiClient.get<UserData>("/user/me");
 
           if (response) {

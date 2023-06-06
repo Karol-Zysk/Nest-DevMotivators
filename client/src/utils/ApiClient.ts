@@ -21,7 +21,7 @@ export class ApiClient {
     this.baseUrl = baseUrl;
   }
 
-  private async request<T>(config: AxiosRequestConfig): Promise<T> {
+  private async request<T>(config: AxiosRequestConfig): Promise<any> {
     try {
       const headers = config.headers || {};
 
@@ -35,7 +35,7 @@ export class ApiClient {
       if (!response.data) {
         throw new Error("No data returned from server");
       }
-      //@ts-ignore
+
       return response.data;
     } catch (error: any) {
       if (error.response && error.response.status === 403) {
