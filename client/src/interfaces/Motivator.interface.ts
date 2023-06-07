@@ -13,6 +13,7 @@ export interface Motivator {
   updatedAt: string;
   slug: string;
   __v: number;
+  safeIn?: string;
   movedToMain: string;
   id: string;
 }

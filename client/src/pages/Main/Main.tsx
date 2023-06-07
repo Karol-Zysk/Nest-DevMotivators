@@ -1,12 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Box,
-  Flex,
-  Heading,
-  Text,
-  Image,
-  useColorModeValue,
-} from "@chakra-ui/react";
+import { Box, Flex, Heading, Text, useColorModeValue } from "@chakra-ui/react";
 import { Motivator } from "../../interfaces/Motivator.interface";
 import Voting from "../../components/Voting";
 import { ApiClient } from "../../utils/ApiClient";
@@ -25,7 +18,9 @@ const Main = () => {
   );
   const [page, setPage] = useState(0);
   const [pageCount, setPageCount] = useState(0);
-  const color = useColorModeValue("black", "white");
+  const color = useColorModeValue("white", "black");
+  const bg = useColorModeValue("white", "black");
+
   const limit = 3;
   const apiClient = new ApiClient();
 
@@ -58,15 +53,24 @@ const Main = () => {
           direction="column"
           minH="100%"
           w="100%"
-          p="1rem"
+          p="2rem"
           mb="2rem"
           borderRadius="md"
-          boxShadow={`0px 3px 4px ${color}`}
+          border="2px"
+          bg={bg}
+          // boxShadow={`4px 4px 4px ${color}`}
         >
           <Flex justify="space-between" minH="full" w="full" mb="4">
-            <Text fontSize="1.25rem" fontWeight="600">
-              Commited by: {motivator.authorName}
-            </Text>
+            <Box>
+              <Text fontSize="1.1rem" fontWeight="600">
+                Commited by: {motivator.authorName}
+              </Text>
+              {motivator.safeIn && (
+                <Text fontSize="1rem" fontWeight="600">
+                  Safe In: {motivator?.safeIn}
+                </Text>
+              )}
+            </Box>
             <Voting motivator={motivator} />
           </Flex>
           <MotivatorImage src={motivator.image} alt={motivator.image} />

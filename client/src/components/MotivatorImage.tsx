@@ -20,7 +20,6 @@ const MotivatorImage: React.FC<ImageWithLoadingProps> = ({ src, alt }) => {
       minW="full"
       minH="150px"
       p="1"
-      boxShadow="1px 1px 3px gray"
       mb="2"
       position="relative"
     >
@@ -39,8 +38,10 @@ const MotivatorImage: React.FC<ImageWithLoadingProps> = ({ src, alt }) => {
         loading="lazy"
         src={src}
         alt={alt}
+        border="4px"
+        minW="full"
         boxSize="-moz-max-content"
-        objectFit="contain"
+        objectFit="cover"
       />
     </Flex>
   );

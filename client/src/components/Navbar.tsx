@@ -69,7 +69,7 @@ export default function Navbar() {
 
   return (
     <Box
-      bg={useColorModeValue("gray.200", "black")}
+      bg={useColorModeValue("facebook.400", "black")}
       px={4}
       py={2}
       borderBottom="4px"

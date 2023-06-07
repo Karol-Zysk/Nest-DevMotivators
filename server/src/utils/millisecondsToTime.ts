@@ -6,7 +6,7 @@ export function convertMilliseconds(milliseconds: number) {
   seconds = seconds % 60;
   minutes = minutes % 60;
 
-  return `safe in: ${hours > 0 ? `${hours} hours, ` : ''}${
+  return `${hours > 0 ? `${hours} hours, ` : ''}${
     minutes > 0 ? `${minutes} minutes, ` : ''
   }${seconds > 1 ? `${seconds} seconds` : ''}`;
 }

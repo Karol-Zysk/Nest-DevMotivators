@@ -1,17 +1,18 @@
 import { ReactNode } from "react";
 import Navbar from "../components/Navbar";
-import { Flex } from "@chakra-ui/react";
+import { Flex, useColorModeValue } from "@chakra-ui/react";
 
 interface LayoutProps {
   children: ReactNode;
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
+  const bg = useColorModeValue("facebook.300", "gray.900");
   return (
     <Flex minH="100vh" borderTop="8px" borderX="4px" direction="column">
       <Navbar />
 
-      <Flex direction="column" h="100%" flex="1">
+      <Flex bg={bg} direction="column" h="100%" flex="1">
         {children}
       </Flex>
 
