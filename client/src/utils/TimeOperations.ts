@@ -1,7 +1,7 @@
 const currentTime = new Date();
 
 export const expiresTime = new Date(
-  currentTime.getTime() + 30 * 60 * 60 * 1000
+  currentTime.getTime() + 230 * 60 * 60 * 1000
 );
 
 export function formatDateString(createdAt: string | undefined) {

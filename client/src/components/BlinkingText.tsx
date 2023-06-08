@@ -11,7 +11,7 @@ const BlinkingText: React.FC<BlinkingTextProps> = ({ color }) => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       setIsVisible((prevVisible) => !prevVisible);
-    }, 750); // Interwał migania (w milisekundach)
+    }, 1150);
 
     return () => {
       clearInterval(intervalId);

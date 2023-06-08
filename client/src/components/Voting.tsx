@@ -43,7 +43,6 @@ const Voting: React.FC<{ motivator: Motivator }> = ({ motivator }) => {
         align="center"
         fontSize="1.125rem"
         fontWeight="700"
-        color="white"
         mr="2"
         $active={true}
         onClick={() =>
@@ -71,7 +70,6 @@ const Voting: React.FC<{ motivator: Motivator }> = ({ motivator }) => {
         align="center"
         fontSize="1.125rem"
         fontWeight="700"
-        color="white"
         $active={true}
         onClick={() =>
           user

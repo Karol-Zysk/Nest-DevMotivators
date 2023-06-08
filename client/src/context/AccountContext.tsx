@@ -1,7 +1,6 @@
 import { useToast } from "@chakra-ui/react";
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { ApiClient } from "../utils/ApiClient";
-import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { expiresTime } from "../utils/TimeOperations";
 
@@ -37,6 +36,7 @@ const AccountContext = createContext<AccountContextValue>(initialState);
 
 const AccountContextProvider = ({ children }: { children: ReactNode }) => {
   const [cookies, setCookie, removeCookie] = useCookies(["is_logged_in"]);
+
   const LoggedIn = cookies["is_logged_in"];
 
   const toast = useToast();
@@ -44,8 +44,6 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<UserData | undefined | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!LoggedIn);
   const [error, setError] = useState<string | null>(null);
-
-  const navigate = useNavigate();
 
   const cleanAfterLogout = () => {
     removeCookie("is_logged_in", { path: "/" });
@@ -66,7 +64,9 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
     } catch (error: any) {
       if (error.statusCode === 401) {
         try {
+          console.log("elo");
           await apiClient.get("/auth/refresh");
+
           const response = await apiClient.get<UserData>("/user/me");
 
           if (response) {

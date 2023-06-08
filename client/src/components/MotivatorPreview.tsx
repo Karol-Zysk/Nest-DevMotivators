@@ -1,5 +1,14 @@
-import { Flex, Heading, Icon, Image, Text } from "@chakra-ui/react";
+import {
+  Flex,
+  Heading,
+  Icon,
+  Image,
+  Spinner,
+  Text,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import { StyledFlex } from "./StyledFlex";
+import { useState } from "react";
 import { FaRegThumbsDown, FaRegThumbsUp } from "react-icons/fa";
 import { AccountContext } from "../context/AccountContext";
 
@@ -17,9 +26,24 @@ const MotivatorPreview: React.FC<MotivatorPreviewProps> = ({
   previewUrl,
 }) => {
   const { user } = useContext(AccountContext);
+
+  const color = useColorModeValue("white", "black");
+  const bg = useColorModeValue("white", "black");
   return (
-    <Flex w="35%" h="30%" minH="30%" justify="center" p="4" align="center">
+    <Flex
+      w="35%"
+      h="30%"
+      minH="30%"
+      direction="column"
+      justify="center"
+      p="4"
+      align="center"
+    >
+      <Text fontSize="2rem" py="6">
+        Live Preview
+      </Text>
       <Flex
+        // key={motivator._id}
         direction="column"
         minH="100%"
         w="100%"
@@ -27,10 +51,11 @@ const MotivatorPreview: React.FC<MotivatorPreviewProps> = ({
         mb="2rem"
         borderRadius="md"
         border="1px"
-        boxShadow="md"
+        bg={bg}
+        boxShadow={`2px 2px 4px ${color}`}
       >
         <Flex justify="space-between" minH="full" w="full" mb="4">
-          <Text fontSize="1.25rem" fontWeight="600" color="white">
+          <Text fontSize="1.25rem" fontWeight="600">
             Commited by: {user?.login}
           </Text>
           <Flex>
@@ -38,7 +63,6 @@ const MotivatorPreview: React.FC<MotivatorPreviewProps> = ({
               align="center"
               fontSize="1.125rem"
               fontWeight="700"
-              color="white"
               mr="2"
             >
               <Icon
@@ -50,12 +74,7 @@ const MotivatorPreview: React.FC<MotivatorPreviewProps> = ({
               />
               8
             </StyledFlex>
-            <StyledFlex
-              align="center"
-              fontSize="1.125rem"
-              fontWeight="700"
-              color="white"
-            >
+            <StyledFlex align="center" fontSize="1.125rem" fontWeight="700">
               <Icon
                 as={FaRegThumbsDown}
                 fontSize="2rem"
@@ -67,26 +86,34 @@ const MotivatorPreview: React.FC<MotivatorPreviewProps> = ({
             </StyledFlex>
           </Flex>
         </Flex>
-        <Flex justify="center" w="full" minW="100%" minH="100%" mb="2">
+        <Flex
+          justify="center"
+          w="full"
+          minW="full"
+          minH="150px"
+          p="1"
+          mb="2"
+          position="relative"
+        >
           {previewUrl ? (
             <Image
+              loading="lazy"
               src={previewUrl}
-              alt="image"
+              alt={"Image "}
+              border="2px"
+              minW="full"
               boxSize="-moz-max-content"
-              objectFit="contain"
+              objectFit="cover"
             />
           ) : (
-            <Flex
-              justify="center"
-              borderRadius="md"
-              border="1px"
-              boxShadow="md"
-              align="center"
-              h="200px"
-              w="full"
-            >
-              <Text>Image</Text>
-            </Flex>
+            <Spinner
+              thickness="4px"
+              speed="0.65s"
+              emptyColor="gray.200"
+              color="blue.500"
+              size="xl"
+              position="absolute"
+            />
           )}
         </Flex>
         <Heading
@@ -96,19 +123,10 @@ const MotivatorPreview: React.FC<MotivatorPreviewProps> = ({
           fontWeight="700"
           w="100%"
           textAlign="center"
-          color="white"
         >
           {title}
         </Heading>
-        <Heading
-          w="100%"
-          textAlign="center"
-          as="h3"
-          mt="1rem"
-          fontSize="3xl"
-          fontWeight="700"
-          color="white"
-        ></Heading>
+
         <Heading
           as="h4"
           mt="0.5rem"
@@ -116,7 +134,6 @@ const MotivatorPreview: React.FC<MotivatorPreviewProps> = ({
           fontWeight="500"
           w="100%"
           textAlign="center"
-          color="white"
         >
           {subTitle}
         </Heading>

@@ -24,6 +24,7 @@ export const Pagination: React.FC<PaginationProps> = ({
       }}
     >
       <ReactPaginate
+      
         breakLabel={"..."}
         breakClassName={"break-me"}
         pageCount={pageCount}
