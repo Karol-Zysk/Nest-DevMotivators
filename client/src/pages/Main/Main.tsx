@@ -18,7 +18,7 @@ const Main = () => {
   );
   const [page, setPage] = useState(0);
   const [pageCount, setPageCount] = useState(0);
-  const color = useColorModeValue("white", "black");
+  // const color = useColorModeValue("white", "black");
   const bg = useColorModeValue("white", "black");
 
   const limit = 3;

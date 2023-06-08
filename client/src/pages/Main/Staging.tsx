@@ -13,6 +13,7 @@ import { ApiClient } from "../../utils/ApiClient";
 import Pagination from "../../components/Pagination";
 import Loading from "../../components/Loading";
 import MotivatorImage from "../../components/MotivatorImage";
+import { Link } from "react-router-dom";
 
 interface ApiResponse {
   motivators: Motivator[];
@@ -55,54 +56,56 @@ const Main = () => {
   return (
     <Box maxW="40%" p="1rem" m="2rem auto">
       {motivators.map((motivator: Motivator) => (
-        <Flex
-          key={motivator._id}
-          direction="column"
-          minH="100%"
-          w="100%"
-          p="1rem"
-          mb="2rem"
-          borderRadius="md"
-          border="1px"
-          bg={bg}
-          boxShadow={`4px 4px 8px ${color}`}
-        >
-          <Flex justify="space-between" minH="full" w="full" py="4" mb="4">
-            <Box>
-              <Text fontSize="1.1rem" fontWeight="600">
-                Commited by: {motivator.authorName}
-              </Text>
-              {motivator.safeIn && (
-                <Text fontSize="1rem" fontWeight="600">
-                  Safe In: {motivator?.safeIn}
+        <Link to={`/motivator/${motivator.id}`}>
+          <Flex
+            key={motivator._id}
+            direction="column"
+            minH="100%"
+            w="100%"
+            p="1rem"
+            mb="2rem"
+            borderRadius="md"
+            border="1px"
+            bg={bg}
+            boxShadow={`4px 4px 8px ${color}`}
+          >
+            <Flex justify="space-between" minH="full" w="full" py="4" mb="4">
+              <Box>
+                <Text fontSize="1.1rem" fontWeight="600">
+                  Commited by: {motivator.authorName}
                 </Text>
-              )}
-            </Box>
-            <Voting motivator={motivator} />
-          </Flex>
-          <MotivatorImage src={motivator.image} alt={motivator.image} />
-          <Heading
-            as="h3"
-            mt="1rem"
-            fontSize="3xl"
-            fontWeight="700"
-            w="100%"
-            textAlign="center"
-          >
-            {motivator.title}
-          </Heading>
+                {motivator.safeIn && (
+                  <Text fontSize="1rem" fontWeight="600">
+                    Safe In: {motivator?.safeIn}
+                  </Text>
+                )}
+              </Box>
+              <Voting motivator={motivator} />
+            </Flex>
+            <MotivatorImage src={motivator.image} alt={motivator.image} />
+            <Heading
+              as="h3"
+              mt="1rem"
+              fontSize="3xl"
+              fontWeight="700"
+              w="100%"
+              textAlign="center"
+            >
+              {motivator.title}
+            </Heading>
 
-          <Heading
-            as="h4"
-            mt="0.5rem"
-            fontSize="xl"
-            fontWeight="500"
-            w="100%"
-            textAlign="center"
-          >
-            {motivator.subTitle}
-          </Heading>
-        </Flex>
+            <Heading
+              as="h4"
+              mt="0.5rem"
+              fontSize="xl"
+              fontWeight="500"
+              w="100%"
+              textAlign="center"
+            >
+              {motivator.subTitle}
+            </Heading>
+          </Flex>
+        </Link>
       ))}
 
       <Pagination pageCount={pageCount} setPage={setPage} />
