@@ -48,6 +48,7 @@ export class MotivatorsController {
   }
 
   @Get('/:id')
+  @Public()
   findMotivatorById(@Param('id') id: string) {
     return this.motivatorsService.findMotivatorById(id);
   }

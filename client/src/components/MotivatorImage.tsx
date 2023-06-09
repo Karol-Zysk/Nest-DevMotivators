@@ -8,8 +8,14 @@ interface ImageWithLoadingProps {
 
 const MotivatorImage: React.FC<ImageWithLoadingProps> = ({ src, alt }) => {
   const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
 
   const handleImageLoad = () => {
+    setIsLoading(false);
+  };
+
+  const handleImageError = () => {
+    setLoadError(true);
     setIsLoading(false);
   };
 
@@ -23,7 +29,7 @@ const MotivatorImage: React.FC<ImageWithLoadingProps> = ({ src, alt }) => {
       mb="2"
       position="relative"
     >
-      {isLoading && (
+      {isLoading && !loadError && (
         <Spinner
           thickness="4px"
           speed="0.65s"
@@ -33,16 +39,28 @@ const MotivatorImage: React.FC<ImageWithLoadingProps> = ({ src, alt }) => {
           position="absolute"
         />
       )}
-      <Image
-        onLoad={handleImageLoad}
-        loading="lazy"
-        src={src}
-        alt={alt}
-        border="4px"
-        minW="full"
-        boxSize="-moz-max-content"
-        objectFit="cover"
-      />
+      {loadError ? (
+        <Image
+          src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930"
+          alt={alt}
+          border="4px"
+          minW="full"
+          boxSize="-moz-max-content"
+          objectFit="cover"
+        />
+      ) : (
+        <Image
+          onLoad={handleImageLoad}
+          onError={handleImageError}
+          loading="lazy"
+          src={src}
+          alt={alt}
+          border="4px"
+          minW="full"
+          boxSize="-moz-max-content"
+          objectFit="cover"
+        />
+      )}
     </Flex>
   );
 };

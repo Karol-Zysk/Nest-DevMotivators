@@ -98,7 +98,7 @@ export default function Navbar() {
           display={{ base: "none", md: "flex" }}
         >
           {Links.map((links) => (
-            <Box _hover={{ opacity: "0.9" }}>
+            <Box _hover={{ opacity: "0.9" }} key={links.link}>
               <NavLink key={links.link}>{links}</NavLink>
             </Box>
           ))}
@@ -179,16 +179,9 @@ export default function Navbar() {
           <Flex alignItems={"center"} justifyContent={"center"} h={"100%"}>
             <VStack as={"nav"} spacing={"10"} align="center">
               {Links.map((links) => (
-                <motion.div
-                  key={links.link}
-                  initial={{ y: -20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <Text fontWeight="semibold" fontSize="xl">
-                    <NavLink key={links.link}>{links}</NavLink>
-                  </Text>
-                </motion.div>
+                <Text key={links.link} fontWeight="semibold" fontSize="xl">
+                  <NavLink>{links}</NavLink>
+                </Text>
               ))}
             </VStack>
           </Flex>

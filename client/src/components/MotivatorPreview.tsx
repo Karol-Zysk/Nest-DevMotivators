@@ -8,7 +8,6 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { StyledFlex } from "./StyledFlex";
-import { useState } from "react";
 import { FaRegThumbsDown, FaRegThumbsUp } from "react-icons/fa";
 import { AccountContext } from "../context/AccountContext";
 
