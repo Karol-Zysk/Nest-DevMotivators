@@ -148,9 +148,8 @@ export class MotivatorsService {
         id,
         {
           [`$${method}`]: { [`${option}`]: user },
-          movedToMain: Date.now(),
         },
-        { new: true, runValidators: true },
+        { new: true },
       )
       .exec();
 
@@ -158,8 +157,8 @@ export class MotivatorsService {
       updatedMotivator = await this.motivatorModel
         .findByIdAndUpdate(
           id,
-          { place: Place.main },
-          { new: true, runValidators: true },
+          { place: Place.main, movedToMain: Date.now() },
+          { new: true },
         )
         .exec();
     }
