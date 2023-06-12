@@ -45,7 +45,7 @@ export class ApiClient {
         throw error.response.data;
       }
 
-      return error;
+      throw error.response.data;
     }
   }
 
