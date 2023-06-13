@@ -10,28 +10,39 @@ import {
 } from "@chakra-ui/react";
 import { UserData } from "../context/AccountContext";
 import { formatDateString } from "../utils/TimeOperations";
+import { MotivatorsStats } from "../pages/DevProfile/DevProfile";
+import { Motivator } from "../interfaces/Motivator.interface";
 
 interface UserCardProps {
   user: UserData | null | undefined;
-  motivatorsNumber: number | undefined;
+  userMotivators:
+    | {
+        motivators: Motivator[];
+        stats: MotivatorsStats;
+      }
+    | undefined;
 }
 
-const Stats: React.FC<UserCardProps> = ({ user, motivatorsNumber }) => {
+const Stats: React.FC<UserCardProps> = ({ user, userMotivators }) => {
   return (
     <Flex w={"full"}>
       <Box
         w={"full"}
-        bg={useColorModeValue("white", "gray.900")}
+        bg={useColorModeValue("white", "black")}
         boxShadow={"2xl"}
         rounded={"lg"}
-        p={6}
+        p={12}
         textAlign={"left"}
       >
-        <Heading fontSize={"2xl"} fontFamily={"body"}>
-          Active since: {formatDateString(user?.createdAt)}
-        </Heading>
-        <Text fontWeight={600} color={"gray.500"} mb={4}>
-          Motivators commited: {motivatorsNumber}
+        <Text mb={4}>
+          Motivators commited: {userMotivators?.motivators.length}
+        </Text>
+        <Text mb={4}>
+          Total Motivator Likes: {userMotivators?.stats.votingStats.likeCount}
+        </Text>
+        <Text mb={4}>
+          Total Motivator Dislikes:{" "}
+          {userMotivators?.stats.votingStats.dislikeCount}
         </Text>
         <Text
           textAlign={"center"}

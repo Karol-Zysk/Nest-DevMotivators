@@ -6,15 +6,26 @@ import Stats from "../../components/Stats";
 import { Motivator } from "../../interfaces/Motivator.interface";
 import { ApiClient } from "../../utils/ApiClient";
 
+export interface MotivatorsStats {
+  votingStats: { likeCount: number; dislikeCount: number };
+}
+
 function DevProfile() {
   const { user } = useContext(AccountContext);
-  const [userMotivators, setUserMotivators] = useState<Motivator[] | undefined>(
-    undefined
-  );
+  const [userMotivators, setUserMotivators] = useState<
+    | {
+        motivators: Motivator[];
+        stats: MotivatorsStats;
+      }
+    | undefined
+  >(undefined);
   const apiClient = new ApiClient();
   const motivatorsInfo = async () => {
     try {
-      const res = await apiClient.get<Motivator[]>(`user/me/motivators`);
+      const res = await apiClient.get<{
+        motivators: Motivator[];
+        stats: MotivatorsStats;
+      }>(`user/me/motivators`);
       setUserMotivators(res);
     } catch (error) {
       console.error(error);
@@ -23,12 +34,13 @@ function DevProfile() {
   useEffect(() => {
     motivatorsInfo();
   }, []);
+  console.log(userMotivators);
 
   return (
     <Flex py="6" px="6" justify="space-around">
       <Flex direction="column" w="35%">
         <UserCard user={user} />
-        <Stats user={user} motivatorsNumber={userMotivators?.length} />
+        <Stats user={user} userMotivators={userMotivators} />
       </Flex>
       <Flex direction="column">
         <UserCard user={user} />

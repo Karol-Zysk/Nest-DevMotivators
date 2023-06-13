@@ -19,37 +19,25 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
   const toast = useToast();
   return (
     <Flex py={2} w={"full"}>
-      <Box
+      <Flex
         w={"full"}
-        bg={useColorModeValue("white", "gray.900")}
+        direction={"column"}
+        bg={useColorModeValue("white", "black")}
         boxShadow={"2xl"}
         rounded={"lg"}
-        p={6}
-        textAlign={"center"}
+        p={12}
+        justify={"center"}
       >
         <Avatar
           size={"2xl"}
           src={user?.userPhoto}
           mb={4}
+          alignSelf={"center"}
           pos={"relative"}
-          _after={{
-            content: '""',
-            w: 4,
-            h: 4,
-            bg: "green.300",
-            border: "2px solid white",
-            rounded: "full",
-            pos: "absolute",
-            bottom: 0,
-            right: 3,
-          }}
         />
-        <Heading fontSize={"2xl"} fontFamily={"body"}>
-          {user?.login}
-        </Heading>
-        <Text fontWeight={600} color={"gray.500"} mb={4}>
-          {user?.email}
-        </Text>
+        <Text fontSize={"2xl"}>Dev{user?.login}</Text>
+        <Text fontSize={"2xl"}>Seniority: {"trainee"}</Text>
+        <Text mb={4}>E-mail: {user?.email}</Text>
         <Text
           textAlign={"center"}
           color={useColorModeValue("gray.700", "gray.400")}
@@ -103,7 +91,7 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
             Follow
           </Button>
         </Stack>
-      </Box>
+      </Flex>
     </Flex>
   );
 };
