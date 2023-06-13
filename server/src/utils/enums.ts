@@ -18,3 +18,12 @@ export enum VoteMethod {
   give = 'push',
   take = 'pull',
 }
+
+export enum Seniority {
+  trainee = 'trainee',
+  junior = 'Junior Developer',
+  regular = 'Regular Developer',
+  senior = 'Senior Developer',
+  techLead = 'Tech Lead',
+  principal = 'Principal Engineer',
+}
