@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { Role } from 'src/utils/enums';
+import { Role, Seniority } from 'src/utils/enums';
 
 export type UserDocument = User & Document;
 
@@ -34,6 +34,12 @@ export class User extends Document {
     default: Role.admin,
   })
   role: Role;
+
+  @Prop({
+    enum: Seniority,
+    default: Seniority.trainee,
+  })
+  seniority: Seniority;
 
   @Prop({
     select: false,
