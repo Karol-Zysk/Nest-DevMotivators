@@ -7,6 +7,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
+import { Technology } from 'src/utils';
 
 export class SignInDto {
   @IsString()
@@ -47,4 +48,12 @@ export class SignUpDto {
   @IsString()
   @IsNotEmpty()
   password: string;
+
+  @MaxLength(2000)
+  @IsString()
+  aboutMe: string;
+
+  @MaxLength(2000)
+  @IsString()
+  technology: Technology;
 }

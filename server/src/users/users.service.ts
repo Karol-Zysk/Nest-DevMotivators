@@ -4,6 +4,7 @@ import { Motivator, MotivatorDocument, User, UserDocument } from 'src/entities';
 import { UpdateUserDto } from './dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { MotivatorsStats } from 'src/interfaces/motivators-stats.interface';
+import { expCaps } from 'src/utils';
 
 @Injectable()
 export class UsersService {
@@ -59,10 +60,26 @@ export class UsersService {
 
     const result = await this.motivatorModel.aggregate(agg).exec();
     const motivators = result[0].motivators;
+    const exp = result[0].likeCount * 15 + result[0].dislikeCount * 2;
+
+    let nextLevelExp;
+    let nextLevel;
+    for (const level in expCaps) {
+      if (exp < expCaps[level]) {
+        nextLevelExp = expCaps[level];
+        nextLevel = level;
+        break;
+      }
+    }
+    console.log(nextLevelExp);
+
     const stats = {
       votingStats: {
         likeCount: result[0].likeCount,
         dislikeCount: result[0].dislikeCount,
+        exp,
+        nextLevelExp,
+        nextLevel,
       },
     };
 

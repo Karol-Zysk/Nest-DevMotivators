@@ -1,15 +1,12 @@
 import {
   Box,
-  Heading,
   Text,
   Stack,
-  Avatar,
   Button,
   useColorModeValue,
   Flex,
 } from "@chakra-ui/react";
 import { UserData } from "../context/AccountContext";
-import { formatDateString } from "../utils/TimeOperations";
 import { MotivatorsStats } from "../pages/DevProfile/DevProfile";
 import { Motivator } from "../interfaces/Motivator.interface";
 
@@ -23,7 +20,7 @@ interface UserCardProps {
     | undefined;
 }
 
-const Stats: React.FC<UserCardProps> = ({ user, userMotivators }) => {
+const Stats: React.FC<UserCardProps> = ({ userMotivators }) => {
   return (
     <Flex w={"full"}>
       <Box

@@ -7,7 +7,13 @@ import { Motivator } from "../../interfaces/Motivator.interface";
 import { ApiClient } from "../../utils/ApiClient";
 
 export interface MotivatorsStats {
-  votingStats: { likeCount: number; dislikeCount: number };
+  votingStats: {
+    likeCount: number;
+    dislikeCount: number;
+    exp: number;
+    nextLevelExp: number;
+    nextLevel: string;
+  };
 }
 
 function DevProfile() {
@@ -39,12 +45,12 @@ function DevProfile() {
   return (
     <Flex py="6" px="6" justify="space-around">
       <Flex direction="column" w="35%">
-        <UserCard user={user} />
+        <UserCard user={user} userMotivators={userMotivators} />
         <Stats user={user} userMotivators={userMotivators} />
       </Flex>
       <Flex direction="column">
-        <UserCard user={user} />
-        <UserCard user={user} />
+        {/* <UserCard user={user} />
+        <UserCard user={user} /> */}
       </Flex>
     </Flex>
   );
