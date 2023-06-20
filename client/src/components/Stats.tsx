@@ -1,73 +1,60 @@
 import {
   Box,
-  Heading,
   Text,
-  Stack,
-  Avatar,
-  Button,
   useColorModeValue,
   Flex,
 } from "@chakra-ui/react";
 import { UserData } from "../context/AccountContext";
-import { formatDateString } from "../utils/TimeOperations";
+import { MotivatorsStats } from "../pages/DevProfile/DevProfile";
+import { Motivator } from "../interfaces/Motivator.interface";
 
 interface UserCardProps {
   user: UserData | null | undefined;
-  motivatorsNumber: number | undefined;
+  userMotivators:
+    | {
+        motivators: Motivator[];
+        stats: MotivatorsStats;
+      }
+    | undefined;
 }
 
-const Stats: React.FC<UserCardProps> = ({ user, motivatorsNumber }) => {
+const Stats: React.FC<UserCardProps> = ({ userMotivators }) => {
   return (
     <Flex w={"full"}>
       <Box
         w={"full"}
-        bg={useColorModeValue("white", "gray.900")}
+        bg={useColorModeValue("white", "black")}
         boxShadow={"2xl"}
         rounded={"lg"}
-        p={6}
+        p={12}
         textAlign={"left"}
       >
-        <Heading fontSize={"2xl"} fontFamily={"body"}>
-          Active since: {formatDateString(user?.createdAt)}
-        </Heading>
-        <Text fontWeight={600} color={"gray.500"} mb={4}>
-          Motivators commited: {motivatorsNumber}
+        <Text mb={4}>
+          <strong> Motivators commited:</strong>{" "}
+          {userMotivators?.motivators.length}
         </Text>
-        <Text
-          textAlign={"center"}
-          color={useColorModeValue("gray.700", "gray.400")}
-          px={3}
-        >
-          {/* id: {user._id} */}
+        <Text mb={4}>
+          <strong> Total Motivator Likes:</strong>{" "}
+          {userMotivators?.stats.votingStats.likeCount}
         </Text>
-        <Stack mt={8} direction={"row"} spacing={4}>
-          <Button
-            flex={1}
-            fontSize={"sm"}
-            rounded={"full"}
-            _focus={{
-              bg: "gray.200",
-            }}
-          >
-            Message
-          </Button>
-          <Button
-            flex={1}
-            fontSize={"sm"}
-            rounded={"full"}
-            bg={"blue.400"}
-            color={"white"}
-            boxShadow={"0 5px 20px 0px rgba(66, 153, 225, 0.5)"}
-            _hover={{
-              bg: "blue.500",
-            }}
-            _focus={{
-              bg: "blue.500",
-            }}
-          >
-            Follow
-          </Button>
-        </Stack>
+        <Text mb={4}>
+          <strong>Total Motivator Dislikes:</strong>{" "}
+          {userMotivators?.stats.votingStats.dislikeCount}
+        </Text>
+        <Text mb={4}>
+          <strong>Like Percentage:</strong>{" "}
+          {userMotivators &&
+          userMotivators.stats.votingStats.likeCount +
+            userMotivators.stats.votingStats.dislikeCount >
+            0
+            ? `${
+                (userMotivators.stats.votingStats.likeCount /
+                  (userMotivators.stats.votingStats.likeCount +
+                    userMotivators.stats.votingStats.dislikeCount)) *
+                100
+              }%`
+            : "N/A"}
+        </Text>
       </Box>
     </Flex>
   );

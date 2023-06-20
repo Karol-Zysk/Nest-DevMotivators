@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { Role, Seniority } from 'src/utils/enums';
+import { Role, Seniority, Technology } from 'src/utils/enums';
 
 export type UserDocument = User & Document;
 
@@ -18,6 +18,11 @@ export class User extends Document {
     lowercase: true,
   })
   email: string;
+
+  @Prop({
+    default: '',
+  })
+  aboutMe: string;
 
   @Prop({
     select: false,
@@ -40,6 +45,12 @@ export class User extends Document {
     default: Seniority.trainee,
   })
   seniority: Seniority;
+
+  @Prop({
+    enum: Technology,
+    default: '',
+  })
+  technology: Technology;
 
   @Prop({
     select: false,

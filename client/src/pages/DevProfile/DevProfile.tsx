@@ -1,20 +1,38 @@
-import { Flex } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import { useContext, useState, useEffect } from "react";
 import { AccountContext } from "../../context/AccountContext";
 import UserCard from "../../components/UserCard";
 import Stats from "../../components/Stats";
 import { Motivator } from "../../interfaces/Motivator.interface";
 import { ApiClient } from "../../utils/ApiClient";
+import DevMotivator from "../../components/DevMotivator";
+
+export interface MotivatorsStats {
+  votingStats: {
+    likeCount: number;
+    dislikeCount: number;
+    exp: number;
+    nextLevelExp: number;
+    nextLevel: string;
+  };
+}
 
 function DevProfile() {
   const { user } = useContext(AccountContext);
-  const [userMotivators, setUserMotivators] = useState<Motivator[] | undefined>(
-    undefined
-  );
+  const [userMotivators, setUserMotivators] = useState<
+    | {
+        motivators: Motivator[];
+        stats: MotivatorsStats;
+      }
+    | undefined
+  >(undefined);
   const apiClient = new ApiClient();
   const motivatorsInfo = async () => {
     try {
-      const res = await apiClient.get<Motivator[]>(`user/me/motivators`);
+      const res = await apiClient.get<{
+        motivators: Motivator[];
+        stats: MotivatorsStats;
+      }>(`user/me/motivators`);
       setUserMotivators(res);
     } catch (error) {
       console.error(error);
@@ -25,14 +43,17 @@ function DevProfile() {
   }, []);
 
   return (
-    <Flex py="6" px="6" justify="space-around">
-      <Flex direction="column" w="35%">
-        <UserCard user={user} />
-        <Stats user={user} motivatorsNumber={userMotivators?.length} />
+    <Flex py="12" px="12" justify="space-around">
+      <Flex direction="column" alignItems={"center"} w="30%">
+        <UserCard user={user} userMotivators={userMotivators} />
+        <Stats user={user} userMotivators={userMotivators} />
       </Flex>
-      <Flex direction="column">
-        <UserCard user={user} />
-        <UserCard user={user} />
+      <Flex py="8" direction="column" w="40%">
+        <Box>
+          {userMotivators?.motivators.map((motivator: Motivator) => (
+            <DevMotivator motivator={motivator} key={motivator._id} />
+          ))}
+        </Box>
       </Flex>
     </Flex>
   );

@@ -7,6 +7,8 @@ import {
   FormLabel,
   Heading,
   Input,
+  Select,
+  Textarea,
   useToast,
   VStack,
 } from "@chakra-ui/react";
@@ -16,11 +18,14 @@ import { AccountContext } from "../../context/AccountContext";
 import { ApiClient } from "../../utils/ApiClient";
 import { useCookies } from "react-cookie";
 import { expiresTime } from "../../utils/TimeOperations";
+import { Technology } from "../../utils/enums";
 
 interface FormData {
   login: string;
   email: string;
   password: string;
+  aboutMe: string;
+  technology: Technology;
 }
 
 const SignUp: React.FC = () => {
@@ -30,17 +35,23 @@ const SignUp: React.FC = () => {
     login: "",
     email: "",
     password: "",
+    aboutMe: "",
+    technology: Technology.Frontend,
   });
 
-  const toast = useToast();
-  const navigate = useNavigate();
-  const [cookies, setCookie] = useCookies(["is_logged_in"]);
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    event: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
     const { name, value } = event.target;
 
     setFormData({ ...formData, [name]: value });
   };
+
+  const toast = useToast();
+  const navigate = useNavigate();
+  const [cookies, setCookie] = useCookies(["is_logged_in"]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -75,7 +86,9 @@ const SignUp: React.FC = () => {
       <Heading>Register</Heading>
       <form onSubmit={handleSubmit}>
         <FormControl isInvalid={Boolean(error)}>
-          <FormLabel htmlFor="login">Login:</FormLabel>
+          <FormLabel mt={"2"} mb={"0"} htmlFor="login">
+            Login:
+          </FormLabel>
           <Input
             type="text"
             id="login"
@@ -86,7 +99,9 @@ const SignUp: React.FC = () => {
             onChange={handleChange}
             required
           />
-          <FormLabel htmlFor="email">Email:</FormLabel>
+          <FormLabel mt={"2"} mb={"0"} htmlFor="email">
+            Email:
+          </FormLabel>
           <Input
             type="email"
             id="email"
@@ -97,7 +112,9 @@ const SignUp: React.FC = () => {
             onChange={handleChange}
             required
           />
-          <FormLabel htmlFor="password">Password:</FormLabel>
+          <FormLabel mt={"2"} mb={"0"} htmlFor="password">
+            Password:
+          </FormLabel>
           <Input
             type="password"
             id="password"
@@ -108,6 +125,36 @@ const SignUp: React.FC = () => {
             onChange={handleChange}
             required
           />
+          <FormLabel mt={"2"} mb={"0"} htmlFor="aboutMe">
+            About me:
+          </FormLabel>
+          <Textarea
+            id="aboutMe"
+            name="aboutMe"
+            bg="white"
+            color="black"
+            value={formData.aboutMe}
+            onChange={handleChange}
+            required
+          />
+          <FormLabel mt={"2"} mb={"0"} htmlFor="technology">
+            Technology:
+          </FormLabel>
+          <Select
+            id="technology"
+            name="technology"
+            bg="white"
+            color="black"
+            value={formData.technology}
+            onChange={handleChange}
+            required
+          >
+            {Object.values(Technology).map((tech) => (
+              <option key={tech} value={tech}>
+                {tech}
+              </option>
+            ))}
+          </Select>
           <FormErrorMessage>{error}</FormErrorMessage>
           <ButtonGroup pt="1rem">
             <Button size={["sm", "md", "lg"]} colorScheme="blue" type="submit">

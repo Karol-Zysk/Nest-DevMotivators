@@ -20,10 +20,38 @@ export enum VoteMethod {
 }
 
 export enum Seniority {
-  trainee = 'trainee',
-  junior = 'Junior Developer',
-  regular = 'Regular Developer',
-  senior = 'Senior Developer',
+  trainee = 'Trainee',
+  junior = 'Junior',
+  regular = 'Regular',
+  senior = 'Senior',
   techLead = 'Tech Lead',
   principal = 'Principal Engineer',
+}
+
+export const expCaps = {
+  [Seniority.trainee]: 0,
+  [Seniority.junior]: 100,
+  [Seniority.regular]: 200,
+  [Seniority.senior]: 500,
+  [Seniority.techLead]: 1000,
+  [Seniority.principal]: 2000,
+};
+
+export enum Technology {
+  Frontend = 'Frontend',
+  Backend = 'Backend',
+  Java = 'Java',
+  DevOps = 'DevOps',
+  Tester = 'Tester',
+  Python = 'Python',
+  JavaScript = 'JavaScript',
+  TypeScript = 'TypeScript',
+  CSharp = 'C#',
+  Ruby = 'Ruby',
+  PHP = 'PHP',
+  Swift = 'Swift',
+  Kotlin = 'Kotlin',
+  Go = 'Go',
+  Rust = 'Rust',
+  Space = '',
 }

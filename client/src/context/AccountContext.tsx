@@ -3,6 +3,7 @@ import { createContext, ReactNode, useEffect, useState } from "react";
 import { ApiClient } from "../utils/ApiClient";
 import { useCookies } from "react-cookie";
 import { expiresTime } from "../utils/TimeOperations";
+import { Seniority, Technology } from "../utils/enums";
 
 export interface UserData {
   userPhoto: string;
@@ -10,6 +11,9 @@ export interface UserData {
   email: string;
   login: string;
   createdAt: string;
+  seniority?: Seniority;
+  aboutMe: string;
+  technology: Technology;
 }
 
 interface AccountContextValue {

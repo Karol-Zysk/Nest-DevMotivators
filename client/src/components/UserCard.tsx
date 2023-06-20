@@ -1,109 +1,98 @@
-import {
-  Box,
-  Heading,
-  Text,
-  Stack,
-  Avatar,
-  Button,
-  useColorModeValue,
-  Flex,
-  useToast,
-} from "@chakra-ui/react";
+import { Text, Avatar, useColorModeValue, Flex, Box } from "@chakra-ui/react";
 import { UserData } from "../context/AccountContext";
+import { Motivator } from "../interfaces/Motivator.interface";
+import { MotivatorsStats } from "../pages/DevProfile/DevProfile";
+import { ProgressBar } from "./ProgressBar";
 
 interface UserCardProps {
   user: UserData | null | undefined;
+  userMotivators:
+    | {
+        motivators: Motivator[];
+        stats: MotivatorsStats;
+      }
+    | undefined;
 }
 
-const UserCard: React.FC<UserCardProps> = ({ user }) => {
-  const toast = useToast();
+const UserCard: React.FC<UserCardProps> = ({ user, userMotivators }) => {
+  const progressValue = userMotivators
+    ? (userMotivators?.stats.votingStats.exp /
+        userMotivators?.stats.votingStats.nextLevelExp) *
+      100
+    : 100;
+
   return (
-    <Flex py={2} w={"full"}>
-      <Box
+    <Flex py={2} mb={"4"} w={"full"}>
+      <Flex
         w={"full"}
-        bg={useColorModeValue("white", "gray.900")}
+        direction={"column"}
+        bg={useColorModeValue("white", "black")}
         boxShadow={"2xl"}
         rounded={"lg"}
-        p={6}
-        textAlign={"center"}
+        p={12}
+        justify={"center"}
       >
         <Avatar
           size={"2xl"}
           src={user?.userPhoto}
           mb={4}
+          alignSelf={"center"}
           pos={"relative"}
-          _after={{
-            content: '""',
-            w: 4,
-            h: 4,
-            bg: "green.300",
-            border: "2px solid white",
-            rounded: "full",
-            pos: "absolute",
-            bottom: 0,
-            right: 3,
-          }}
         />
-        <Heading fontSize={"2xl"} fontFamily={"body"}>
-          {user?.login}
-        </Heading>
-        <Text fontWeight={600} color={"gray.500"} mb={4}>
-          {user?.email}
-        </Text>
         <Text
+          fontWeight={"semibold"}
+          mt="4"
+          mb={4}
+          fontSize={"2xl"}
+          w={"full"}
           textAlign={"center"}
-          color={useColorModeValue("gray.700", "gray.400")}
-          px={3}
         >
-          Fajny Ziomo
+          {user?.login}
         </Text>
-        <Stack mt={8} direction={"row"} spacing={4}>
-          <Button
-            onClick={() => {
-              toast({
-                title: "Info",
-                description: "Not yet implemented",
-                status: "info",
-                duration: 5000,
-                isClosable: true,
-              });
-            }}
-            flex={1}
-            fontSize={"sm"}
-            rounded={"full"}
-            _focus={{
-              bg: "gray.200",
-            }}
-          >
-            Message
-          </Button>
-          <Button
-            onClick={() => {
-              toast({
-                title: "Info",
-                description: "Not yet implemented",
-                status: "info",
-                duration: 5000,
-                isClosable: true,
-              });
-            }}
-            flex={1}
-            fontSize={"sm"}
-            rounded={"full"}
-            bg={"blue.400"}
-            color={"white"}
-            boxShadow={"0 5px 20px 0px rgba(66, 153, 225, 0.5)"}
-            _hover={{
-              bg: "blue.500",
-            }}
-            _focus={{
-              bg: "blue.500",
-            }}
-          >
-            Follow
-          </Button>
-        </Stack>
-      </Box>
+        <Text fontSize={"md"} mb={2}>
+          <strong>Seniority:</strong> {user?.seniority} {user?.technology}{" "}
+          Developer
+        </Text>
+        <Text fontSize={"md"} mb={2}>
+          <strong>E-mail:</strong> {user?.email}
+        </Text>
+        <Box border={4} mb={2} borderColor={"red.500"}>
+          <Text fontSize={"md"}>
+            <strong>About Me:</strong> {user?.aboutMe}
+          </Text>
+        </Box>
+        <Flex alignItems={"center"}>
+          <Text fontWeight={"semibold"} fontSize={"md"}>
+            Exp:
+          </Text>
+          <ProgressBar
+            exp={userMotivators && userMotivators?.stats.votingStats.exp}
+            nextLvlExp={
+              userMotivators && userMotivators?.stats.votingStats.nextLevelExp
+            }
+            value={progressValue}
+          />
+        </Flex>
+
+        <Text
+          fontSize={"md"}
+          w={"full"}
+          mt={8}
+          textAlign={"center"}
+          justifySelf={"center"}
+        >
+          <strong>
+            You need{" "}
+            {userMotivators &&
+              userMotivators?.stats.votingStats.nextLevelExp -
+                userMotivators?.stats.votingStats.exp}{" "}
+            exp to becme:{" "}
+            <span style={{ color: "green" }}>
+              {userMotivators?.stats.votingStats.nextLevel}!
+            </span>
+          </strong>
+        </Text>
+      </Flex>
     </Flex>
   );
 };

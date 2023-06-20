@@ -34,6 +34,8 @@ export class AuthService {
 
       const hash = await this.hashData(dto.password);
       const newUser = await this.userModel.create({
+        technology: dto.technology,
+        aboutMe: dto.aboutMe,
         email: dto.email,
         login: dto.login,
         hash,
