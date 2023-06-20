@@ -1,15 +1,8 @@
-import {
-  Text,
-  Stack,
-  Avatar,
-  Button,
-  useColorModeValue,
-  Flex,
-  useToast,
-} from "@chakra-ui/react";
+import { Text, Avatar, useColorModeValue, Flex } from "@chakra-ui/react";
 import { UserData } from "../context/AccountContext";
 import { Motivator } from "../interfaces/Motivator.interface";
 import { MotivatorsStats } from "../pages/DevProfile/DevProfile";
+import { ProgressBar } from "./ProgressBar";
 
 interface UserCardProps {
   user: UserData | null | undefined;
@@ -22,7 +15,12 @@ interface UserCardProps {
 }
 
 const UserCard: React.FC<UserCardProps> = ({ user, userMotivators }) => {
-  const toast = useToast();
+  const progressValue = userMotivators
+    ? (userMotivators?.stats.votingStats.exp /
+        userMotivators?.stats.votingStats.nextLevelExp) *
+      100
+    : 100;
+
   return (
     <Flex py={2} w={"full"}>
       <Flex
@@ -41,80 +39,41 @@ const UserCard: React.FC<UserCardProps> = ({ user, userMotivators }) => {
           alignSelf={"center"}
           pos={"relative"}
         />
-        <Text mt="8" mb={2} fontSize={"xl"}>
-          Nick: {user?.login}
+        <Text mt="4" mb={4} fontSize={"2xl"} w={"full"} textAlign={"center"}>
+          {user?.login}
         </Text>
         <Text fontSize={"xl"} mb={2}>
-          Seniority: {user?.seniority}
+          Seniority: {user?.seniority} {user?.technology} Developer
         </Text>
         <Text fontSize={"xl"} mb={2}>
           E-mail: {user?.email}
         </Text>
+        <Text fontSize={"lg"} py={8} border={2}>
+          <strong>About Me:</strong> {user?.aboutMe}
+        </Text>
+        <Flex alignItems={"center"}>
+          <Text fontSize={"lg"}>Exp:</Text>
+          <ProgressBar
+            exp={userMotivators?.stats.votingStats.exp}
+            nextLvlExp={userMotivators?.stats.votingStats.nextLevelExp}
+            value={progressValue}
+          />
+        </Flex>
+
         <Text
+          fontSize={"lg"}
+          w={"full"}
+          mt={4}
           textAlign={"center"}
-          color={useColorModeValue("gray.700", "gray.400")}
-          p={4}
-          py="4"
+          justifySelf={"center"}
         >
-          {user?.aboutMe}
-        </Text>
-        <Text color={useColorModeValue("gray.700", "gray.400")} px={3}>
-          Exp: {userMotivators?.stats.votingStats.exp} /{" "}
-          {userMotivators?.stats.votingStats.nextLevelExp}
-        </Text>
-        <Text color={useColorModeValue("gray.700", "gray.400")} px={3}>
           You need{" "}
           {userMotivators &&
             userMotivators?.stats.votingStats.nextLevelExp -
               userMotivators?.stats.votingStats.exp}{" "}
-          exp to becme: {userMotivators?.stats.votingStats.nextLevel}
+          exp to becme:{" "}
+          <strong>{userMotivators?.stats.votingStats.nextLevel}</strong>
         </Text>
-        <Stack mt={8} direction={"row"} spacing={4}>
-          <Button
-            onClick={() => {
-              toast({
-                title: "Info",
-                description: "Not yet implemented",
-                status: "info",
-                duration: 5000,
-                isClosable: true,
-              });
-            }}
-            flex={1}
-            fontSize={"sm"}
-            rounded={"full"}
-            _focus={{
-              bg: "gray.200",
-            }}
-          >
-            Message
-          </Button>
-          <Button
-            onClick={() => {
-              toast({
-                title: "Info",
-                description: "Not yet implemented",
-                status: "info",
-                duration: 5000,
-                isClosable: true,
-              });
-            }}
-            flex={1}
-            fontSize={"sm"}
-            rounded={"full"}
-            bg={"blue.400"}
-            color={"white"}
-            boxShadow={"0 5px 20px 0px rgba(66, 153, 225, 0.5)"}
-            _hover={{
-              bg: "blue.500",
-            }}
-            _focus={{
-              bg: "blue.500",
-            }}
-          >
-            Follow
-          </Button>
-        </Stack>
       </Flex>
     </Flex>
   );

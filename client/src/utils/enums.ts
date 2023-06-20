@@ -42,6 +42,7 @@ export enum Technology {
   Backend = "Backend",
   Java = "Java",
   DevOps = "DevOps",
+  Tester = "Tester",
   Python = "Python",
   JavaScript = "JavaScript",
   TypeScript = "TypeScript",

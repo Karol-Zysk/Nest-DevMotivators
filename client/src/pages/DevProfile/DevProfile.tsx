@@ -44,7 +44,7 @@ function DevProfile() {
 
   return (
     <Flex py="6" px="6" justify="space-around">
-      <Flex direction="column" w="35%">
+      <Flex direction="column" w="40%">
         <UserCard user={user} userMotivators={userMotivators} />
         <Stats user={user} userMotivators={userMotivators} />
       </Flex>

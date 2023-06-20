@@ -12,7 +12,8 @@ export interface UserData {
   login: string;
   createdAt: string;
   seniority?: Seniority;
-  aboutMe: Technology;
+  aboutMe: string;
+  technology: Technology;
 }
 
 interface AccountContextValue {
