@@ -13,6 +13,8 @@ const DevMotivator: React.FC<DevMotivatorInterface> = ({ motivator }) => {
   const bg = useColorModeValue("white", "black");
   return (
     <Flex
+      w="100%"
+      minH="10vh"
       justify="center"
       align="ceenter"
       direction="column"

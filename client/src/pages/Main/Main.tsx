@@ -32,7 +32,7 @@ const Main = () => {
     };
 
     getMotivators();
-  }, [page, motivators, apiClient]);
+  }, [page]);
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -43,7 +43,7 @@ const Main = () => {
   }
 
   return (
-    <Box maxW="40%" p="1rem" m="2rem auto">
+    <Box minW="40%" maxW="40%" p="1rem" m="2rem auto">
       {motivators.map((motivator: Motivator) => (
         <DevMotivator motivator={motivator} key={motivator._id} />
       ))}

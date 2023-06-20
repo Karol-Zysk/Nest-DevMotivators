@@ -1,24 +1,20 @@
-import {
-  Box,
-  Text,
-  useColorModeValue,
-  Flex,
-} from "@chakra-ui/react";
+import { Box, Text, useColorModeValue, Flex } from "@chakra-ui/react";
 import { UserData } from "../context/AccountContext";
-import { MotivatorsStats } from "../pages/DevProfile/DevProfile";
-import { Motivator } from "../interfaces/Motivator.interface";
 
-interface UserCardProps {
-  user: UserData | null | undefined;
-  userMotivators:
-    | {
-        motivators: Motivator[];
-        stats: MotivatorsStats;
-      }
-    | undefined;
+interface VotingStats {
+  likeCount: number;
+  dislikeCount: number;
+  exp: number;
+  nextLevelExp: number;
+  nextLevel: string;
 }
 
-const Stats: React.FC<UserCardProps> = ({ userMotivators }) => {
+interface UserCardProps {
+  motivatorsNumber: number | undefined;
+  votingStats: VotingStats | undefined;
+}
+
+const Stats: React.FC<UserCardProps> = ({ votingStats, motivatorsNumber }) => {
   return (
     <Flex w={"full"}>
       <Box
@@ -30,27 +26,20 @@ const Stats: React.FC<UserCardProps> = ({ userMotivators }) => {
         textAlign={"left"}
       >
         <Text mb={4}>
-          <strong> Motivators commited:</strong>{" "}
-          {userMotivators?.motivators.length}
+          <strong> Motivators commited:</strong> {motivatorsNumber}
         </Text>
         <Text mb={4}>
-          <strong> Total Motivator Likes:</strong>{" "}
-          {userMotivators?.stats.votingStats.likeCount}
+          <strong> Total Motivator Likes:</strong> {votingStats?.likeCount}
         </Text>
         <Text mb={4}>
-          <strong>Total Motivator Dislikes:</strong>{" "}
-          {userMotivators?.stats.votingStats.dislikeCount}
+          <strong>Total Motivator Dislikes:</strong> {votingStats?.dislikeCount}
         </Text>
         <Text mb={4}>
           <strong>Like Percentage:</strong>{" "}
-          {userMotivators &&
-          userMotivators.stats.votingStats.likeCount +
-            userMotivators.stats.votingStats.dislikeCount >
-            0
+          {votingStats && votingStats?.likeCount + votingStats?.dislikeCount > 0
             ? `${
-                (userMotivators.stats.votingStats.likeCount /
-                  (userMotivators.stats.votingStats.likeCount +
-                    userMotivators.stats.votingStats.dislikeCount)) *
+                (votingStats?.likeCount /
+                  (votingStats?.likeCount + votingStats?.dislikeCount)) *
                 100
               }%`
             : "N/A"}

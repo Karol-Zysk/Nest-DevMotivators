@@ -1,25 +1,31 @@
 import { Text, Avatar, useColorModeValue, Flex, Box } from "@chakra-ui/react";
 import { UserData } from "../context/AccountContext";
-import { Motivator } from "../interfaces/Motivator.interface";
-import { MotivatorsStats } from "../pages/DevProfile/DevProfile";
 import { ProgressBar } from "./ProgressBar";
+
+interface VotingStats {
+  likeCount: number;
+  dislikeCount: number;
+  exp: number;
+  nextLevelExp: number;
+  nextLevel: string;
+}
 
 interface UserCardProps {
   user: UserData | null | undefined;
-  userMotivators:
-    | {
-        motivators: Motivator[];
-        stats: MotivatorsStats;
-      }
-    | undefined;
+
+  votingStats: VotingStats | undefined;
 }
 
-const UserCard: React.FC<UserCardProps> = ({ user, userMotivators }) => {
-  const progressValue = userMotivators
-    ? (userMotivators?.stats.votingStats.exp /
-        userMotivators?.stats.votingStats.nextLevelExp) *
-      100
-    : 100;
+const UserCard: React.FC<UserCardProps> = ({ user, votingStats }) => {
+  const exp = votingStats?.exp;
+  const nextLevel = votingStats?.nextLevel;
+  const nextLevelExp = votingStats?.nextLevelExp;
+
+  let progressValue = 0;
+
+  if (exp !== undefined && nextLevelExp !== undefined && nextLevelExp !== 0) {
+    progressValue = (exp / nextLevelExp) * 100;
+  }
 
   return (
     <Flex py={2} mb={"4"} w={"full"}>
@@ -66,10 +72,8 @@ const UserCard: React.FC<UserCardProps> = ({ user, userMotivators }) => {
             Exp:
           </Text>
           <ProgressBar
-            exp={userMotivators && userMotivators?.stats.votingStats.exp}
-            nextLvlExp={
-              userMotivators && userMotivators?.stats.votingStats.nextLevelExp
-            }
+            exp={exp}
+            nextLvlExp={nextLevelExp}
             value={progressValue}
           />
         </Flex>
@@ -82,14 +86,8 @@ const UserCard: React.FC<UserCardProps> = ({ user, userMotivators }) => {
           justifySelf={"center"}
         >
           <strong>
-            You need{" "}
-            {userMotivators &&
-              userMotivators?.stats.votingStats.nextLevelExp -
-                userMotivators?.stats.votingStats.exp}{" "}
-            exp to becme:{" "}
-            <span style={{ color: "green" }}>
-              {userMotivators?.stats.votingStats.nextLevel}!
-            </span>
+            You need {nextLevelExp && exp && nextLevelExp - exp} exp to becme:{" "}
+            <span style={{ color: "green" }}>{nextLevel}!</span>
           </strong>
         </Text>
       </Flex>

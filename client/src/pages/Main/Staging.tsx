@@ -32,7 +32,7 @@ const Main = () => {
     };
 
     getMotivators();
-  }, [page, motivators, apiClient]);
+  }, [page, apiClient]);
 
   useEffect(() => {
     window.scrollTo({ top: 0 });

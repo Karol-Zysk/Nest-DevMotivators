@@ -125,18 +125,6 @@ const SignUp: React.FC = () => {
             onChange={handleChange}
             required
           />
-          <FormLabel mt={"2"} mb={"0"} htmlFor="aboutMe">
-            About me:
-          </FormLabel>
-          <Textarea
-            id="aboutMe"
-            name="aboutMe"
-            bg="white"
-            color="black"
-            value={formData.aboutMe}
-            onChange={handleChange}
-            required
-          />
           <FormLabel mt={"2"} mb={"0"} htmlFor="technology">
             Technology:
           </FormLabel>
