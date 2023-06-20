@@ -7,7 +7,7 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const bg = useColorModeValue("facebook.200", "gray.900");
+  const bg = useColorModeValue("blackAlpha.200", "gray.900");
   return (
     <Flex minH="100vh" borderTop="8px" borderX="4px" direction="column">
       <Navbar />

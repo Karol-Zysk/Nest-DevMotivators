@@ -1,4 +1,4 @@
-import { Text, Avatar, useColorModeValue, Flex } from "@chakra-ui/react";
+import { Text, Avatar, useColorModeValue, Flex, Box } from "@chakra-ui/react";
 import { UserData } from "../context/AccountContext";
 import { Motivator } from "../interfaces/Motivator.interface";
 import { MotivatorsStats } from "../pages/DevProfile/DevProfile";
@@ -22,7 +22,7 @@ const UserCard: React.FC<UserCardProps> = ({ user, userMotivators }) => {
     : 100;
 
   return (
-    <Flex py={2} w={"full"}>
+    <Flex py={2} mb={"4"} w={"full"}>
       <Flex
         w={"full"}
         direction={"column"}
@@ -39,40 +39,58 @@ const UserCard: React.FC<UserCardProps> = ({ user, userMotivators }) => {
           alignSelf={"center"}
           pos={"relative"}
         />
-        <Text mt="4" mb={4} fontSize={"2xl"} w={"full"} textAlign={"center"}>
+        <Text
+          fontWeight={"semibold"}
+          mt="4"
+          mb={4}
+          fontSize={"2xl"}
+          w={"full"}
+          textAlign={"center"}
+        >
           {user?.login}
         </Text>
-        <Text fontSize={"xl"} mb={2}>
-          Seniority: {user?.seniority} {user?.technology} Developer
+        <Text fontSize={"md"} mb={2}>
+          <strong>Seniority:</strong> {user?.seniority} {user?.technology}{" "}
+          Developer
         </Text>
-        <Text fontSize={"xl"} mb={2}>
-          E-mail: {user?.email}
+        <Text fontSize={"md"} mb={2}>
+          <strong>E-mail:</strong> {user?.email}
         </Text>
-        <Text fontSize={"lg"} py={8} border={2}>
-          <strong>About Me:</strong> {user?.aboutMe}
-        </Text>
+        <Box border={4} mb={2} borderColor={"red.500"}>
+          <Text fontSize={"md"}>
+            <strong>About Me:</strong> {user?.aboutMe}
+          </Text>
+        </Box>
         <Flex alignItems={"center"}>
-          <Text fontSize={"lg"}>Exp:</Text>
+          <Text fontWeight={"semibold"} fontSize={"md"}>
+            Exp:
+          </Text>
           <ProgressBar
-            exp={userMotivators?.stats.votingStats.exp}
-            nextLvlExp={userMotivators?.stats.votingStats.nextLevelExp}
+            exp={userMotivators && userMotivators?.stats.votingStats.exp}
+            nextLvlExp={
+              userMotivators && userMotivators?.stats.votingStats.nextLevelExp
+            }
             value={progressValue}
           />
         </Flex>
 
         <Text
-          fontSize={"lg"}
+          fontSize={"md"}
           w={"full"}
-          mt={4}
+          mt={8}
           textAlign={"center"}
           justifySelf={"center"}
         >
-          You need{" "}
-          {userMotivators &&
-            userMotivators?.stats.votingStats.nextLevelExp -
-              userMotivators?.stats.votingStats.exp}{" "}
-          exp to becme:{" "}
-          <strong>{userMotivators?.stats.votingStats.nextLevel}</strong>
+          <strong>
+            You need{" "}
+            {userMotivators &&
+              userMotivators?.stats.votingStats.nextLevelExp -
+                userMotivators?.stats.votingStats.exp}{" "}
+            exp to becme:{" "}
+            <span style={{ color: "green" }}>
+              {userMotivators?.stats.votingStats.nextLevel}!
+            </span>
+          </strong>
         </Text>
       </Flex>
     </Flex>

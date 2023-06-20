@@ -1,8 +1,6 @@
 import {
   Box,
   Text,
-  Stack,
-  Button,
   useColorModeValue,
   Flex,
 } from "@chakra-ui/react";
@@ -32,50 +30,31 @@ const Stats: React.FC<UserCardProps> = ({ userMotivators }) => {
         textAlign={"left"}
       >
         <Text mb={4}>
-          Motivators commited: {userMotivators?.motivators.length}
+          <strong> Motivators commited:</strong>{" "}
+          {userMotivators?.motivators.length}
         </Text>
         <Text mb={4}>
-          Total Motivator Likes: {userMotivators?.stats.votingStats.likeCount}
+          <strong> Total Motivator Likes:</strong>{" "}
+          {userMotivators?.stats.votingStats.likeCount}
         </Text>
         <Text mb={4}>
-          Total Motivator Dislikes:{" "}
+          <strong>Total Motivator Dislikes:</strong>{" "}
           {userMotivators?.stats.votingStats.dislikeCount}
         </Text>
-        <Text
-          textAlign={"center"}
-          color={useColorModeValue("gray.700", "gray.400")}
-          px={3}
-        >
-          {/* id: {user._id} */}
+        <Text mb={4}>
+          <strong>Like Percentage:</strong>{" "}
+          {userMotivators &&
+          userMotivators.stats.votingStats.likeCount +
+            userMotivators.stats.votingStats.dislikeCount >
+            0
+            ? `${
+                (userMotivators.stats.votingStats.likeCount /
+                  (userMotivators.stats.votingStats.likeCount +
+                    userMotivators.stats.votingStats.dislikeCount)) *
+                100
+              }%`
+            : "N/A"}
         </Text>
-        <Stack mt={8} direction={"row"} spacing={4}>
-          <Button
-            flex={1}
-            fontSize={"sm"}
-            rounded={"full"}
-            _focus={{
-              bg: "gray.200",
-            }}
-          >
-            Message
-          </Button>
-          <Button
-            flex={1}
-            fontSize={"sm"}
-            rounded={"full"}
-            bg={"blue.400"}
-            color={"white"}
-            boxShadow={"0 5px 20px 0px rgba(66, 153, 225, 0.5)"}
-            _hover={{
-              bg: "blue.500",
-            }}
-            _focus={{
-              bg: "blue.500",
-            }}
-          >
-            Follow
-          </Button>
-        </Stack>
       </Box>
     </Flex>
   );

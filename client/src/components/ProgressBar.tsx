@@ -48,7 +48,7 @@ export const ProgressBar = ({
         alignItems="center"
         justifyContent="center"
       >
-        <Text>{`${exp} / ${nextLvlExp}`}</Text>
+        <Text>{`${exp || 0} / ${nextLvlExp || 100}`}</Text>
       </Box>
     </Box>
   );
