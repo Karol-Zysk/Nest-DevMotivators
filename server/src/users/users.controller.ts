@@ -26,6 +26,11 @@ export class UsersController {
     return this.usersService.getMe(user);
   }
 
+  @Get('/:id')
+  getUserById(@Param('id') id: string) {
+    return this.usersService.getUserById(id);
+  }
+
   @Patch('me')
   updatetMe(@GetUser() user: User, @Body() dto: UpdateUserDto) {
     return this.usersService.updateMe(user._id, dto);

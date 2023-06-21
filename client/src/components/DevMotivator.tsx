@@ -3,12 +3,14 @@ import Voting from "./Voting";
 import { Motivator } from "../interfaces/Motivator.interface";
 import MotivatorImage from "./MotivatorImage";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 interface DevMotivatorInterface {
   motivator: Motivator;
 }
 
 const DevMotivator: React.FC<DevMotivatorInterface> = ({ motivator }) => {
+  const navigate = useNavigate();
   // const color = useColorModeValue("white", "black");
   const bg = useColorModeValue("white", "black");
   return (
@@ -29,7 +31,10 @@ const DevMotivator: React.FC<DevMotivatorInterface> = ({ motivator }) => {
       <Flex justify="space-between" minH="full" w="full" py="4" mb="4">
         <Box>
           <Text fontSize="1.1rem" fontWeight="600">
-            Commited by: {motivator.authorName}
+            Commited by:{" "}
+            <span onClick={() => navigate(`/user/${motivator.author}`)}>
+              {motivator.authorName}
+            </span>
           </Text>
           {motivator.safeIn && (
             <Text fontSize="1rem" fontWeight="600">

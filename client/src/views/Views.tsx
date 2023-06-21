@@ -8,15 +8,18 @@ import Staging from "../pages/Main/Staging";
 import PullRequest from "../pages/PullRequest/PullRequest";
 import DevProfile from "../pages/DevProfile/DevProfile";
 import MotivatorPage from "../pages/MotivatorPage";
+import UsersProfile from "../pages/DevProfile/UsersProfile";
 
 const Views = () => {
   return (
     <Routes>
+      <Route path="/" element={<Main />} />
       <Route path="/main" element={<Main />} />
       <Route path="/main/:page" element={<Main />} />
       <Route path="/staging" element={<Staging />} />
       <Route path="/staging/:page" element={<Staging />} />
       <Route path="/motivator/:id" element={<MotivatorPage />} />
+      <Route path="/user/:id" element={<UsersProfile />} />
       <Route element={<PrivateRoutes />}>
         <Route path="/pullrequest" element={<PullRequest />} />
         <Route path="/profile" element={<DevProfile />} />

@@ -53,7 +53,6 @@ export class CommentService {
       .find({ motivator: motivatorId })
       .populate('user', 'seniority login technology userPhoto')
       .exec();
-    console.log(comments);
 
     if (!comments) {
       throw new NotFoundException(
