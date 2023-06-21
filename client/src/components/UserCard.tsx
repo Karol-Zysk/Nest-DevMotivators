@@ -30,6 +30,8 @@ const UserCard: React.FC<UserCardProps> = ({ user, votingStats }) => {
   return (
     <Flex py={2} mb={"4"} w={"full"}>
       <Flex
+        borderRight={"4px"}
+        borderBottom={"4px"}
         w={"full"}
         direction={"column"}
         bg={useColorModeValue("white", "black")}

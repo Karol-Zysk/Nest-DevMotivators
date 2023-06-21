@@ -49,7 +49,7 @@ export class AuthService {
         sameSite: 'none',
         secure: true,
         path: '/',
-        maxAge: 1080000,
+        maxAge: 1080000000,
       });
 
       res.cookie('refresh_token', tokens.refreshToken, {
@@ -57,7 +57,7 @@ export class AuthService {
         sameSite: 'none',
         secure: true,
         path: '/',
-        maxAge: 259200000,
+        maxAge: 2592000000,
       });
 
       res.sendStatus(201);
@@ -84,7 +84,7 @@ export class AuthService {
       sameSite: 'none',
       secure: true,
       path: '/',
-      maxAge: 1080000,
+      maxAge: 108000000,
     });
 
     res.cookie('refresh_token', tokens.refreshToken, {
@@ -92,7 +92,7 @@ export class AuthService {
       sameSite: 'none',
       secure: true,
       path: '/',
-      maxAge: 259200000,
+      maxAge: 2592000000,
     });
 
     res.sendStatus(200);

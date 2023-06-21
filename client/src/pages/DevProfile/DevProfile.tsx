@@ -1,4 +1,4 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import { useContext, useState, useEffect } from "react";
 import { AccountContext } from "../../context/AccountContext";
 import UserCard from "../../components/UserCard";
@@ -44,20 +44,31 @@ function DevProfile() {
 
   return (
     <Flex py="12" px="12" justify="space-around">
-      <Flex direction="column" alignItems={"center"} w="30%">
+      <Flex direction="column" alignItems={"center"} w="35%">
         <UserCard user={user} votingStats={userMotivators?.stats.votingStats} />
         <Stats
           votingStats={userMotivators?.stats.votingStats}
           motivatorsNumber={userMotivators?.motivators.length}
         />
       </Flex>
-      <Flex py="8" direction="column" w="40%">
-        <Box>
-          {userMotivators && userMotivators?.motivators.length !== 0
-            ? userMotivators?.motivators.map((motivator: Motivator) => (
-                <DevMotivator motivator={motivator} key={motivator._id} />
-              ))
-            : "Here is place for your Motivators"}
+      <Flex
+        py="8"
+        justify={"center"}
+        align={"center"}
+        direction="column"
+        w="45%"
+      >
+        <Text mb={"4"} fontSize={"2xl"} fontWeight={"semibold"}>
+          {user?.login} Dev_Motivators
+        </Text>
+        <Box w={"90%"}>
+          {userMotivators && userMotivators?.motivators.length !== 0 ? (
+            userMotivators?.motivators.map((motivator: Motivator) => (
+              <DevMotivator motivator={motivator} key={motivator._id} />
+            ))
+          ) : (
+            <Text fontSize={"lg"}>Here is place for your Motivators</Text>
+          )}
         </Box>
       </Flex>
     </Flex>

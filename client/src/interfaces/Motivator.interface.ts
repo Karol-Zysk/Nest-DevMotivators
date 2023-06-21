@@ -17,3 +17,17 @@ export interface Motivator {
   movedToMain: string;
   id: string;
 }
+
+export interface Comment {
+  _id: string;
+  comment: string;
+  user: {
+    _id: string;
+    login: string;
+    userPhoto: string;
+    technology: string;
+    seniority: string;
+  };
+  motivator: string;
+  createdAt: string;
+}

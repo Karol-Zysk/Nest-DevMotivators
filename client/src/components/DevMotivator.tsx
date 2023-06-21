@@ -9,21 +9,22 @@ interface DevMotivatorInterface {
 }
 
 const DevMotivator: React.FC<DevMotivatorInterface> = ({ motivator }) => {
-  const color = useColorModeValue("white", "black");
+  // const color = useColorModeValue("white", "black");
   const bg = useColorModeValue("white", "black");
   return (
     <Flex
       w="100%"
-      minH="10vh"
+      minH="30vh"
       justify="center"
       align="ceenter"
       direction="column"
-      p="1rem"
+      p="1.5rem"
       mb="2rem"
       borderRadius="md"
-      border="1px"
+      borderRight={"4px"}
+      borderBottom={"4px"}
       bg={bg}
-      boxShadow={`4px 4px 8px ${color}`}
+      // boxShadow={`4px 4px 8px ${color}`}
     >
       <Flex justify="space-between" minH="full" w="full" py="4" mb="4">
         <Box>

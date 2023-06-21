@@ -1,5 +1,4 @@
 import { Box, Text, useColorModeValue, Flex } from "@chakra-ui/react";
-import { UserData } from "../context/AccountContext";
 
 interface VotingStats {
   likeCount: number;
@@ -18,6 +17,8 @@ const Stats: React.FC<UserCardProps> = ({ votingStats, motivatorsNumber }) => {
   return (
     <Flex w={"full"}>
       <Box
+        borderRight={"4px"}
+        borderBottom={"4px"}
         w={"full"}
         bg={useColorModeValue("white", "black")}
         boxShadow={"2xl"}
@@ -37,11 +38,11 @@ const Stats: React.FC<UserCardProps> = ({ votingStats, motivatorsNumber }) => {
         <Text mb={4}>
           <strong>Like Percentage:</strong>{" "}
           {votingStats && votingStats?.likeCount + votingStats?.dislikeCount > 0
-            ? `${
+            ? `${(
                 (votingStats?.likeCount /
                   (votingStats?.likeCount + votingStats?.dislikeCount)) *
                 100
-              }%`
+              ).toFixed(2)}%`
             : "N/A"}
         </Text>
       </Box>

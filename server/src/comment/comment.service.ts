@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { CreateCommentDto } from './dto/create-comment.dto'; // Zdefiniuj to DTO do walidacji danych przychodzących
 import {
   Comment,
@@ -40,5 +40,26 @@ export class CommentService {
     await newComment.save();
 
     return newComment;
+  }
+
+  async getAllCommentsForMotivator(id: any): Promise<Comment[]> {
+    const motivatorId = new Types.ObjectId(id);
+    const motivator = await this.motivatorModel.findById(motivatorId);
+    if (!motivator) {
+      throw new NotFoundException(`Motivator with ID ${id} not found`);
+    }
+
+    const comments = await this.commentModel
+      .find({ motivator: motivatorId })
+      .populate('user', 'seniority login technology userPhoto')
+      .exec();
+    console.log(comments);
+
+    if (!comments) {
+      throw new NotFoundException(
+        `No comments found for Motivator with ID ${id}`,
+      );
+    }
+    return comments;
   }
 }
