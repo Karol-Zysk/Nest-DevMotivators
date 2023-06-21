@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
+import { useParams } from "react-router-dom";
 import { Box } from "@chakra-ui/react";
 import { Motivator } from "../../interfaces/Motivator.interface";
 import { ApiClient } from "../../utils/ApiClient";
@@ -11,11 +12,11 @@ interface ApiResponse {
   count: number;
 }
 
-const Main = () => {
+const Staging = () => {
+  const { page = "1" } = useParams<string>();
   const [motivators, setMotivators] = useState<Motivator[] | undefined>(
     undefined
   );
-  const [page, setPage] = useState(0);
   const [pageCount, setPageCount] = useState(0);
 
   const limit = 3;
@@ -24,7 +25,7 @@ const Main = () => {
   useEffect(() => {
     const getMotivators = async () => {
       const res: ApiResponse = await apiClient.get(
-        `/motivators/place/staging?page=${page + 1}&limit=${limit}`
+        `/motivators/place/staging?page=${parseInt(page)}&limit=${limit}`
       );
 
       setMotivators(res.motivators);
@@ -32,10 +33,10 @@ const Main = () => {
     };
 
     getMotivators();
-  }, [page, motivators, apiClient]);
+  }, [page]);
 
   useEffect(() => {
-    window.scrollTo({ top: 0 });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, [page]);
 
   if (!motivators) {
@@ -43,14 +44,14 @@ const Main = () => {
   }
 
   return (
-    <Box maxW="40%" p="1rem" m="2rem auto">
+    <Box minW="45%" maxW="45%" p="1rem" m="2rem auto">
       {motivators.map((motivator: Motivator) => (
         <DevMotivator motivator={motivator} key={motivator._id} />
       ))}
 
-      <Pagination pageCount={pageCount} setPage={setPage} />
+      <Pagination pageCount={pageCount} route={"staging"} />
     </Box>
   );
 };
 
-export default Main;
+export default Staging;

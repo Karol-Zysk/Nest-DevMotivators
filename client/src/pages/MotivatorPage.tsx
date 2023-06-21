@@ -1,6 +1,6 @@
 import { useParams } from "react-router";
 import { useState, useEffect } from "react";
-import { Motivator } from "../interfaces/Motivator.interface";
+import { Motivator, Comment } from "../interfaces/Motivator.interface";
 import { ApiClient } from "../utils/ApiClient";
 import Loading from "../components/Loading";
 import {
@@ -8,7 +8,6 @@ import {
   Box,
   Button,
   Flex,
-  Input,
   Text,
   Textarea,
   VStack,
@@ -19,6 +18,7 @@ import DevMotivator from "../components/DevMotivator";
 const MotivatorPage = () => {
   const { id } = useParams();
   const [motivator, setMotivator] = useState<Motivator | undefined>(undefined);
+  const [comments, setComments] = useState<Comment[]>([]);
   const [comment, setComment] = useState<string>("");
   const toast = useToast();
 
@@ -27,74 +27,79 @@ const MotivatorPage = () => {
   useEffect(() => {
     const getMotivator = async () => {
       const res: Motivator = await apiClient.get(`/motivators/${id}`);
-
       setMotivator(res);
     };
 
+    const fetchComments = async () => {
+      const res: Comment[] = await apiClient.get(`/comments/${id}`);
+      setComments(res);
+    };
+
     getMotivator();
+    fetchComments();
   }, []);
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
   }, [motivator]);
 
-  const handleCommentSubmit = () => {
-    toast({
-      title: "Feature not implemented yet",
-      description: "This feature will be implemented soon",
-      status: "info",
-      duration: 3000,
-      isClosable: true,
-    });
+  const handleCommentSubmit = async () => {
+    if (comment) {
+      const newComment = await apiClient.post<Comment>(`/comments/${id}`, {
+        comment,
+      });
+
+      setComments([...comments, newComment]);
+      setComment("");
+
+      toast({
+        title: "Comment added",
+        description: "Your comment was successfully added",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } else {
+      toast({
+        title: "Error",
+        description: "Please enter a comment",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
   };
 
   if (!motivator) {
     return <Loading />;
   }
 
-  const comments = [
-    {
-      username: "John Doe",
-      date: "2023-06-10",
-      avatar: "https://via.placeholder.com/150",
-      comment: "This is a great motivator!",
-    },
-    {
-      username: "Jane Smith",
-      date: "2023-06-11",
-      avatar: "https://via.placeholder.com/150",
-      comment: "I really like this!",
-    },
-    {
-      username: "Mark Johnson",
-      date: "2023-06-12",
-      avatar: "https://via.placeholder.com/150",
-      comment: "Amazing!",
-    },
-  ];
-
   return (
-    <Box maxW="45%" p="1rem" m="2rem auto">
+    <Box w="40%" p="1rem" m="2rem auto">
       <DevMotivator motivator={motivator} />
       <VStack align="start" spacing={4} mt={6}>
-        {comments.map((comment, i) => (
-          <Box key={i} display="flex" alignItems="start" mt={3}>
-            <Avatar src={comment.avatar} mr={3} />
-            <Box>
-              <Text fontWeight="bold">{comment.username}</Text>
-              <Text fontSize="sm" color="gray.500">
-                {comment.date}
-              </Text>
-              <Text mt={2}>{comment.comment}</Text>
+        {comments.length > 0 ? (
+          comments.map((comment, i) => (
+            <Box key={i} display="flex" alignItems="start" mt={3}>
+              <Avatar src={comment.user.userPhoto} mr={3} />
+              <Box>
+                <Text fontWeight="bold">{comment.user.login}</Text>
+                <Text fontSize="sm" color="gray.500">
+                  {new Date(comment.createdAt).toLocaleDateString()}
+                </Text>
+                <Text mt={2}>{comment.comment}</Text>
+              </Box>
             </Box>
-          </Box>
-        ))}
+          ))
+        ) : (
+          <Text>No comments yet.</Text>
+        )}
       </VStack>
       <Flex>
         <Textarea
           minHeight="5rem"
           m="4"
-          placeholder="Example Text"
+          placeholder="Add a comment"
           value={comment}
           onChange={(e) => setComment(e.target.value)}
         />

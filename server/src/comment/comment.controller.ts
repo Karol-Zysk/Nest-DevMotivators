@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { CommentService } from './comment.service';
 import { JwtGuard } from 'src/auth/guard';
@@ -18,5 +18,10 @@ export class CommentController {
   ) {
     const comment = await this.commentService.addComment(dto, user, id);
     return comment;
+  }
+
+  @Get(':id')
+  async getAllCommentsForMotivator(@Param('id') id: string) {
+    return await this.commentService.getAllCommentsForMotivator(id);
   }
 }

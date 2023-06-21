@@ -15,6 +15,8 @@ Unregistered user features, plus:
 - Ability to add Dev-Motivators, which after acceptance by Admin/Moderator, go to "Staging", and after achieving a certain number of thumbs up, move to "Main".
 - Ability to edit and delete your own Dev-Motivators.
 - Ability to vote on Dev-Motivators, both positively and negatively.
+- Ability to add comments to DevMotivators.
+- Ability to gain experience by adding new popular DevMotivators that collect likes and dislikes.
 
 ### Admin/Moderator:
 

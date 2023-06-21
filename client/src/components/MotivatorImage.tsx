@@ -43,7 +43,7 @@ const MotivatorImage: React.FC<ImageWithLoadingProps> = ({ src, alt }) => {
         <Image
           src="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930"
           alt={alt}
-          border="4px"
+          border="2px"
           minW="full"
           boxSize="-moz-max-content"
           objectFit="cover"
@@ -55,7 +55,7 @@ const MotivatorImage: React.FC<ImageWithLoadingProps> = ({ src, alt }) => {
           loading="lazy"
           src={src}
           alt={alt}
-          border="4px"
+          border="1px"
           minW="full"
           boxSize="-moz-max-content"
           objectFit="cover"

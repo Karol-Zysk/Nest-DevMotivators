@@ -12,13 +12,14 @@ import MotivatorPage from "../pages/MotivatorPage";
 const Views = () => {
   return (
     <Routes>
-      <Route path="/" element={<Main />} />
+      <Route path="/main" element={<Main />} />
+      <Route path="/main/:page" element={<Main />} />
       <Route path="/staging" element={<Staging />} />
+      <Route path="/staging/:page" element={<Staging />} />
       <Route path="/motivator/:id" element={<MotivatorPage />} />
       <Route element={<PrivateRoutes />}>
         <Route path="/pullrequest" element={<PullRequest />} />
         <Route path="/profile" element={<DevProfile />} />
-        <Route path="/settings" element={<PullRequest />} />
       </Route>
 
       <Route element={<AuthRoutes />} path="/">

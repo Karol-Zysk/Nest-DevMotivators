@@ -1,16 +1,15 @@
 import ReactPaginate from "react-paginate";
 import { ArrowBackIcon, ArrowForwardIcon } from "@chakra-ui/icons";
 import "../styles/pagination.css";
+import { useNavigate } from "react-router-dom";
 
 interface PaginationProps {
   pageCount: number;
-  setPage: React.Dispatch<React.SetStateAction<number>>;
+  route: string;
 }
 
-export const Pagination: React.FC<PaginationProps> = ({
-  pageCount,
-  setPage,
-}) => {
+export const Pagination: React.FC<PaginationProps> = ({ pageCount, route }) => {
+  const navigate = useNavigate();
   return (
     <div
       style={{
@@ -24,13 +23,12 @@ export const Pagination: React.FC<PaginationProps> = ({
       }}
     >
       <ReactPaginate
-      
         breakLabel={"..."}
         breakClassName={"break-me"}
         pageCount={pageCount}
         marginPagesDisplayed={2}
         pageRangeDisplayed={5}
-        onPageChange={({ selected }) => setPage(selected)}
+        onPageChange={({ selected }) => navigate(`/${route}/${selected + 1}`)}
         containerClassName={"pagination"}
         nextLabel={<ArrowForwardIcon style={{ fontSize: 18, width: 150 }} />}
         previousLabel={<ArrowBackIcon style={{ fontSize: 18, width: 150 }} />}
