@@ -12,7 +12,7 @@ interface ApiResponse {
   count: number;
 }
 
-const Staging = () => {
+const Waiting = () => {
   const { page = "1" } = useParams<string>();
   const [motivators, setMotivators] = useState<Motivator[] | undefined>(
     undefined
@@ -25,7 +25,7 @@ const Staging = () => {
   useEffect(() => {
     const getMotivators = async () => {
       const res: ApiResponse = await apiClient.get(
-        `/motivators/place/staging?page=${parseInt(page)}&limit=${limit}`
+        `/motivators/place/waiting?page=${parseInt(page)}&limit=${limit}`
       );
 
       setMotivators(res.motivators);
@@ -48,20 +48,20 @@ const Staging = () => {
       <Text
         fontWeight={"semibold"}
         mt={"8"}
-        // color={"red.500"}
-        fontSize={"lg"}
+        color={"red.500"}
+        fontSize={"xl"}
         textAlign={"center"}
       >
-        Dev_motivators in staging area...{" "}
+        Dev_motivators before review...{" "}
       </Text>
       <Text
         fontWeight={"semibold"}
+        color={"red.500"}
         mt={"2"}
-        // color={"red.500"}
-        fontSize={"lg"}
+        fontSize={"xl"}
         textAlign={"center"}
       >
-        When a motivator receives 10 positive reviews, it gets moved to 'Main'
+        You're watching at your own risk!{" "}
       </Text>
       <Box minW="45%" maxW="45%" p="1rem" m="2rem auto">
         {motivators.map((motivator: Motivator) => (
@@ -74,4 +74,4 @@ const Staging = () => {
   );
 };
 
-export default Staging;
+export default Waiting;

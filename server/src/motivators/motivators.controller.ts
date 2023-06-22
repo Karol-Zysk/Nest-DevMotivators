@@ -41,8 +41,7 @@ export class MotivatorsController {
   }
 
   @Get('/place/waiting')
-  @UseGuards(RolesGuard)
-  @Roles(Role.admin, Role.moderator)
+  @Public()
   findMotivatorsWaiting(@Query() queryString: QueryString) {
     return this.motivatorsService.findAllMotivators(Place.waiting, queryString);
   }

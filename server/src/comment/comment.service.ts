@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { CreateCommentDto } from './dto/create-comment.dto'; // Zdefiniuj to DTO do walidacji danych przychodzących
+import { CreateCommentDto } from './dto/create-comment.dto';
 import {
   Comment,
   CommentDocument,
@@ -53,7 +53,6 @@ export class CommentService {
       .find({ motivator: motivatorId })
       .populate('user', 'seniority login technology userPhoto')
       .exec();
-    console.log(comments);
 
     if (!comments) {
       throw new NotFoundException(

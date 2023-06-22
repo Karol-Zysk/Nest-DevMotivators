@@ -42,7 +42,7 @@ const UserCard: React.FC<UserCardProps> = ({ user, votingStats }) => {
       >
         <Avatar
           size={"2xl"}
-          src={user?.userPhoto}
+          name={user?.login}
           mb={4}
           alignSelf={"center"}
           pos={"relative"}
@@ -89,7 +89,9 @@ const UserCard: React.FC<UserCardProps> = ({ user, votingStats }) => {
         >
           <strong>
             You need {nextLevelExp && exp && nextLevelExp - exp} exp to becme:{" "}
-            <span style={{ color: "green" }}>{nextLevel}!</span>
+            <Text as={"span"} color={"green.400"}>
+              {nextLevel}!
+            </Text>
           </strong>
         </Text>
       </Flex>

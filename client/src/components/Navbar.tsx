@@ -20,7 +20,6 @@ import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import { AiOutlineUser } from "react-icons/ai";
 import { useContext, useState } from "react";
 import { AccountContext } from "../context/AccountContext";
-import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import LogoutButton from "./LogoutButton";
 import NaviBtn from "./NavigationButton";
@@ -41,6 +40,10 @@ const Links = [
   {
     link: "Staging",
     href: "/staging",
+  },
+  {
+    link: "Waiting",
+    href: "/waiting",
   },
 ];
 
@@ -98,8 +101,14 @@ export default function Navbar() {
           display={{ base: "none", md: "flex" }}
         >
           {Links.map((links) => (
-            <Box _hover={{ opacity: "0.9" }} key={links.link}>
-              <NavLink key={links.link}>{links}</NavLink>
+            <Box
+              _hover={{ opacity: "0.9" }}
+              color={links.link === "Waiting" ? "red.400" : "inherit"}
+              transform={links.link === "Waiting" ? "rotate(-5deg)" : "none"}
+              opacity={links.link === "Waiting" ? "0.8" : "none"}
+              key={links.link}
+            >
+              <NavLink>{links}</NavLink>
             </Box>
           ))}
         </HStack>

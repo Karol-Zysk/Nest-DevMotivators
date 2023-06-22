@@ -30,8 +30,10 @@ export const Pagination: React.FC<PaginationProps> = ({ pageCount, route }) => {
         pageRangeDisplayed={5}
         onPageChange={({ selected }) => navigate(`/${route}/${selected + 1}`)}
         containerClassName={"pagination"}
-        nextLabel={<ArrowForwardIcon style={{ fontSize: 18, width: 150 }} />}
-        previousLabel={<ArrowBackIcon style={{ fontSize: 18, width: 150 }} />}
+        nextLabel={<ArrowForwardIcon style={{ fontSize: 18, width: "auto" }} />}
+        previousLabel={
+          <ArrowBackIcon style={{ fontSize: 18, width: "auto" }} />
+        }
         activeClassName={"active"}
       />
     </div>
