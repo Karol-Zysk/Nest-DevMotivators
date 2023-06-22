@@ -4,9 +4,10 @@ import {
   NotFoundException,
   ForbiddenException,
 } from '@nestjs/common';
+import { startOfDay, endOfDay } from 'date-fns';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { Motivator, MotivatorDocument, User } from '../entities';
+import { Motivator, MotivatorDocument, User, UserDocument } from '../entities';
 import { CreateMotivatorDto } from './dto/create-motivator.dto';
 import { UpdateMotivatorDto } from './dto/update-motivator.dto';
 import { ApiFeatures, QueryString } from '../utils/apiFeatures';
@@ -16,6 +17,8 @@ import { v2 as cloudinary } from 'cloudinary';
 @Injectable()
 export class MotivatorsService {
   constructor(
+    @InjectModel(User.name)
+    private readonly userModel: Model<UserDocument>,
     @InjectModel(Motivator.name)
     private readonly motivatorModel: Model<MotivatorDocument>,
   ) {}
@@ -100,7 +103,6 @@ export class MotivatorsService {
     const deletedMotivator = await motivatorToDelete.deleteOne();
 
     return deletedMotivator;
-    return;
   }
 
   async checkVoteConditions(
@@ -172,5 +174,25 @@ export class MotivatorsService {
       { new: true, runValidators: true },
     );
     return updatedMotivator;
+  }
+
+  async motivatorsInfo(): Promise<{
+    motivatorsNumber: number;
+    usersNumber: number;
+    motivatorsToday: number;
+  }> {
+    const motivatorsNumber = await this.motivatorModel.countDocuments();
+    const usersNumber = await this.userModel.countDocuments();
+
+    const startOfToday = startOfDay(new Date());
+    const endOfToday = endOfDay(new Date());
+
+    const motivatorsToday = await this.motivatorModel.countDocuments({
+      createdAt: {
+        $gte: startOfToday,
+        $lte: endOfToday,
+      },
+    });
+    return { motivatorsNumber, usersNumber, motivatorsToday };
   }
 }

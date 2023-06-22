@@ -46,6 +46,12 @@ export class MotivatorsController {
     return this.motivatorsService.findAllMotivators(Place.waiting, queryString);
   }
 
+  @Get('/info')
+  @Public()
+  motivatorsInfo() {
+    return this.motivatorsService.motivatorsInfo();
+  }
+
   @Get('/:id')
   @Public()
   findMotivatorById(@Param('id') id: string) {

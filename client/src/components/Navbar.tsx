@@ -94,7 +94,7 @@ export default function Navbar() {
         <HStack
           spacing={8}
           alignItems={"center"}
-          fontWeight="semibold"
+          // fontWeight="semibold"
           fontSize="2xl"
           w="100%"
           justify="center"
@@ -103,9 +103,12 @@ export default function Navbar() {
           {Links.map((links) => (
             <Box
               _hover={{ opacity: "0.9" }}
-              color={links.link === "Waiting" ? "red.400" : "inherit"}
+              color={links.link === "Waiting" ? "red" : "inherit"}
+              textShadow={
+                links.link === "Waiting" ? "1.5px 1.5px 1px " : "none"
+              }
               transform={links.link === "Waiting" ? "rotate(-5deg)" : "none"}
-              opacity={links.link === "Waiting" ? "0.8" : "none"}
+              opacity={links.link === "Waiting" ? "1" : "none"}
               key={links.link}
             >
               <NavLink>{links}</NavLink>

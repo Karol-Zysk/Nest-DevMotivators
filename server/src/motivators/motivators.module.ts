@@ -1,8 +1,9 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { MotivatorsController } from './motivators.controller';
 import { MotivatorsService } from './motivators.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Motivator, MotivatorSchema } from 'src/entities';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { Motivator, MotivatorSchema } from 'src/entities';
         schema: MotivatorSchema,
       },
     ]),
+    forwardRef(() => UsersModule),
   ],
   controllers: [MotivatorsController],
   providers: [MotivatorsService],

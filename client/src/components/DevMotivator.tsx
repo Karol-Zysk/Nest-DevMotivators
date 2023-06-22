@@ -1,15 +1,40 @@
-import { Box, Flex, Heading, Text, useColorModeValue } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Text,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import Voting from "./Voting";
 import { Motivator } from "../interfaces/Motivator.interface";
 import MotivatorImage from "./MotivatorImage";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router";
+import { ApiClient } from "../utils/ApiClient";
+import { useContext } from "react";
+import { AccountContext } from "../context/AccountContext";
+import { Role } from "../utils/enums";
 
 interface DevMotivatorInterface {
   motivator: Motivator;
 }
 
 const DevMotivator: React.FC<DevMotivatorInterface> = ({ motivator }) => {
+  const { user } = useContext(AccountContext);
+
+  const apiClient = new ApiClient();
+  const acceptToStaging = async () => {
+    try {
+      await apiClient.patch<{
+        motivator: Motivator;
+      }>(`motivators/${motivator._id}/accept`);
+      console.log("ok");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const navigate = useNavigate();
   // const color = useColorModeValue("white", "black");
   const bg = useColorModeValue("white", "black");
@@ -27,6 +52,10 @@ const DevMotivator: React.FC<DevMotivatorInterface> = ({ motivator }) => {
       borderBottom={"4px"}
       bg={bg}
     >
+      {motivator.place === "waiting" &&
+        user?.role === (Role.admin || Role.moderator) && (
+          <Button onClick={acceptToStaging}>Accept</Button>
+        )}
       <Flex justify="space-between" minH="full" w="full" py="4" mb="4">
         <Box>
           <Text fontSize="1.1rem" fontWeight="600">

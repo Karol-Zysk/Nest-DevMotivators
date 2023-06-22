@@ -3,7 +3,7 @@ import { createContext, ReactNode, useEffect, useState } from "react";
 import { ApiClient } from "../utils/ApiClient";
 import { useCookies } from "react-cookie";
 import { expiresTime } from "../utils/TimeOperations";
-import { Seniority, Technology } from "../utils/enums";
+import { Role, Seniority, Technology } from "../utils/enums";
 
 export interface UserData {
   userPhoto: string;
@@ -14,6 +14,7 @@ export interface UserData {
   seniority?: Seniority;
   aboutMe: string;
   technology: Technology;
+  role: Role;
 }
 
 interface AccountContextValue {
@@ -107,7 +108,7 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (LoggedIn) fetchUserData();
     return;
-  }, []);
+  }, [isLoggedIn]);
 
   return (
     <AccountContext.Provider
