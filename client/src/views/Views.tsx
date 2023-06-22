@@ -9,6 +9,7 @@ import PullRequest from "../pages/PullRequest/PullRequest";
 import DevProfile from "../pages/DevProfile/DevProfile";
 import MotivatorPage from "../pages/MotivatorPage";
 import UsersProfile from "../pages/DevProfile/UsersProfile";
+import Waiting from "../pages/Main/Waiting";
 
 const Views = () => {
   return (
@@ -18,6 +19,8 @@ const Views = () => {
       <Route path="/main/:page" element={<Main />} />
       <Route path="/staging" element={<Staging />} />
       <Route path="/staging/:page" element={<Staging />} />
+      <Route path="/waiting" element={<Waiting />} />
+      <Route path="/waiting/:page" element={<Waiting />} />
       <Route path="/motivator/:id" element={<MotivatorPage />} />
       <Route path="/user/:id" element={<UsersProfile />} />
       <Route element={<PrivateRoutes />}>

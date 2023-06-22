@@ -81,7 +81,7 @@ const MotivatorPage = () => {
         {comments.length > 0 ? (
           comments.map((comment, i) => (
             <Box key={i} display="flex" alignItems="start" mt={3}>
-              <Avatar src={comment.user.userPhoto} mr={3} />
+              <Avatar name={comment.user.login} mr={3} />
               <Box>
                 <Text fontWeight="bold">{comment.user.login}</Text>
                 <Text fontSize="sm" color="gray.500">

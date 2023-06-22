@@ -26,15 +26,20 @@ const DevMotivator: React.FC<DevMotivatorInterface> = ({ motivator }) => {
       borderRight={"4px"}
       borderBottom={"4px"}
       bg={bg}
-      // boxShadow={`4px 4px 8px ${color}`}
     >
       <Flex justify="space-between" minH="full" w="full" py="4" mb="4">
         <Box>
           <Text fontSize="1.1rem" fontWeight="600">
             Commited by:{" "}
-            <span onClick={() => navigate(`/user/${motivator.author}`)}>
+            <Text
+              as={"span"}
+              decoration={"underline"}
+              opacity={"0.85"}
+              _hover={{ cursor: "pointer", opacity: 1 }}
+              onClick={() => navigate(`/user/${motivator.author}`)}
+            >
               {motivator.authorName}
-            </span>
+            </Text>
           </Text>
           {motivator.safeIn && (
             <Text fontSize="1rem" fontWeight="600">

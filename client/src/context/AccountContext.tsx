@@ -107,7 +107,7 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (LoggedIn) fetchUserData();
     return;
-  }, [isLoggedIn]);
+  }, []);
 
   return (
     <AccountContext.Provider
