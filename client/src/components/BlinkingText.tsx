@@ -20,8 +20,9 @@ const BlinkingText: React.FC<BlinkingTextProps> = ({ color }) => {
 
   return (
     <Box
-      w="30%"
-      fontSize={["2xl", "3xl", "2xl"]}
+      w="100%"
+      p={"2"}
+      fontSize={["sm", "lg", "lg", "xl"]}
       fontWeight="medium"
       color={color}
     >

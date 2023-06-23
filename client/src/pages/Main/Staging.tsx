@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Text, useToast } from "@chakra-ui/react";
 import { Motivator } from "../../interfaces/Motivator.interface";
 import { ApiClient } from "../../utils/ApiClient";
 import Pagination from "../../components/Pagination";
@@ -22,14 +22,25 @@ const Staging = () => {
   const limit = 3;
   const apiClient = useMemo(() => new ApiClient(), []);
 
+  const toast = useToast();
   useEffect(() => {
     const getMotivators = async () => {
-      const res: ApiResponse = await apiClient.get(
-        `/motivators/place/staging?page=${parseInt(page)}&limit=${limit}`
-      );
+      try {
+        const res: ApiResponse = await apiClient.get(
+          `/motivators/place/staging?page=${parseInt(page)}&limit=${limit}`
+        );
 
-      setMotivators(res.motivators);
-      setPageCount(Math.ceil(res.count / limit));
+        setMotivators(res.motivators);
+        setPageCount(Math.ceil(res.count / limit));
+      } catch (error: any) {
+        toast({
+          title: "Error",
+          description: `Something Went Wrong`,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      }
     };
 
     getMotivators();

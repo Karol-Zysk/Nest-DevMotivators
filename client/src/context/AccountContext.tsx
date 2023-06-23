@@ -74,14 +74,21 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
 
           const response = await apiClient.get<UserData>("/user/me");
 
-          if (response) {
-            setUser(response);
-            setIsLoggedIn(true);
-            setCookie("is_logged_in", true, {
-              path: "/",
-              expires: expiresTime,
+          if (!response) {
+            toast({
+              title: "Error",
+              description: `Something Went Wrong`,
+              status: "error",
+              duration: 5000,
+              isClosable: true,
             });
           }
+          setUser(response);
+          setIsLoggedIn(true);
+          setCookie("is_logged_in", true, {
+            path: "/",
+            expires: expiresTime,
+          });
         } catch (refreshError: any) {
           cleanAfterLogout();
 
@@ -106,7 +113,7 @@ const AccountContextProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
-    if (LoggedIn) fetchUserData();
+    if (isLoggedIn) fetchUserData();
     return;
   }, [isLoggedIn]);
 

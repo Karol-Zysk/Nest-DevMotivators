@@ -43,6 +43,7 @@ const LogoutButton = () => {
 
   return (
     <Button
+      display={{ base: "none", md: "flex" }}
       size={["xs", "sm", "md"]}
       bg="transparent"
       color="white"

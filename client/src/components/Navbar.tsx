@@ -75,9 +75,9 @@ export default function Navbar() {
       bg={useColorModeValue("facebook.400", "black")}
       px={4}
       py={2}
-      borderBottom="4px"
+      borderBottom="1px"
     >
-      <Flex h="min" p="4" align={"center"} justifyContent={"space-between"}>
+      <Flex h="min" p="2" align={"center"} justifyContent={"space-between"}>
         {
           <IconButton
             size={"md"}
@@ -92,10 +92,10 @@ export default function Navbar() {
         }
         <BlinkingText color={color} />
         <HStack
+          border={"2px"}
           spacing={8}
           alignItems={"center"}
-          // fontWeight="semibold"
-          fontSize="2xl"
+          fontSize={["md", "lg", "xl", "2xl"]}
           w="100%"
           justify="center"
           display={{ base: "none", md: "flex" }}
@@ -126,7 +126,6 @@ export default function Navbar() {
                   cursor={"pointer"}
                 >
                   <AiOutlineUser size="32" color={color} />
-                  {/* <Avatar size={"sm"} src={user?.userPhoto} /> */}
                 </MenuButton>
                 <MenuList background={opositeColor}>
                   <MenuItem background={opositeColor}>
